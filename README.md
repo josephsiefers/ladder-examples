@@ -21,6 +21,8 @@ npm test                        # offline unit tests (vitest)
 npm run typecheck               # tsc --noEmit
 npm run lint                    # Oxlint
 npm run format:check            # Biome formatting and import order (npm run format to fix)
+npm run depcruise               # module boundaries (dependency-cruiser)
+npm run mutate                  # mutation testing (StrykerJS)
 ```
 
 ## Tests vs evals

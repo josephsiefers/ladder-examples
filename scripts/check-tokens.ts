@@ -99,7 +99,7 @@ const USAGE = "Usage: check-tokens --staged | check-tokens <path>...";
 /** Large enough for any file worth committing; the default (1 MiB) would crash on big blobs. */
 const MAX_BUFFER = 256 * 1024 * 1024;
 
-function git(args: readonly string[], cwd?: string): Buffer {
+function git(args: readonly string[], cwd: string): Buffer {
   return execFileSync("git", args, { cwd, maxBuffer: MAX_BUFFER });
 }
 
@@ -107,8 +107,8 @@ function git(args: readonly string[], cwd?: string): Buffer {
  * Staged additions, copies, modifications and renames, read from the index rather than the
  * working tree, because the index is what gets committed. Paths are repo-root-relative.
  */
-function readStagedFiles(): FileContent[] {
-  const root = repoRoot();
+function readStagedFiles(cwd: string): FileContent[] {
+  const root = repoRoot(cwd);
   const paths = git(["diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z"], root)
     .toString()
     .split("\0")
@@ -116,33 +116,36 @@ function readStagedFiles(): FileContent[] {
   return paths.map((path) => ({ path, content: git(["show", `:${path}`], root) }));
 }
 
-/** Explicit paths, read from the working tree and named relative to the repo root. */
-function readPaths(paths: readonly string[]): FileContent[] {
-  const root = repoRoot();
-  return paths.map((path) => ({
-    path: relative(root, realpathSync(resolve(path)))
-      .split(sep)
-      .join("/"),
-    content: readFileSync(path),
-  }));
+/** Explicit paths, resolved against `cwd`, read from the working tree and named relative to the repo root. */
+function readPaths(paths: readonly string[], cwd: string): FileContent[] {
+  const root = repoRoot(cwd);
+  return paths.map((path) => {
+    const absolute = resolve(cwd, path);
+    return {
+      path: relative(root, realpathSync(absolute)).split(sep).join("/"),
+      content: readFileSync(absolute),
+    };
+  });
 }
 
-function repoRoot(): string {
-  return git(["rev-parse", "--show-toplevel"]).toString().trim();
+function repoRoot(cwd: string): string {
+  return git(["rev-parse", "--show-toplevel"], cwd).toString().trim();
 }
 
-/** Runs the check and returns the process exit code: 0 pass, 1 violations, 2 usage error. */
-export function main(argv: readonly string[]): number {
+export interface CheckResult {
+  /** The process exit code: 0 pass, 1 violations, 2 usage error. */
+  status: number;
+  stderr: string;
+}
+
+/** Runs the check as the command line would from `cwd`, without touching the process. */
+export function runCheck(argv: readonly string[], cwd: string): CheckResult {
   const args = parseArguments(argv);
-  if (!args) {
-    process.stderr.write(`${USAGE}\n`);
-    return 2;
-  }
-  const files = args.staged ? readStagedFiles() : readPaths(args.paths);
+  if (!args) return { status: 2, stderr: `${USAGE}\n` };
+  const files = args.staged ? readStagedFiles(cwd) : readPaths(args.paths, cwd);
   const violations = findViolations(files);
-  if (violations.length === 0) return 0;
-  process.stderr.write(formatReport(violations));
-  return 1;
+  if (violations.length === 0) return { status: 0, stderr: "" };
+  return { status: 1, stderr: formatReport(violations) };
 }
 
 /** Either `--staged` or one or more paths, never both; `undefined` for anything else. */
@@ -161,5 +164,7 @@ function parseArguments(argv: readonly string[]): { staged: boolean; paths: stri
 }
 
 if (import.meta.main) {
-  process.exitCode = main(process.argv.slice(2));
+  const { status, stderr } = runCheck(process.argv.slice(2), process.cwd());
+  process.stderr.write(stderr);
+  process.exitCode = status;
 }

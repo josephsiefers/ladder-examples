@@ -63,7 +63,7 @@ Future use cases record their discovery card, justification sentence, and **open
 | Formatting | Biome | Formatter + import sorting only; Biome's linter is off |
 | Linting | Oxlint | All lint rules live here |
 | Boundaries | dependency-cruiser | Rules below |
-| Mutation | StrykerJS | Vitest runner; break threshold 70%; `prompts.ts` excluded |
+| Mutation | StrykerJS | Vitest runner + TypeScript checker; break threshold 70%; `prompts.ts`, the CLI entry, tests and fixtures excluded |
 | Hooks | Husky + lint-staged | Pre-commit runs no tests |
 
 ### Pre-commit hook (in order)

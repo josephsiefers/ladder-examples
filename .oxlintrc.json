@@ -10,5 +10,5 @@
     "builtin": true,
     "node": true
   },
-  "ignorePatterns": [".cache/**", "out/**", "reports/**", ".stryker-tmp/**"]
+  "ignorePatterns": [".cache/**", "out/**", "reports/**", ".stryker-tmp/**", "scripts/fixtures/**"]
 }

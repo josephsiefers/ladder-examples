@@ -3,3 +3,4 @@
 npm run --silent check-tokens -- --staged
 npx --no-install lint-staged --concurrent false
 npm run --silent typecheck
+npm run --silent depcruise

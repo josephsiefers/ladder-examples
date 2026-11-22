@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { runCheck } from "./check-tokens";
 
 const TSX = fileURLToPath(new URL("../node_modules/.bin/tsx", import.meta.url));
 const SCRIPT = fileURLToPath(new URL("./check-tokens.ts", import.meta.url));
@@ -30,9 +31,9 @@ function checkTokens(...args: string[]) {
   return checkTokensIn(".", ...args);
 }
 
+/** In-process, so mutation testing sees the coverage. */
 function checkTokensIn(dir: string, ...args: string[]) {
-  const result = spawnSync(TSX, [SCRIPT, ...args], { cwd: join(repo, dir), encoding: "utf8" });
-  return { status: result.status, stderr: result.stderr };
+  return runCheck(args, join(repo, dir));
 }
 
 beforeEach(() => {
@@ -118,4 +119,16 @@ describe("check-tokens <paths>", () => {
       expect(stderr).toBe("Usage: check-tokens --staged | check-tokens <path>...\n");
     },
   );
+});
+
+describe("check-tokens as a command", () => {
+  it("writes the report to stderr and exits with its status", () => {
+    write("big.md", OVERSIZED);
+    git("add", "big.md");
+
+    const result = spawnSync(TSX, [SCRIPT, "--staged"], { cwd: repo, encoding: "utf8" });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("big.md: ~6,002 tokens (limit 5,000)");
+  });
 });
