@@ -74,6 +74,13 @@ describe("module boundaries", () => {
     expect(violations).toContainEqual({ rule: "no-circular", from: "src/core/cycle/a.ts" });
   });
 
+  it("blocks production code from importing test code", () => {
+    expect(violations).toContainEqual({
+      rule: "test-code-is-private",
+      from: "src/core/stats/index.ts",
+    });
+  });
+
   it("passes the clean module, its SDK use, and the CLI's use-case import", () => {
     const clean = ["src/core/llm/", "src/cli.ts", "scripts/generate.ts"];
     const flagged = violations.filter(({ from }) => clean.some((path) => from.startsWith(path)));

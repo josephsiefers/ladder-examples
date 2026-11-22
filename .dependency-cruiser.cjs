@@ -61,6 +61,16 @@ module.exports = {
       to: { path: "^src/usecases/" },
     },
     {
+      name: "test-code-is-private",
+      comment:
+        "Only tests and fixtures files import *.test.ts or *.fixtures.ts files. Instead: if " +
+        "production code needs the value, move it out of the fixtures file into the module " +
+        "that owns it, and have the fixtures import it from there.",
+      severity: "error",
+      from: { pathNot: "\\.(test|fixtures)\\.ts$" },
+      to: { path: "\\.(test|fixtures)\\.ts$" },
+    },
+    {
       name: "sdk-only-in-llm",
       comment:
         "Only src/core/llm may import @anthropic-ai/sdk. Instead: call the model through the " +

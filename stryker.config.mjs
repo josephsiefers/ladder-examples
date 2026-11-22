@@ -9,6 +9,7 @@ export default {
     "src/**/*.ts",
     "scripts/**/*.ts",
     "!**/*.test.ts",
+    "!**/*.fixtures.ts",
     // Mutating prompt text produces meaningless survivors.
     "!**/prompts.ts",
     "!src/cli.ts",

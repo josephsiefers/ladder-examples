@@ -45,13 +45,14 @@ Husky runs `.husky/pre-commit` on every commit: the token-size check on staged c
 2. `sdk-only-in-llm`: only `src/core/llm` imports `@anthropic-ai/sdk`.
 3. `fs-only-where-allowed`: only `src/core/documents`, `src/core/llm`, `src/core/eval` and `scripts/` import `fs`; use cases never do.
 4. `no-usecase-to-usecase`: use cases never import other use cases; shared code moves into `src/core`.
-5. `usecases-only-from-cli`: only `src/cli.ts` imports use cases (a use case's own tests excepted). Plus `no-circular`.
+5. `usecases-only-from-cli`: only `src/cli.ts` imports use cases (a use case's own tests excepted).
+6. `test-code-is-private`: only `*.test.ts` and `*.fixtures.ts` files import `*.test.ts` or `*.fixtures.ts` files. Plus `no-circular`.
 
-**If the boundary check blocks you, restructure; never add an exception without asking.** Each rule is proven by a fixture under `scripts/fixtures/boundaries/` (`scripts/boundaries.test.ts`); fixtures are excluded from the boundary check, typecheck, linting and mutation testing.
+**If the boundary check blocks you, restructure; never add an exception without asking.** Each rule is proven by a fixture under `scripts/fixtures/boundaries/` (`scripts/boundaries.test.ts`); fixtures are excluded from the boundary check, vitest, typecheck, linting and mutation testing.
 
 ## Mutation testing
 
-`npm run mutate` runs StrykerJS (`stryker.config.mjs`) over `src/` and `scripts/`, excluding tests, `prompts.ts`, `src/cli.ts` and fixtures. It fails below 70%. Runs are incremental (`reports/stryker-incremental.json`), so only changed code and tests are re-tested. The HTML report is `reports/mutation/index.html`.
+`npm run mutate` runs StrykerJS (`stryker.config.mjs`) over `src/` and `scripts/`, excluding tests, `*.fixtures.ts`, `prompts.ts`, `src/cli.ts` and the boundary fixtures. It fails below 70%. Runs are incremental (`reports/stryker-incremental.json`), so only changed code and tests are re-tested. The HTML report is `reports/mutation/index.html`.
 
 Scope a run to the modules a ticket touched. `--mutate` replaces the configured list, so repeat the test exclusion:
 

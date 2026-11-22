@@ -43,7 +43,7 @@ How to split:
   re-export from it, so importers do not change.
 - Tests: split by the behaviour under test, one file per area, kept next to the
   code (for example cache.replay.test.ts, cache.keys.test.ts). Move shared
-  fixtures into a fixtures file in the same folder.
+  fixtures into a fixtures file in the same folder (cache.fixtures.ts).
 - Scripts and data: move large data literals into their own files under data/
   and load or import them. JSON data: one record per file.
 - Markdown: split by top-level section into sibling files linked from an index.

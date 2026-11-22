@@ -79,6 +79,7 @@ Future use cases record their discovery card, justification sentence, and **open
 3. Only `src/core/documents`, `src/core/llm`, `src/core/eval`, and `scripts/` import `fs`. **Use cases never import `fs`**, so firm data can only be reached through the translation layer.
 4. Use cases never import other use cases. Shared needs move into `core`.
 5. Only `src/cli.ts` imports use cases (tests inside the use case excepted). No circular dependencies.
+6. Test code is private: only `*.test.ts` and `*.fixtures.ts` files import `*.test.ts` or `*.fixtures.ts` files. Shared test fixtures live in `<name>.fixtures.ts` next to the tests.
 
 ### Layout
 ```
