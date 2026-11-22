@@ -63,6 +63,8 @@ npm run mutate -- --mutate 'scripts/check-tokens.ts'
 
 TypeScript 7.0 ships no in-process compiler API, which Stryker needs, so `npm run mutate` loads `scripts/stryker-typescript6.mjs` to give Stryker the `typescript6` alias. For the same reason dependency-cruiser parses TypeScript with `@swc/core`.
 
+The `typescript6` alias also installs a `tsc`, and npm linked it over TypeScript 7's, so a bare `npx tsc` runs TypeScript 6. Typecheck with `npm run typecheck`, which calls TypeScript 7's compiler by path.
+
 ## Definition of done
 
 `docs/spec/README.md` (Definition of done) is the authoritative list, and every item on it applies to every ticket. Until a ticket's tooling exists, say in the closing comment which items were skipped.
