@@ -1,0 +1,22 @@
+{
+  "input": { "contractId": "nda-sample-02" },
+  "gold": {
+    "parties": [
+      { "name": "Brightwater Analytics, Inc.", "role": "both" },
+      { "name": "Solano Grid Technologies LLC", "role": "both" }
+    ],
+    "effectiveDate": { "kind": "last-signature" },
+    "term": { "kind": "until-terminated", "noticeDays": 30 },
+    "survivalPeriod": { "kind": "fixed", "months": 36 },
+    "governingLaw": "california",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": ["1.1", "1.3"],
+    "effectiveDate": ["1.2"],
+    "term": ["5.1"],
+    "survivalPeriod": ["5.2"],
+    "governingLaw": ["9.3"],
+    "mutuality": ["1.3"]
+  }
+}

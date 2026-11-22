@@ -1,0 +1,22 @@
+{
+  "input": { "contractId": "nda-sample-01" },
+  "gold": {
+    "parties": [
+      { "name": "Kestrel Bioanalytics Limited", "role": "both" },
+      { "name": "Marlow Data Systems Ltd", "role": "both" }
+    ],
+    "effectiveDate": { "kind": "date", "value": "2025-03-03" },
+    "term": { "kind": "fixed", "months": 24 },
+    "survivalPeriod": { "kind": "fixed", "months": 60 },
+    "governingLaw": "england-and-wales",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": ["1.1", "1.3"],
+    "effectiveDate": ["1.1"],
+    "term": ["7.1"],
+    "survivalPeriod": ["7.2"],
+    "governingLaw": ["12.1"],
+    "mutuality": ["1.3"]
+  }
+}

@@ -1,20 +1,68 @@
-import { Command, CommanderError } from "commander";
+import { relative } from "node:path";
+import { Argument, Command, CommanderError, InvalidArgumentError, Option } from "commander";
 import packageJson from "../package.json" with { type: "json" };
 import { createFirmDocuments } from "./core/documents";
+import {
+  createEvalStore,
+  DEFAULT_CONCURRENCY,
+  DEFAULT_RUNS,
+  type EvalDefinition,
+  type EvalStore,
+  renderReport,
+  runEval,
+  SPLITS,
+  type Split,
+} from "./core/eval";
 import { createAnthropicLlm, formatCallSummary } from "./core/llm";
-import { type SnapshotDeps, snapshotContract } from "./usecases/01-contract-snapshot";
+import {
+  createSnapshotEval,
+  type SnapshotDeps,
+  snapshotContract,
+} from "./usecases/01-contract-snapshot";
 
 /** Everything a command touches outside its own code, so tests can run the CLI offline. */
 export interface CliDeps extends SnapshotDeps {
+  evalStore: EvalStore;
   stdout: (text: string) => void;
   stderr: (text: string) => void;
+}
+
+interface EvalOptions {
+  split: Split;
+  runs: number;
+  concurrency: number;
+}
+
+function positiveInteger(value: string): number {
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 1) {
+    throw new InvalidArgumentError("Must be a whole number of at least 1.");
+  }
+  return number;
+}
+
+/** Loads the split's cases, runs them, prints the report and saves the full run record. */
+async function runEvalCommand<Input, Value>(
+  definition: EvalDefinition<Input, Value>,
+  { split, runs, concurrency }: EvalOptions,
+  deps: CliDeps,
+): Promise<void> {
+  const cases = await deps.evalStore.loadCases(definition, split);
+  deps.stderr(
+    `Running eval ${definition.name} on split ${split}: ${cases.length} case(s) × ${runs} run(s), ${concurrency} at a time…`,
+  );
+  const record = await runEval(definition, cases, { llm: deps.llm, split, runs, concurrency });
+  const path = await deps.evalStore.saveRunRecord(record);
+  deps.stdout(renderReport(record, definition.target));
+  deps.stdout(`\nRun record: ${relative(process.cwd(), path)}`);
 }
 
 export function buildProgram(deps: CliDeps): Command {
   const program = new Command("ladder")
     .description(packageJson.description)
     .version(packageJson.version)
-    .exitOverride();
+    .exitOverride()
+    .configureOutput({ writeErr: (text) => deps.stderr(text.trimEnd()) });
 
   program
     .command("snapshot")
@@ -24,6 +72,29 @@ export function buildProgram(deps: CliDeps): Command {
       const result = await snapshotContract(contractId, deps);
       deps.stdout(JSON.stringify(result.snapshot, null, 2));
       deps.stdout(formatCallSummary(result));
+    });
+
+  const evals: Record<string, (options: EvalOptions) => Promise<void>> = {
+    snapshot: (options) => runEvalCommand(createSnapshotEval(deps), options, deps),
+  };
+  program
+    .command("eval")
+    .description("Run an eval with real model calls; print its report and save the run record")
+    .addArgument(new Argument("<name>", "the eval to run").choices(Object.keys(evals)))
+    .addOption(
+      new Option("--split <split>", "dataset split; test runs only when named")
+        .choices(SPLITS)
+        .default("dev"),
+    )
+    .option("--runs <n>", "times to run each case", positiveInteger, DEFAULT_RUNS)
+    .option(
+      "--concurrency <n>",
+      "case runs in flight at once",
+      positiveInteger,
+      DEFAULT_CONCURRENCY,
+    )
+    .action(async (name: string, options: EvalOptions) => {
+      await evals[name]?.(options);
     });
 
   return program;
@@ -56,6 +127,7 @@ if (import.meta.main) {
   process.exitCode = await run(process.argv, {
     llm: createAnthropicLlm({ apiKey: process.env.ANTHROPIC_API_KEY }),
     documents: createFirmDocuments(),
+    evalStore: createEvalStore(),
     stdout: (text) => console.log(text),
     stderr: (text) => console.error(text),
   });

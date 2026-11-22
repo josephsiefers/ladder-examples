@@ -31,11 +31,22 @@ npm run mutate                  # mutation testing (StrykerJS)
 - **Evals** (`npm run eval -- <usecase>`) measure _model behaviour_ with real API calls. Each eval runs several times (3 by default) and reports mean ± stdev, because a single run hides inconsistency. Evals never run as part of `npm test`.
 - Every LLM call is recorded in `.cache/llm/`, which is committed, so anyone can replay every eval without an API key.
 
+## Reading an eval report
+
+`npm run eval -- <name> [--split smoke|dev|test] [--runs N] [--concurrency N]` prints a Markdown report and saves the full run record (every output, error, call and token count) as JSON under `reports/evals/`.
+
+- **The table** has one row per field. Each run scores every case, giving the field one accuracy per run. **Mean** is the average of those accuracies. **Stdev** (population) is how much they move between runs, and **min**/**max** are the worst and best runs. A high mean with a high stdev means the model is right only some of the time: the same contract can come back different on another run.
+- **Why run N times:** sampling stays at API defaults, so one run is one draw. One run can hide a field that flips between answers. Three runs (the default) show the inconsistency.
+- **The target line** compares the fields named in the use case's justification sentence with its target. This is what decides whether the rung is good enough.
+- **Failures** lists each wrong value: the case, the field, the expected (gold) and actual values, and in how many runs it failed. A thrown error (for example, invalid model output) fails every field of that case run.
+- **Totals** are calls, tokens, failed case runs and wall time.
+- **Splits:** `smoke` holds a few hand-written cases for demos and quick checks. `dev` is where prompts get tuned. `test` is held out: it loads only with an explicit `--split test`, and prompts are never tuned against it. The default split is `dev`.
+
 ## Use cases
 
 | Use case | Rung | Status |
 |---|---|---|
-| [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built (eval to come) |
+| [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built; smoke eval run (dev eval to come) |
 | [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Planned |
 | [UC3 NDA review](#uc3-nda-review-future) | Prompt chaining + sectioning, then voting | Future |
 | [UC4 Minimal edit](#uc4-minimal-edit-future) | Evaluator-optimizer | Future |
@@ -76,6 +87,38 @@ npm run ladder -- snapshot does-not-exist        # error: Contract 'does-not-exi
 ```
 
 The snapshot is followed by one line with the model, input and output tokens, and latency, for example `model claude-haiku-5-5 · 5,624 input tokens · 265 output tokens · 3.49 s`. Contracts live in [data/firm/contracts/](data/firm/contracts/) and are read only through `core/documents`.
+
+**Eval**
+
+```sh
+npm run eval -- snapshot --split smoke --runs 3   # 4 smoke NDAs × 3 runs, live Haiku calls
+npm run eval -- snapshot                          # error: Eval 'snapshot': split dev has no cases yet.
+```
+
+Each field is scored exact-match after normalisation (case-folded, whitespace collapsed, trailing punctuation stripped). Parties are compared as an order-insensitive set of (name, role). An invented value where the contract states nothing scores false. Gold cases live in [data/evals/snapshot/](data/evals/snapshot/), one JSON file per case, with the evidence paragraph for each field.
+
+The smoke split is `nda-sample-01` plus three hand-written NDAs, each planting different traps in how the snapshot is written:
+
+- `nda-sample-02`: effective at the last signature, and a term that runs until terminated on 30 days' notice.
+- `nda-sample-03`: a one-way NDA whose recital mentions "mutual discussions", under New York law with Delaware courts.
+- `nda-sample-04`: a party named "Halden Robotics Pte. Ltd. and its Affiliates", with indefinite survival for trade secrets only. The gold survival period is the 2 years that apply to confidential information in general, following the prompt's rule.
+
+Smoke results (Haiku, 3 runs, 2026-11-22):
+
+| Field | Mean | Stdev | Min | Max |
+|---|---:|---:|---:|---:|
+| parties | 100.0% | 0.0% | 100.0% | 100.0% |
+| effectiveDate | 100.0% | 0.0% | 100.0% | 100.0% |
+| term | 100.0% | 0.0% | 100.0% | 100.0% |
+| survivalPeriod | 100.0% | 0.0% | 100.0% | 100.0% |
+| governingLaw | 83.3% | 11.8% | 75.0% | 100.0% |
+| mutuality | 100.0% | 0.0% | 100.0% | 100.0% |
+
+`effectiveDate 100.0% · term 100.0% → target 98%: MET`
+
+One failure: in 2 of 3 runs, `nda-sample-04`'s "laws of the Republic of Singapore" came back as `other` instead of `singapore`. Totals: 12 calls, 58,236 input tokens, 3,716 output tokens, 6.9 s wall time.
+
+Four hand-written cases say little about the 98% target, which is measured on the dev split (to come). They do show the misses are not consistent: the same contract gets a different governing law on different runs, which a single run would hide.
 
 ### UC2 Intake triage
 

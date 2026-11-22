@@ -24,7 +24,7 @@
 | `parties` | list of `{name, role: discloser \| recipient \| both}`. Mutual NDAs use `both`. Names are the legal entity without "and its Affiliates". |
 | `effectiveDate` | `{kind: "date", value: "YYYY-MM-DD"}` \| `{kind: "last-signature"}` \| `{kind: "not-stated"}` |
 | `term` | `{kind: "fixed", months}` \| `{kind: "until-terminated", noticeDays}` \| `{kind: "not-stated"}` |
-| `survivalPeriod` | `{kind: "fixed", months}` \| `{kind: "indefinite"}` \| `{kind: "not-stated"}` |
+| `survivalPeriod` | `{kind: "fixed", months}` \| `{kind: "indefinite"}` \| `{kind: "not-stated"}`. Where survival differs by kind of information (e.g. 2 years, but indefinite for trade secrets), the period for confidential information in general. |
 | `governingLaw` | `england-and-wales` \| `new-york` \| `delaware` \| `california` \| `ontario` \| `singapore` \| `other` \| `not-stated` |
 | `mutuality` | `mutual` \| `one-way` |
 

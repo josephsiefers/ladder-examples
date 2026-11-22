@@ -1,0 +1,22 @@
+{
+  "input": { "contractId": "nda-sample-03" },
+  "gold": {
+    "parties": [
+      { "name": "Harrow Therapeutics, Inc.", "role": "discloser" },
+      { "name": "Pellucid Capital Partners LLC", "role": "recipient" }
+    ],
+    "effectiveDate": { "kind": "date", "value": "2025-07-14" },
+    "term": { "kind": "fixed", "months": 24 },
+    "survivalPeriod": { "kind": "fixed", "months": 18 },
+    "governingLaw": "new-york",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": ["1.1", "1.3"],
+    "effectiveDate": ["1.1"],
+    "term": ["6.1"],
+    "survivalPeriod": ["6.2"],
+    "governingLaw": ["10.1"],
+    "mutuality": ["1.3"]
+  }
+}
