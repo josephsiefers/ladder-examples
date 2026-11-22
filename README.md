@@ -35,7 +35,7 @@ npm run mutate                  # mutation testing (StrykerJS)
 
 | Use case | Rung | Status |
 |---|---|---|
-| [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Planned |
+| [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built (eval to come) |
 | [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Planned |
 | [UC3 NDA review](#uc3-nda-review-future) | Prompt chaining + sectioning, then voting | Future |
 | [UC4 Minimal edit](#uc4-minimal-edit-future) | Evaluator-optimizer | Future |
@@ -44,7 +44,38 @@ npm run mutate                  # mutation testing (StrykerJS)
 
 ### UC1 Contract snapshot
 
-_Not built yet._ Spec: [uc1-contract-snapshot.md](docs/spec/use-cases/uc1-contract-snapshot.md).
+Reads one contract and records its **contract snapshot** (parties, effective date, term, survival period, governing law, mutuality) for the matter record. Spec: [uc1-contract-snapshot.md](docs/spec/use-cases/uc1-contract-snapshot.md).
+
+**Discovery card**
+
+- **Outcome:** stop paralegals keying contract snapshots into the matter record by hand.
+- **Process:** a paralegal opens the contract, finds the six facts, and types them into the matter record.
+- **Data:** about 300 contracts a week. Two years of keyed snapshots exist and can serve as gold labels.
+- **Quality:** a wrong term date means a missed renewal reminder. The paralegal confirms every record.
+- **Constraints:** fixed schema; the output must fit the matter record.
+
+**Design: single call (rung-locked)**
+
+```
+┌──────────────────┐     ┌──────────────────────────────┐     ┌────────────────────┐
+│ contract         │     │ single call                  │     │ contract snapshot  │
+│ core/documents   │────▶│ Haiku, native structured     │────▶│ validated by zod;  │
+│ [N.M] paragraphs │     │ output, fixed schema         │     │ invalid = error    │
+└──────────────────┘     └──────────────────────────────┘     └────────────────────┘
+```
+
+> "I'd start with a single call because it's one document into one fixed schema. I'd move to a chain (extract, then verify) only if evals show effective-date or term accuracy below 98%."
+
+UC1 exists to show the bottom rung, so it never climbs: if the eval shows a single call can't do the job, the problem is reshaped rather than the design. The prompt ([prompts.ts](src/usecases/01-contract-snapshot/prompts.ts)) defines each field precisely: the term is not the survival period, governing law is the law and not the courts, "not stated" beats a guess, and party names leave out "and its Affiliates".
+
+**Run it**
+
+```sh
+npm run ladder -- snapshot nda-sample-01         # one live Haiku call; prints the snapshot as JSON
+npm run ladder -- snapshot does-not-exist        # error: Contract 'does-not-exist' not found. ...
+```
+
+The snapshot is followed by one line with the model, input and output tokens, and latency, for example `model claude-haiku-5-5 · 5,624 input tokens · 265 output tokens · 3.49 s`. Contracts live in [data/firm/contracts/](data/firm/contracts/) and are read only through `core/documents`.
 
 ### UC2 Intake triage
 
