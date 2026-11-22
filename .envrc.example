@@ -1,0 +1,5 @@
+# Copy to .envrc and fill in. direnv loads it into your shell; the `ladder` CLI
+# also loads it with Node's built-in process.loadEnvFile(), so direnv is optional.
+# Keep this file to plain `export KEY=value` lines so both can read it.
+# Not needed for `npm test`, or for evals run with --replay-only.
+export ANTHROPIC_API_KEY=

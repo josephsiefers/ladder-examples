@@ -1,0 +1,16 @@
+node_modules/
+
+# Secrets. Copy .envrc.example to .envrc.
+.envrc
+
+# Fake-firm writes (e.g. routed queues), eval run records and review sheets
+out/
+reports/
+
+# Mutation-testing temp files
+.stryker-tmp/
+
+.DS_Store
+
+# Note: .cache/llm/ is deliberately NOT ignored. The LLM cache is committed
+# so anyone can replay every eval without an API key.
