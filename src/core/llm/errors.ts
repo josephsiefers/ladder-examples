@@ -24,6 +24,44 @@ export class MissingApiKeyError extends Error {
   }
 }
 
+/** The LLM cache cannot answer: a setup problem, not model behaviour, so an eval stops on it. */
+export class LlmCacheError extends Error {
+  override name = "LlmCacheError";
+}
+
+/** Replay-only mode needed an entry the cache does not hold. */
+export class CacheMissError extends LlmCacheError {
+  override name = "CacheMissError";
+
+  constructor(
+    keyFieldsDescription: string,
+    readonly key: string,
+  ) {
+    super(
+      `No cached LLM call for ${keyFieldsDescription} (key ${key}). Run without --replay-only to record it.`,
+    );
+  }
+}
+
+/** A cache entry exists but cannot be replayed. Never treated as a miss. */
+export class CorruptCacheEntryError extends LlmCacheError {
+  override name = "CorruptCacheEntryError";
+
+  constructor(
+    readonly file: string,
+    detail: string,
+  ) {
+    super(`Corrupt LLM cache entry ${file}: ${detail}. Delete it, or re-record it with --live.`);
+  }
+}
+
+/** `path: message; …` for each issue, naming the root as `(root)`. */
+export function formatIssues(error: z.ZodError): string {
+  return error.issues
+    .map((issue) => `${issue.path.join(".") || "(root)"}: ${issue.message}`)
+    .join("; ");
+}
+
 /** Parses raw model output as JSON and validates it against `schema`, or throws `InvalidOutputError`. */
 export function parseOutput<T>(
   raw: string,
@@ -39,11 +77,6 @@ export function parseOutput<T>(
     throw new InvalidOutputError(schemaName, raw, `not valid JSON${suffix}`);
   }
   const result = schema.safeParse(json);
-  if (!result.success) {
-    const issues = result.error.issues.map(
-      (issue) => `${issue.path.join(".") || "(root)"}: ${issue.message}`,
-    );
-    throw new InvalidOutputError(schemaName, raw, issues.join("; "));
-  }
+  if (!result.success) throw new InvalidOutputError(schemaName, raw, formatIssues(result.error));
   return result.data;
 }

@@ -13,18 +13,40 @@ import {
   SPLITS,
   type Split,
 } from "./core/eval";
-import { createAnthropicLlm, formatCallSummary } from "./core/llm";
+import {
+  type CacheMode,
+  type CacheStore,
+  createAnthropicLlm,
+  createCachedLlm,
+  createFileCacheStore,
+  formatCallSummary,
+} from "./core/llm";
 import {
   createSnapshotEval,
   type SnapshotDeps,
   snapshotContract,
 } from "./usecases/01-contract-snapshot";
 
-/** Everything a command touches outside its own code, so tests can run the CLI offline. */
+/**
+ * Everything a command touches outside its own code, so tests can run the CLI offline. `llm` is
+ * the live LLM; commands call it through the LLM cache in `llmCache`.
+ */
 export interface CliDeps extends SnapshotDeps {
+  llmCache: CacheStore;
   evalStore: EvalStore;
   stdout: (text: string) => void;
   stderr: (text: string) => void;
+}
+
+interface CacheOptions {
+  live?: boolean;
+  replayOnly?: boolean;
+}
+
+function cacheMode({ live, replayOnly }: CacheOptions): CacheMode {
+  if (live) return "live";
+  if (replayOnly) return "replay-only";
+  return "read-through";
 }
 
 interface EvalOptions {
@@ -62,24 +84,42 @@ export function buildProgram(deps: CliDeps): Command {
     .description(packageJson.description)
     .version(packageJson.version)
     .exitOverride()
-    .configureOutput({ writeErr: (text) => deps.stderr(text.trimEnd()) });
+    .configureOutput({ writeErr: (text) => deps.stderr(text.trimEnd()) })
+    .addOption(new Option("--live", "call the API for every LLM call and re-record the cache"))
+    .addOption(
+      new Option(
+        "--replay-only",
+        "replay LLM calls from the cache only; a miss is an error (no API key needed)",
+      ).conflicts("live"),
+    );
+
+  /** The deps with the live LLM behind the cache, in the mode the global flags ask for. */
+  const cachedDeps = (): CliDeps => ({
+    ...deps,
+    llm: createCachedLlm(deps.llm, {
+      mode: cacheMode(program.opts<CacheOptions>()),
+      store: deps.llmCache,
+    }),
+  });
 
   program
     .command("snapshot")
     .description("UC1: record the contract snapshot of one contract (single call)")
     .argument("<contractId>", "contract ID in the firm's contracts, e.g. nda-sample-01")
     .action(async (contractId: string) => {
-      const result = await snapshotContract(contractId, deps);
+      const result = await snapshotContract(contractId, cachedDeps());
       deps.stdout(JSON.stringify(result.snapshot, null, 2));
       deps.stdout(formatCallSummary(result));
     });
 
   const evals: Record<string, (options: EvalOptions) => Promise<void>> = {
-    snapshot: (options) => runEvalCommand(createSnapshotEval(deps), options, deps),
+    snapshot: (options) => runEvalCommand(createSnapshotEval(deps), options, cachedDeps()),
   };
   program
     .command("eval")
-    .description("Run an eval with real model calls; print its report and save the run record")
+    .description(
+      "Run an eval with real model calls (cached); print its report and save the run record",
+    )
     .addArgument(new Argument("<name>", "the eval to run").choices(Object.keys(evals)))
     .addOption(
       new Option("--split <split>", "dataset split; test runs only when named")
@@ -126,6 +166,7 @@ if (import.meta.main) {
   loadOptionalEnvFile();
   process.exitCode = await run(process.argv, {
     llm: createAnthropicLlm({ apiKey: process.env.ANTHROPIC_API_KEY }),
+    llmCache: createFileCacheStore(),
     documents: createFirmDocuments(),
     evalStore: createEvalStore(),
     stdout: (text) => console.log(text),

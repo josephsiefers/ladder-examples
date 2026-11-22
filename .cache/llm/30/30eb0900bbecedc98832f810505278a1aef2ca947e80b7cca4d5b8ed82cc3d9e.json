@@ -1,0 +1,247 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are a paralegal at a law firm. You read one contract and record its contract snapshot for the matter record. Record only what the contract states; never guess or infer a value it does not state.\n\nEach paragraph of the contract is marked with its number, e.g. [7.1]. Read the whole contract before answering: the values you need may be anywhere in it.\n\nFields:\n\nparties\n  Every party to the contract, as {name, role}.\n  - name: the legal entity name exactly as the contract gives it, e.g. \"Kestrel Bioanalytics Limited\". Leave out defined short names, addresses, company numbers, and any extension such as \"and its Affiliates\" or \"and its subsidiaries\".\n  - role: \"discloser\" if the party only discloses confidential information, \"recipient\" if it only receives it, \"both\" if it does both. In a mutual agreement every party is \"both\".\n\neffectiveDate\n  The date the agreement takes effect.\n  - {kind: \"date\", value: \"YYYY-MM-DD\"} when the contract states a calendar date, however it is written (\"3 March 2025\", \"the third day of March, two thousand and twenty-five\" both become \"2025-03-03\").\n  - {kind: \"last-signature\"} when it takes effect on the date of the last signature (or similar wording) rather than a stated date.\n  - {kind: \"not-stated\"} when the contract gives no effective date.\n\nterm\n  How long the agreement itself runs. This is NOT the survival period: ignore how long confidentiality obligations last after the agreement ends.\n  - {kind: \"fixed\", months} for a fixed duration, converted to months (\"two (2) years\" is 24).\n  - {kind: \"until-terminated\", noticeDays} when it runs until a party terminates it on notice, with the notice period in days (convert weeks or months to days: one month is 30 days).\n  - {kind: \"not-stated\"} when the contract gives no term.\n\nsurvivalPeriod\n  How long the confidentiality obligations continue after the agreement expires or terminates. This is NOT the term.\n  - {kind: \"fixed\", months}, converted to months (\"five (5) years\" is 60). If different information has different survival periods, use the period that applies to Confidential Information in general.\n  - {kind: \"indefinite\"} when the obligations survive with no end date for Confidential Information in general.\n  - {kind: \"not-stated\"} when the contract does not say the obligations survive.\n\ngoverningLaw\n  The law the parties chose to govern the contract. This is NOT the courts or jurisdiction for disputes: a contract governed by New York law with disputes heard in Delaware courts has governingLaw \"new-york\".\n  One of: \"england-and-wales\" (also \"English law\" or \"the laws of England\"), \"new-york\", \"delaware\", \"california\", \"ontario\", \"singapore\", \"other\" (any other law that is stated), or \"not-stated\" (no governing law clause).\n\nmutuality\n  \"mutual\" if both parties disclose and protect confidential information; \"one-way\" if only one party discloses and only the other protects. Decide from the obligations, not the title or recitals: a recital mentioning \"mutual discussions\" does not make a one-way agreement mutual.\n\n\"Not stated\" is always a valid answer. An invented value is worse than \"not-stated\".",
+    "prompt": "Record the contract snapshot for this contract.\n\n<contract id=\"nda-sample-03\">\n# Confidentiality Agreement\n\n## 1. Parties and Background\n[1.1] This Confidentiality Agreement (this \"Agreement\") is dated as of July 14, 2025 (the \"Effective Date\") and is made between Harrow Therapeutics, Inc., a Delaware corporation having its principal office at 88 Hudson Yards, New York, New York 10001 (the \"Disclosing Party\"), and Pellucid Capital Partners LLC, a Delaware limited liability company having its principal office at 1201 North Market Street, Wilmington, Delaware 19801 (the \"Recipient\").\n[1.2] The Disclosing Party and the Recipient have engaged in mutual discussions concerning a possible minority investment by the Recipient in the Disclosing Party (the \"Transaction\").\n[1.3] To allow the Recipient to evaluate the Transaction, the Disclosing Party is prepared to make available to the Recipient certain information about its business, clinical programmes and finances. The Recipient will not provide confidential information to the Disclosing Party under this Agreement, and this Agreement imposes obligations of confidentiality on the Recipient only.\n\n## 2. Evaluation Material\n[2.1] \"Evaluation Material\" means all information concerning the Disclosing Party or its business, whether furnished before or after the Effective Date and in whatever form, that is furnished to the Recipient or its Representatives by or on behalf of the Disclosing Party, together with all notes, analyses, compilations and other materials prepared by the Recipient or its Representatives that contain or reflect such information.\n[2.2] \"Representatives\" means the Recipient's affiliates and its and their directors, officers, employees, partners, legal counsel, accountants and financial advisers.\n[2.3] Evaluation Material does not include information that: (a) is or becomes generally available to the public other than as a result of a disclosure by the Recipient or its Representatives; (b) was available to the Recipient on a non-confidential basis before its disclosure by the Disclosing Party; or (c) becomes available to the Recipient on a non-confidential basis from a source other than the Disclosing Party that is not prohibited from disclosing it.\n\n## 3. Use and Non-Disclosure\n[3.1] The Recipient shall, and shall direct its Representatives to, keep the Evaluation Material strictly confidential and use it solely for the purpose of evaluating, negotiating and consummating the Transaction.\n[3.2] The Recipient shall not disclose any Evaluation Material, or the fact that discussions concerning the Transaction are taking place, to any person other than those of its Representatives who need to know it for the purpose described in clause 3.1 and who are informed of its confidential nature.\n[3.3] The Recipient shall be liable for any breach of this Agreement by any of its Representatives.\n\n## 4. Legally Required Disclosure\n[4.1] If the Recipient or any of its Representatives is requested or required by law, regulation or legal process to disclose any Evaluation Material, the Recipient shall, to the extent legally permitted, provide the Disclosing Party with prompt written notice so that the Disclosing Party may seek a protective order, and shall disclose only that portion of the Evaluation Material that it is legally required to disclose.\n\n## 5. Return or Destruction\n[5.1] At any time upon the written request of the Disclosing Party, the Recipient shall promptly return or destroy all Evaluation Material and confirm the destruction in writing, save that the Recipient may retain copies to the extent required by applicable law or bona fide internal document-retention policies.\n\n## 6. Term\n[6.1] This Agreement shall remain in effect for a period of two (2) years from the Effective Date.\n[6.2] The Recipient's obligations under clauses 3 and 5 shall continue for a period of eighteen (18) months following the expiry or earlier termination of this Agreement.\n\n## 7. No Representations; No Obligation\n[7.1] The Disclosing Party makes no representation or warranty as to the accuracy or completeness of the Evaluation Material. Only those representations and warranties made in a definitive agreement regarding the Transaction, when and if executed, shall have any legal effect.\n[7.2] Neither party shall be under any legal obligation with respect to the Transaction unless and until a definitive agreement has been executed and delivered.\n\n## 8. Non-Solicitation\n[8.1] For a period of twelve (12) months from the Effective Date, the Recipient shall not, directly or indirectly, solicit for employment any officer or senior employee of the Disclosing Party with whom it had contact in connection with the Transaction, provided that general solicitations not directed at such persons shall not breach this clause.\n\n## 9. Remedies\n[9.1] The Recipient acknowledges that money damages would not be a sufficient remedy for any breach of this Agreement and that the Disclosing Party shall be entitled to specific performance and injunctive relief as remedies for any such breach, without proof of actual damages.\n\n## 10. Miscellaneous\n[10.1] This Agreement shall be governed by, and construed in accordance with, the laws of the State of New York, without regard to the conflict of laws principles thereof.\n[10.2] Each party irrevocably and unconditionally submits to the exclusive jurisdiction of the state and federal courts located in Wilmington, Delaware for any action arising out of or relating to this Agreement, and waives any objection to the laying of venue in those courts.\n[10.3] This Agreement contains the entire agreement between the parties concerning the confidentiality of the Evaluation Material. No waiver or modification of this Agreement shall be binding unless in writing and signed by both parties.\n[10.4] This Agreement may be executed in counterparts, each of which shall be deemed an original.\n\n## 11. Signatures\n[11.1] Harrow Therapeutics, Inc., by Elena Vasquez, Chief Financial Officer.\n[11.2] Pellucid Capital Partners LLC, by Thomas Achebe, Managing Partner.\n</contract>",
+    "schemaName": "contract-snapshot",
+    "jsonSchema": {
+      "$defs": {
+        "__schema0": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "{minLength: 1}"
+            },
+            "role": {
+              "enum": [
+                "discloser",
+                "recipient",
+                "both"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "role"
+          ]
+        },
+        "__schema1": {
+          "type": "integer",
+          "description": "{exclusiveMinimum: 0, maximum: 9007199254740991}"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "minItems": 1
+        },
+        "effectiveDate": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "{pattern: \"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))$\"}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "last-signature"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "term": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "until-terminated"
+                },
+                "noticeDays": {
+                  "type": "integer",
+                  "description": "{minimum: 0, maximum: 9007199254740991}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "noticeDays"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "survivalPeriod": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "indefinite"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "governingLaw": {
+          "enum": [
+            "england-and-wales",
+            "new-york",
+            "delaware",
+            "california",
+            "ontario",
+            "singapore",
+            "other",
+            "not-stated"
+          ]
+        },
+        "mutuality": {
+          "enum": [
+            "mutual",
+            "one-way"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "parties",
+        "effectiveDate",
+        "term",
+        "survivalPeriod",
+        "governingLaw",
+        "mutuality"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "parties": [
+      {
+        "name": "Harrow Therapeutics, Inc.",
+        "role": "discloser"
+      },
+      {
+        "name": "Pellucid Capital Partners LLC",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-07-14"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 18
+    },
+    "governingLaw": "new-york",
+    "mutuality": "one-way"
+  },
+  "usage": {
+    "inputTokens": 4766,
+    "outputTokens": 330
+  },
+  "latencyMs": 2008.915587,
+  "recordedAt": "2026-11-22T18:48:05.989Z"
+}

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildProgram, type CliDeps, run } from "./cli";
 import { createFirmDocuments } from "./core/documents";
 import { EmptySplitError, type EvalStore, type RunRecord, type Split } from "./core/eval";
-import { createFakeLlm } from "./core/llm";
+import { type CacheStore, createFakeLlm, createMemoryCacheStore } from "./core/llm";
 
 const SNAPSHOT = {
   parties: [
@@ -33,7 +33,13 @@ function fakeEvalStore(splits: Split[]) {
   return { store, saved };
 }
 
-function fakeDeps({ splits = ["smoke", "dev"] }: { splits?: Split[] } = {}) {
+function fakeDeps({
+  splits = ["smoke", "dev"],
+  llmCache = createMemoryCacheStore(),
+}: {
+  splits?: Split[];
+  llmCache?: CacheStore;
+} = {}) {
   const out: string[] = [];
   const err: string[] = [];
   const llm = createFakeLlm(() => SNAPSHOT, {
@@ -43,6 +49,7 @@ function fakeDeps({ splits = ["smoke", "dev"] }: { splits?: Split[] } = {}) {
   const evals = fakeEvalStore(splits);
   const deps: CliDeps = {
     llm,
+    llmCache,
     documents: createFirmDocuments(),
     evalStore: evals.store,
     stdout: (text) => out.push(text),
@@ -52,6 +59,9 @@ function fakeDeps({ splits = ["smoke", "dev"] }: { splits?: Split[] } = {}) {
 }
 
 const argv = (...args: string[]) => ["node", "ladder", ...args];
+
+/** An eval report without its totals line, which differs between live and cached runs. */
+const table = (report = "") => report.split("\n\nTotals:")[0];
 
 describe("ladder CLI", () => {
   it("is named ladder", () => {
@@ -78,6 +88,20 @@ describe("ladder CLI", () => {
       expect(out).toEqual([
         JSON.stringify(SNAPSHOT, null, 2),
         "model claude-haiku-5-5 · 2,400 input tokens · 150 output tokens · 1.50 s",
+      ]);
+    });
+
+    it("replays a repeated call from the cache and says so", async () => {
+      const llmCache = createMemoryCacheStore();
+      await run(argv("snapshot", "nda-sample-01"), fakeDeps({ llmCache }).deps);
+      const { deps, llm, out } = fakeDeps({ llmCache });
+
+      expect(await run(argv("snapshot", "nda-sample-01"), deps)).toBe(0);
+
+      expect(llm.calls).toEqual([]);
+      expect(out).toEqual([
+        JSON.stringify(SNAPSHOT, null, 2),
+        "model claude-haiku-5-5 · 2,400 input tokens · 150 output tokens · 1.50 s · cached",
       ]);
     });
 
@@ -109,8 +133,70 @@ describe("ladder CLI", () => {
       expect(report).toContain("| effectiveDate | 100.0% | 0.0% | 100.0% | 100.0% |");
       expect(report).toContain("effectiveDate 100.0% · term 100.0% → target 98%: MET");
       expect(report).toContain("### Failures\n\nNone.");
-      expect(report).toContain("Totals: 2 calls · 4,800 input tokens · 300 output tokens");
+      expect(report).toContain(
+        "Totals: 2 calls · live 2 · cached 0 · 4,800 input tokens · 300 output tokens",
+      );
       expect(recordLine).toBe("\nRun record: reports/evals/snapshot-smoke.json");
+    });
+
+    it("replays a second run from the cache: zero live calls and an identical table", async () => {
+      const llmCache = createMemoryCacheStore();
+      const args = argv("eval", "snapshot", "--split", "smoke", "--runs", "2");
+      const first = fakeDeps({ llmCache });
+      await run(args, first.deps);
+      const second = fakeDeps({ llmCache });
+
+      expect(await run(args, second.deps)).toBe(0);
+
+      expect(second.llm.calls).toEqual([]);
+      expect(table(second.out[0])).toBe(table(first.out[0]));
+      expect(second.out[0]).toContain("Totals: 2 calls · live 0 · cached 2 · 4,800 input tokens");
+    });
+
+    it("calls live and re-records with --live, before or after the command", async () => {
+      const llmCache = createMemoryCacheStore();
+      await run(argv("eval", "snapshot", "--split", "smoke"), fakeDeps({ llmCache }).deps);
+      const after = fakeDeps({ llmCache });
+      const before = fakeDeps({ llmCache });
+
+      await run(argv("eval", "snapshot", "--split", "smoke", "--live"), after.deps);
+      await run(argv("--live", "eval", "snapshot", "--split", "smoke"), before.deps);
+
+      expect(after.llm.calls).toHaveLength(3);
+      expect(before.llm.calls).toHaveLength(3);
+      expect(after.out[0]).toContain("Totals: 3 calls · live 3 · cached 0");
+    });
+
+    it("replays offline with --replay-only, and stops with a clear error on a miss", async () => {
+      const llmCache = createMemoryCacheStore();
+      const args = argv("eval", "snapshot", "--split", "smoke", "--runs", "2", "--replay-only");
+      await run(
+        argv("eval", "snapshot", "--split", "smoke", "--runs", "1"),
+        fakeDeps({ llmCache }).deps,
+      );
+      const { deps, llm, out, err, saved } = fakeDeps({ llmCache });
+
+      const code = await run(args, deps);
+
+      expect(code).toBe(1);
+      expect(llm.calls).toEqual([]);
+      expect(err.at(-1)).toMatch(
+        /^error: No cached LLM call for model claude-haiku-5-5 · schema contract-snapshot · sample index 1 · /,
+      );
+      expect(out).toEqual([]);
+      expect(saved).toEqual([]);
+    });
+
+    it("refuses --live together with --replay-only", async () => {
+      const { deps, llm, err } = fakeDeps();
+
+      const code = await run(argv("eval", "snapshot", "--live", "--replay-only"), deps);
+
+      expect(code).toBe(1);
+      expect(err.join("\n")).toMatch(
+        /--live.*cannot be used with.*--replay-only|--replay-only.*cannot be used with.*--live/,
+      );
+      expect(llm.calls).toEqual([]);
     });
 
     it("defaults to the dev split, 3 runs and 4 at a time", async () => {

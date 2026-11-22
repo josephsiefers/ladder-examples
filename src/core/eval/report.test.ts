@@ -3,13 +3,14 @@ import { caseRun, runRecord } from "./eval.fixtures";
 import { renderReport } from "./report";
 import type { FieldStats } from "./types";
 
-const call = (inputTokens: number, outputTokens: number) => ({
+const call = (inputTokens: number, outputTokens: number, cached = false) => ({
   model: "claude-haiku-5-5" as const,
   usage: { inputTokens, outputTokens },
   latencyMs: 1000,
+  cached,
 });
 
-/** 2 cases × 3 runs. `term` fails on case y in runs 0 and 2; case x errors in run 1. */
+/** 2 cases × 3 runs. `term` fails on case y in runs 0 and 2; case x errors in run 1. Two calls are cached. */
 const RECORD = runRecord(
   [
     caseRun("x", 0, { date: true, term: true }, { calls: [call(1000, 50)] }),
@@ -33,8 +34,8 @@ const RECORD = runRecord(
         error: "boom\nstack",
       },
     ),
-    caseRun("y", 1, { date: true, term: true }, { calls: [call(2000, 60)] }),
-    caseRun("x", 2, { date: true, term: true }, { calls: [call(1000, 50)] }),
+    caseRun("y", 1, { date: true, term: true }, { calls: [call(2000, 60, true)] }),
+    caseRun("x", 2, { date: true, term: true }, { calls: [call(1000, 50, true)] }),
     caseRun(
       "y",
       2,
@@ -73,7 +74,7 @@ describe("renderReport", () => {
         "| x | term | until terminated \\| 30 days' notice | error: boom | 1/3 |",
         "| y | term | fixed 24 months | fixed 60 months | 2/3 |",
         "",
-        "Totals: 6 calls · 8,500 input tokens · 290 output tokens · 1 failed case run · wall time 12.3 s",
+        "Totals: 6 calls · live 4 · cached 2 · 8,500 input tokens · 290 output tokens · 1 failed case run · wall time 12.3 s",
       ].join("\n"),
     );
   });
@@ -86,7 +87,7 @@ describe("renderReport", () => {
     expect(report).toContain("### Failures\n\nNone.\n");
     expect(report).toContain("| date | 100.0% | 0.0% | 100.0% | 100.0% |");
     expect(report).toContain(
-      "Totals: 0 calls · 0 input tokens · 0 output tokens · 0 failed case runs · wall time 0.5 s",
+      "Totals: 0 calls · live 0 · cached 0 · 0 input tokens · 0 output tokens · 0 failed case runs · wall time 0.5 s",
     );
   });
 

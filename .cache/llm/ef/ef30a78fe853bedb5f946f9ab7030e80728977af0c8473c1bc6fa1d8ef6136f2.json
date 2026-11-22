@@ -1,0 +1,246 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are a paralegal at a law firm. You read one contract and record its contract snapshot for the matter record. Record only what the contract states; never guess or infer a value it does not state.\n\nEach paragraph of the contract is marked with its number, e.g. [7.1]. Read the whole contract before answering: the values you need may be anywhere in it.\n\nFields:\n\nparties\n  Every party to the contract, as {name, role}.\n  - name: the legal entity name exactly as the contract gives it, e.g. \"Kestrel Bioanalytics Limited\". Leave out defined short names, addresses, company numbers, and any extension such as \"and its Affiliates\" or \"and its subsidiaries\".\n  - role: \"discloser\" if the party only discloses confidential information, \"recipient\" if it only receives it, \"both\" if it does both. In a mutual agreement every party is \"both\".\n\neffectiveDate\n  The date the agreement takes effect.\n  - {kind: \"date\", value: \"YYYY-MM-DD\"} when the contract states a calendar date, however it is written (\"3 March 2025\", \"the third day of March, two thousand and twenty-five\" both become \"2025-03-03\").\n  - {kind: \"last-signature\"} when it takes effect on the date of the last signature (or similar wording) rather than a stated date.\n  - {kind: \"not-stated\"} when the contract gives no effective date.\n\nterm\n  How long the agreement itself runs. This is NOT the survival period: ignore how long confidentiality obligations last after the agreement ends.\n  - {kind: \"fixed\", months} for a fixed duration, converted to months (\"two (2) years\" is 24).\n  - {kind: \"until-terminated\", noticeDays} when it runs until a party terminates it on notice, with the notice period in days (convert weeks or months to days: one month is 30 days).\n  - {kind: \"not-stated\"} when the contract gives no term.\n\nsurvivalPeriod\n  How long the confidentiality obligations continue after the agreement expires or terminates. This is NOT the term.\n  - {kind: \"fixed\", months}, converted to months (\"five (5) years\" is 60). If different information has different survival periods, use the period that applies to Confidential Information in general.\n  - {kind: \"indefinite\"} when the obligations survive with no end date for Confidential Information in general.\n  - {kind: \"not-stated\"} when the contract does not say the obligations survive.\n\ngoverningLaw\n  The law the parties chose to govern the contract. This is NOT the courts or jurisdiction for disputes: a contract governed by New York law with disputes heard in Delaware courts has governingLaw \"new-york\".\n  One of: \"england-and-wales\" (also \"English law\" or \"the laws of England\"), \"new-york\", \"delaware\", \"california\", \"ontario\", \"singapore\", \"other\" (any other law that is stated), or \"not-stated\" (no governing law clause).\n\nmutuality\n  \"mutual\" if both parties disclose and protect confidential information; \"one-way\" if only one party discloses and only the other protects. Decide from the obligations, not the title or recitals: a recital mentioning \"mutual discussions\" does not make a one-way agreement mutual.\n\n\"Not stated\" is always a valid answer. An invented value is worse than \"not-stated\".",
+    "prompt": "Record the contract snapshot for this contract.\n\n<contract id=\"nda-sample-02\">\n# Mutual Confidentiality Agreement\n\n## 1. Parties and Background\n[1.1] This Mutual Confidentiality Agreement (the \"Agreement\") is entered into by and between Brightwater Analytics, Inc., a Delaware corporation with its principal place of business at 410 Mission Street, San Francisco, California 94105 (\"Brightwater\"), and Solano Grid Technologies LLC, a California limited liability company with its principal place of business at 2200 Harbor Boulevard, Oakland, California 94607 (\"Solano\"). Brightwater and Solano are each a \"Party\" and together the \"Parties\".\n[1.2] This Agreement takes effect on the date on which it has been signed by both Parties, being the date of the later of the two signatures below (the \"Effective Date\").\n[1.3] The Parties are evaluating a possible joint offering in which Brightwater's demand-forecasting software would be combined with Solano's battery-storage control systems (the \"Opportunity\"). Each Party expects to disclose Confidential Information to the other in the course of that evaluation, and each Party is willing to protect the other's Confidential Information on the terms of this Agreement.\n\n## 2. Definitions\n[2.1] \"Confidential Information\" means all non-public information disclosed by or on behalf of one Party (the \"Disclosing Party\") to the other Party (the \"Receiving Party\") in connection with the Opportunity, whether disclosed orally, in writing or by inspection, and whether before or after the Effective Date, including source code, models, data sets, pricing, roadmaps and customer information.\n[2.2] \"Representatives\" means a Party's officers, employees, contractors, attorneys and accountants who need to know the Confidential Information for the Opportunity.\n\n## 3. Confidentiality Obligations\n[3.1] The Receiving Party shall hold the Disclosing Party's Confidential Information in strict confidence and shall not disclose it to any third party other than its Representatives who are bound by written obligations of confidentiality no less protective than those in this Agreement.\n[3.2] The Receiving Party shall use the Disclosing Party's Confidential Information solely for the purpose of evaluating the Opportunity and shall protect it using at least the degree of care it uses to protect its own information of a similar nature, and no less than a reasonable degree of care.\n[3.3] The Receiving Party shall be responsible for any breach of this Agreement caused by its Representatives.\n\n## 4. Exceptions\n[4.1] Confidential Information does not include information that the Receiving Party can demonstrate: (a) is or becomes publicly available through no fault of the Receiving Party; (b) was rightfully known to the Receiving Party without restriction before receipt from the Disclosing Party; (c) is rightfully received from a third party without a duty of confidentiality; or (d) is independently developed by the Receiving Party without use of the Disclosing Party's Confidential Information.\n[4.2] The Receiving Party may disclose Confidential Information to the extent required by law or court order, provided that it gives the Disclosing Party prompt written notice, where lawful, so that the Disclosing Party may seek a protective order.\n\n## 5. Term and Termination\n[5.1] This Agreement shall commence on the Effective Date and shall remain in force until terminated by either Party giving the other Party not less than thirty (30) days' prior written notice of termination.\n[5.2] The Receiving Party's obligations under clause 3 with respect to Confidential Information disclosed before termination shall survive termination of this Agreement for a period of three (3) years from the date on which termination takes effect.\n\n## 6. Return of Materials\n[6.1] Within fifteen (15) days after termination of this Agreement or the Disclosing Party's earlier written request, the Receiving Party shall return or destroy all Confidential Information of the Disclosing Party in its possession and, on request, certify in writing that it has done so.\n\n## 7. No Licence; No Warranty\n[7.1] No licence under any patent, copyright, trade secret or other intellectual property right is granted by this Agreement, except the limited right to use Confidential Information to evaluate the Opportunity.\n[7.2] All Confidential Information is provided \"AS IS\", without warranty of any kind.\n\n## 8. Remedies\n[8.1] Each Party agrees that a breach of this Agreement may cause irreparable harm for which monetary damages would be an inadequate remedy, and that the Disclosing Party shall be entitled to seek equitable relief, including an injunction, in addition to any other remedy available at law.\n\n## 9. General\n[9.1] This Agreement is the entire agreement between the Parties concerning its subject matter and supersedes all prior understandings concerning that subject matter. It may be amended only by a written instrument signed by both Parties.\n[9.2] Neither Party may assign this Agreement without the other Party's prior written consent, except to a successor to all or substantially all of its business.\n[9.3] This Agreement shall be governed by and construed in accordance with the laws of the State of California, without giving effect to any choice of law rule that would cause the application of the laws of another jurisdiction. The state and federal courts located in San Francisco County, California shall have exclusive jurisdiction over any dispute arising out of this Agreement.\n[9.4] This Agreement may be signed in counterparts, including by electronic signature, each of which is an original and all of which together are one instrument.\n\n## 10. Signatures\n[10.1] Signed for and on behalf of Brightwater Analytics, Inc. by Priya Raman, Chief Operating Officer. Date: ____________.\n[10.2] Signed for and on behalf of Solano Grid Technologies LLC by Marcus Lindqvist, Managing Member. Date: ____________.\n</contract>",
+    "schemaName": "contract-snapshot",
+    "jsonSchema": {
+      "$defs": {
+        "__schema0": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "{minLength: 1}"
+            },
+            "role": {
+              "enum": [
+                "discloser",
+                "recipient",
+                "both"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "role"
+          ]
+        },
+        "__schema1": {
+          "type": "integer",
+          "description": "{exclusiveMinimum: 0, maximum: 9007199254740991}"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "minItems": 1
+        },
+        "effectiveDate": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "{pattern: \"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))$\"}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "last-signature"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "term": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "until-terminated"
+                },
+                "noticeDays": {
+                  "type": "integer",
+                  "description": "{minimum: 0, maximum: 9007199254740991}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "noticeDays"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "survivalPeriod": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "indefinite"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "governingLaw": {
+          "enum": [
+            "england-and-wales",
+            "new-york",
+            "delaware",
+            "california",
+            "ontario",
+            "singapore",
+            "other",
+            "not-stated"
+          ]
+        },
+        "mutuality": {
+          "enum": [
+            "mutual",
+            "one-way"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "parties",
+        "effectiveDate",
+        "term",
+        "survivalPeriod",
+        "governingLaw",
+        "mutuality"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 2
+  },
+  "value": {
+    "parties": [
+      {
+        "name": "Brightwater Analytics, Inc.",
+        "role": "both"
+      },
+      {
+        "name": "Solano Grid Technologies LLC",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 30
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "governingLaw": "california",
+    "mutuality": "mutual"
+  },
+  "usage": {
+    "inputTokens": 4667,
+    "outputTokens": 322
+  },
+  "latencyMs": 1678.816406,
+  "recordedAt": "2026-11-22T18:47:43.604Z"
+}

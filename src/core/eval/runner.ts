@@ -1,4 +1,4 @@
-import type { CallStats, Llm } from "../llm";
+import { type CallStats, type Llm, LlmCacheError } from "../llm";
 import type { CaseRun, EvalCase, EvalDefinition, RunRecord, Split } from "./types";
 
 export const DEFAULT_RUNS = 3;
@@ -16,7 +16,8 @@ export interface RunOptions {
 
 /**
  * Runs every (case, run) pair exactly once, at most `concurrency` at a time, and scores each
- * output against gold. A thrown error becomes a failed case; it never ends the eval.
+ * output against gold. A thrown error becomes a failed case and never ends the eval, except an
+ * LLM cache error (a replay-only miss or a corrupt entry), which is a setup problem and does.
  */
 export async function runEval<Input, Value>(
   definition: EvalDefinition<Input, Value>,
@@ -86,6 +87,7 @@ async function runPair<Input, Value>(
       output,
     };
   } catch (error) {
+    if (error instanceof LlmCacheError) throw error;
     const message = error instanceof Error ? error.message : String(error);
     const shown = `error: ${message.split("\n")[0]}`;
     const everyField = <T>(value: T) =>

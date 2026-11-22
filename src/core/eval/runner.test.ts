@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { createFakeLlm, type StructuredRequest } from "../llm";
+import { CacheMissError, createFakeLlm, type StructuredRequest } from "../llm";
 import { runEval } from "./runner";
 import type { EvalCase, EvalDefinition } from "./types";
 
@@ -146,7 +146,19 @@ describe("runEval", () => {
     expect(record.results.filter((result) => result.error)).toHaveLength(1);
   });
 
-  it("records the model, usage and latency of every call", async () => {
+  it("stops on an LLM cache error, which is a setup problem rather than a failed case", async () => {
+    const definition = toyEval({
+      async run() {
+        throw new CacheMissError("model claude-haiku-5-5", "abc");
+      },
+    });
+
+    const running = runEval(definition, cases, { llm: createFakeLlm(() => gold), split: "smoke" });
+
+    await expect(running).rejects.toThrow(CacheMissError);
+  });
+
+  it("records the model, usage, latency and cached flag of every call", async () => {
     const llm = createFakeLlm(() => gold, {
       usage: { inputTokens: 1000, outputTokens: 50 },
       latencyMs: 1200,
@@ -160,7 +172,11 @@ describe("runEval", () => {
 
     const record = await runEval(twice, cases.slice(0, 1), { llm, split: "smoke", runs: 1 });
 
-    const call = { model: "claude-haiku-5-5", usage: { inputTokens: 1000, outputTokens: 50 } };
+    const call = {
+      model: "claude-haiku-5-5",
+      usage: { inputTokens: 1000, outputTokens: 50 },
+      cached: false,
+    };
     expect(record.results[0]?.calls).toEqual([
       { ...call, latencyMs: 1200 },
       { ...call, latencyMs: 1200 },

@@ -28,6 +28,7 @@ export function createFakeLlm(
         model: request.model,
         usage,
         latencyMs,
+        cached: false,
       };
     },
   };

@@ -7,10 +7,10 @@ export interface StructuredRequest<T> {
   system: string;
   prompt: string;
   schema: z.ZodType<T>;
-  /** Names the schema in errors (and, later, in cache keys). */
+  /** Names the schema in errors and cache keys. */
   schemaName: string;
   maxTokens?: number;
-  /** Which sample of a repeated call this is (eval run number). Ignored until the cache uses it. */
+  /** Which sample of a repeated call this is (the eval run number); part of the cache key. Default 0. */
   sampleIndex?: number;
 }
 
@@ -19,11 +19,13 @@ export interface Usage {
   outputTokens: number;
 }
 
-/** What one call cost: the model, its token usage and its latency. */
+/** What one call cost: the model, its token usage and its latency, and whether it was replayed. */
 export interface CallStats {
   model: ModelId;
   usage: Usage;
   latencyMs: number;
+  /** Replayed from the LLM cache. Usage and latency are then the original live call's. */
+  cached: boolean;
 }
 
 export interface StructuredResult<T> extends CallStats {

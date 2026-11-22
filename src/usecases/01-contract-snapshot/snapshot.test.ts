@@ -34,6 +34,7 @@ describe("snapshotContract", () => {
       model: "claude-haiku-5-5",
       usage: { inputTokens: 2100, outputTokens: 140 },
       latencyMs: 1800,
+      cached: false,
     });
   });
 

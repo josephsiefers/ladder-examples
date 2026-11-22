@@ -17,7 +17,8 @@ const row = (cells: string[]) => `| ${cells.map(cell).join(" | ")} |`;
 
 /**
  * The eval report in Markdown: per-field stats across runs, the definition's target line, the
- * failures list, and totals.
+ * failures list, and totals (live and cached calls counted apart; cached calls report the
+ * original call's usage).
  */
 export function renderReport(
   record: RunRecord,
@@ -71,8 +72,11 @@ function totalsLine(record: RunRecord): string {
   const tokens = (kind: "inputTokens" | "outputTokens") =>
     count.format(calls.reduce((sum, call) => sum + call.usage[kind], 0));
   const failed = record.results.filter((result) => result.error !== undefined).length;
+  const cached = calls.filter((call) => call.cached).length;
   return [
     `Totals: ${plural(calls.length, "call")}`,
+    `live ${calls.length - cached}`,
+    `cached ${cached}`,
     `${tokens("inputTokens")} input tokens`,
     `${tokens("outputTokens")} output tokens`,
     `${plural(failed, "failed case run")}`,

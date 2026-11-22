@@ -1,9 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { MissingApiKeyError, parseOutput } from "./errors";
 import type { Llm } from "./llm";
-
-const DEFAULT_MAX_TOKENS = 4096;
+import { DEFAULT_MAX_TOKENS, outputJsonSchema } from "./request";
 
 /** The slice of the SDK's `messages` resource this module uses, so tests can inject a fake. */
 export interface MessagesClient {
@@ -36,15 +34,15 @@ export function createAnthropicLlm({
     async extract(request) {
       if (!apiKey) throw new MissingApiKeyError();
       client ??= makeClient(apiKey);
-      const { type, schema } = zodOutputFormat(request.schema);
-
       const started = now();
       const response = await client.create({
         model: request.model,
         max_tokens: request.maxTokens ?? DEFAULT_MAX_TOKENS,
         system: request.system,
         messages: [{ role: "user", content: request.prompt }],
-        output_config: { format: { type, schema } },
+        output_config: {
+          format: { type: "json_schema", schema: outputJsonSchema(request.schema) },
+        },
       });
       const latencyMs = now() - started;
 
@@ -57,6 +55,7 @@ export function createAnthropicLlm({
           outputTokens: response.usage.output_tokens,
         },
         latencyMs,
+        cached: false,
       };
     },
   };

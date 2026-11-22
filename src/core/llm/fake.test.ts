@@ -25,6 +25,7 @@ describe("fake LLM", () => {
       model: "claude-haiku-5-5",
       usage: { inputTokens: 10, outputTokens: 2 },
       latencyMs: 5,
+      cached: false,
     });
     expect(llm.calls).toEqual([{ ...REQUEST, sampleIndex: 2 }]);
   });

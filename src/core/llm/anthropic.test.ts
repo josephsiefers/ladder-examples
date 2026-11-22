@@ -69,7 +69,7 @@ describe("Anthropic LLM", () => {
     expect(create).toHaveBeenCalledWith(expect.objectContaining({ max_tokens: 300 }));
   });
 
-  it("returns the validated value with the model, token usage and latency", async () => {
+  it("returns the validated value with the model, token usage and latency, marked live", async () => {
     const { llm } = setUp(reply('{"answer":"no"}'));
 
     const result = await llm.extract(REQUEST);
@@ -79,6 +79,7 @@ describe("Anthropic LLM", () => {
       model: "claude-haiku-5-5",
       usage: { inputTokens: 1234, outputTokens: 56 },
       latencyMs: 850,
+      cached: false,
     });
   });
 
