@@ -66,12 +66,14 @@ Future use cases record their discovery card, justification sentence, and **open
 | Mutation | StrykerJS | Vitest runner + TypeScript checker; break threshold 70%; `prompts.ts`, the CLI entry, tests and fixtures excluded |
 | Hooks | Husky + lint-staged | Pre-commit runs no tests |
 
-### Pre-commit hook (in order)
-1. Token-size check on staged content: about chars ÷ 4, limit 5,000 per file. Exempt: lockfiles, `.cache/llm/**`, `out/**`, `reports/**`, binaries. Failure messages tell the agent how to split the file.
-2. `biome check --write` on staged files (via lint-staged): formatting plus import order, matching `npm run format:check`. Biome's linter is off, so nothing else runs.
-3. `oxlint` on staged files.
-4. `tsc --noEmit` on the whole project.
-5. `depcruise` on the whole project.
+### Pre-commit hook
+1. Clean-tree guard: the commit is refused if any tracked file has unstaged changes or any untracked file is not ignored. The whole-project checks read the working tree, so it must match what is committed.
+2. Then, in parallel:
+   - Token-size check on staged content: about chars ÷ 4, limit 5,000 per file. Exempt: lockfiles, `.cache/llm/**`, `out/**`, `reports/**`, binaries. Failure messages tell the agent how to split the file.
+   - In sequence:
+     1. `biome check --write` on staged files (via lint-staged): formatting plus import order, matching `npm run format:check`. Biome's linter is off, so nothing else runs.
+     2. `oxlint` on staged files.
+     3. `tsc --noEmit` and `depcruise` on the whole project, in parallel with each other. They wait for lint-staged because Biome rewrites staged files.
 
 ### Module boundaries (dependency-cruiser)
 1. Each module under `src/core/*` and `src/usecases/*` is imported from outside **only through its `index.ts`**.

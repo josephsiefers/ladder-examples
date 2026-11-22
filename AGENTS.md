@@ -31,7 +31,9 @@ npm run mutate           # mutation testing (StrykerJS); slow, so scope it (see 
 
 ## Pre-commit hook
 
-Husky runs `.husky/pre-commit` on every commit: the token-size check on staged content, then Biome (writing fixes) on staged files and Oxlint on staged TypeScript (via lint-staged), then a whole-project typecheck, then the boundary check (`npm run depcruise`, over `src/`, `scripts/` and root `*.ts`). It runs no tests.
+Husky runs `.husky/pre-commit` on every commit. First a guard refuses the commit if the working tree differs from the index (unstaged changes, or untracked files that aren't ignored). Then, in parallel: the token-size check on staged content, and lint-staged (Biome writing fixes on staged files, then Oxlint on staged TypeScript) followed by the whole-project typecheck and boundary check (`npm run depcruise`, over `src/`, `scripts/` and root `*.ts`), which run in parallel with each other. Failed steps print their output under their name. It runs no tests.
+
+- **Stage every file the commit needs before committing.** The typecheck and boundary check read the working tree, so the guard makes sure they check exactly what is committed. If it fails, `git add` what belongs in the commit and stash the rest.
 
 - **Never commit with `--no-verify`.** If the hook fails, fix the cause and commit again.
 - **When the token check fails**, a staged file is over 5,000 tokens (characters ÷ 4). Follow the splitting advice the message prints, stage the result, and commit again. The check reads the **index**, so `git add` your fix before retrying. Run it by hand with `npm run check-tokens -- --staged` or `npm run check-tokens -- <path>...`.

@@ -1,6 +1,50 @@
-# Order matters: block oversized files before spending time on formatting.
-# No tests run here; `npm test` is part of the definition of done instead.
-npm run --silent check-tokens -- --staged
-npx --no-install lint-staged --concurrent false
-npm run --silent typecheck
-npm run --silent depcruise
+# Husky runs this with `sh -e`. No tests run here; `npm test` is part of the definition of done.
+#
+# Layout: the clean-tree guard, then the token check in parallel with the rest. The rest is
+# lint-staged, then the typecheck and the boundary check in parallel. Those two wait for
+# lint-staged because Biome rewrites staged files; the token check reads only the index.
+
+# 1. The typecheck and the boundary check read the working tree, so it must match the index:
+#    otherwise a file left unstaged passes here and is missing from the commit.
+unstaged=$(git diff --name-only)
+untracked=$(git ls-files --others --exclude-standard)
+if [ -n "$unstaged$untracked" ]; then
+  echo "pre-commit: the working tree has changes that are not staged, so the checks would not test what is being committed:"
+  git diff --name-only | sed 's/^/  modified, not staged: /'
+  git ls-files --others --exclude-standard | sed 's/^/  untracked:            /'
+  echo "Stage them (git add) if they belong in this commit; otherwise stash them (git stash push --include-untracked) and commit again."
+  exit 1
+fi
+
+out=$(mktemp -d)
+trap 'rm -rf "$out"' EXIT
+status=0
+
+# Prints a buffered step's output under its name, so parallel failures don't interleave.
+failed() {
+  echo "pre-commit: $1 failed:"
+  cat "$out/$1"
+  status=1
+}
+
+# 2. Token-size check on the staged content, in the background.
+npm run --silent check-tokens -- --staged >"$out/check-tokens" 2>&1 &
+tokens=$!
+
+# 3. lint-staged prints live, since it is the only step in the foreground.
+if npx --no-install lint-staged --concurrent false; then
+  # 4. Whole-project typecheck and boundary check, in parallel.
+  npm run --silent typecheck >"$out/typecheck" 2>&1 &
+  typecheck=$!
+  npm run --silent depcruise >"$out/depcruise" 2>&1 &
+  depcruise=$!
+else
+  status=1
+fi
+
+wait "$tokens" || failed check-tokens
+if [ -n "${typecheck-}" ]; then
+  wait "$typecheck" || failed typecheck
+  wait "$depcruise" || failed depcruise
+fi
+exit "$status"
