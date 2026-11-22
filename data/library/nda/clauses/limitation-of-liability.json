@@ -1,0 +1,15 @@
+{
+  "standard-indirect-loss": {
+    "heading": "Limitation of Liability",
+    "paragraphs": [
+      "Neither party shall be liable to the other under this Agreement for any indirect or consequential loss, or for any loss of profit, revenue or goodwill, save that nothing in this Agreement limits the liability of the Receiving Party for a breach of its obligations of confidentiality."
+    ]
+  },
+  "standard-carve-outs": {
+    "heading": "Liability",
+    "paragraphs": [
+      "Nothing in this Agreement limits or excludes any liability for fraud, for death or personal injury caused by negligence, or for any other liability that cannot be limited or excluded by law.",
+      "Subject to the preceding paragraph, neither party shall be liable for any special, indirect or consequential loss arising out of this Agreement, other than loss arising from an unauthorised disclosure of Confidential Information."
+    ]
+  }
+}

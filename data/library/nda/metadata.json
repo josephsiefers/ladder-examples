@@ -1,0 +1,140 @@
+{
+  "titles": {
+    "mutual": [
+      "Mutual Non-Disclosure Agreement",
+      "Mutual Confidentiality Agreement"
+    ],
+    "one-way": [
+      "Non-Disclosure Agreement",
+      "Confidentiality Agreement"
+    ]
+  },
+  "phrasings": {
+    "parties": {
+      "standard": [
+        [
+          "This {{title}} (the \"Agreement\") is made between {{parties.first}} (\"{{parties.firstShort}}\") and {{parties.second}} (\"{{parties.secondShort}}\")."
+        ],
+        [
+          "This {{title}} (this \"Agreement\") is entered into by and between {{parties.first}} (\"{{parties.firstShort}}\") and {{parties.second}} (\"{{parties.secondShort}}\"), each a \"party\"."
+        ]
+      ]
+    },
+    "effectiveDate": {
+      "numerals": [
+        [
+          "This Agreement is dated {{effectiveDate.numerals}} (the \"Effective Date\")."
+        ],
+        [
+          "This Agreement takes effect on {{effectiveDate.numeralsUs}} (the \"Effective Date\")."
+        ]
+      ],
+      "words": [
+        [
+          "This Agreement is made on {{effectiveDate.dayOf}} (the \"Effective Date\")."
+        ],
+        [
+          "This Agreement is dated as of {{effectiveDate.words}} (the \"Effective Date\")."
+        ]
+      ],
+      "last-signature": [
+        [
+          "This Agreement takes effect on the date on which it has been signed by both parties, being the later of the dates of signature below (the \"Effective Date\")."
+        ],
+        [
+          "This Agreement comes into force on the date of the last signature below (the \"Effective Date\")."
+        ]
+      ]
+    },
+    "mutuality": {
+      "mutual": [
+        [
+          "{{parties.firstShort}} and {{parties.secondShort}} wish to exchange information for {{purpose}} (the \"Purpose\"). Each of them may disclose Confidential Information to the other, and in this Agreement the \"Disclosing Party\" is the party disclosing Confidential Information and the \"Receiving Party\" is the party receiving it."
+        ],
+        [
+          "{{parties.firstShort}} and {{parties.secondShort}} are discussing {{purpose}} (the \"Purpose\").",
+          "Each of {{parties.firstShort}} and {{parties.secondShort}} will disclose Confidential Information to the other and will protect the Confidential Information it receives. References to the \"Disclosing Party\" and the \"Receiving Party\" are to each of them in that capacity."
+        ]
+      ],
+      "one-way": [
+        [
+          "{{mutuality.discloser}} (the \"Disclosing Party\") intends to disclose Confidential Information to {{mutuality.recipient}} (the \"Receiving Party\") for {{purpose}} (the \"Purpose\"). {{mutuality.recipient}} will not disclose confidential information under this Agreement, which imposes obligations of confidentiality on {{mutuality.recipient}} only."
+        ]
+      ],
+      "one-way-mutual-discussions": [
+        [
+          "{{parties.firstShort}} and {{parties.secondShort}} have engaged in mutual discussions concerning {{purpose}} (the \"Purpose\").",
+          "To allow those discussions to continue, {{mutuality.discloser}} (the \"Disclosing Party\") is prepared to make Confidential Information available to {{mutuality.recipient}} (the \"Receiving Party\"). {{mutuality.recipient}} will not provide confidential information under this Agreement, and only {{mutuality.recipient}} is bound by obligations of confidentiality."
+        ]
+      ]
+    },
+    "term": {
+      "fixed": [
+        [
+          "This Agreement shall remain in force for a period of {{term.period}} from the date on which it takes effect, unless terminated earlier by agreement in writing."
+        ],
+        [
+          "This Agreement continues for {{term.period}} and then expires automatically."
+        ]
+      ],
+      "until-terminated": [
+        [
+          "This Agreement continues in force until terminated by either party giving the other not less than {{term.notice}} prior written notice."
+        ],
+        [
+          "Either party may terminate this Agreement at any time on {{term.notice}} written notice to the other; until then it remains in force."
+        ]
+      ]
+    },
+    "governingLaw": {
+      "standard": [
+        [
+          "This Agreement and any dispute arising out of it are governed by {{governingLaw.law}}.",
+          "Each party submits to the exclusive jurisdiction of {{courts.courts}}."
+        ],
+        [
+          "This Agreement shall be governed by and construed in accordance with {{governingLaw.law}}, and the parties submit to the exclusive jurisdiction of {{courts.courts}}."
+        ]
+      ]
+    },
+    "signature": {
+      "standard": [
+        [
+          "Signed for and on behalf of {{signature.party}} by its authorised signatory. Date: ____________."
+        ],
+        [
+          "{{signature.party}}, by its duly authorised representative. Date: ____________."
+        ]
+      ]
+    },
+    "survivalPeriod": {
+      "fixed": [
+        [
+          "The Receiving Party's obligations of confidentiality survive the expiry or termination of this Agreement for {{survivalPeriod.period}}."
+        ],
+        [
+          "The obligations in this Agreement in respect of Confidential Information disclosed before its expiry or termination continue for a further {{survivalPeriod.period}} after it ends."
+        ]
+      ],
+      "like-term": [
+        [
+          "The Receiving Party's obligations of confidentiality shall remain in force for a period of {{survivalPeriod.period}} from the date on which this Agreement expires or terminates."
+        ],
+        [
+          "Each obligation of confidentiality in this Agreement continues for {{survivalPeriod.period}} after this Agreement expires and then ends."
+        ]
+      ],
+      "trade-secrets-indefinite": [
+        [
+          "The Receiving Party's obligations of confidentiality survive the expiry or termination of this Agreement for {{survivalPeriod.period}}.",
+          "In respect of any Confidential Information that is a trade secret, those obligations continue indefinitely, for as long as the information remains a trade secret."
+        ]
+      ],
+      "indefinite": [
+        [
+          "The Receiving Party's obligations of confidentiality survive the expiry or termination of this Agreement and continue indefinitely, until the Confidential Information falls within one of the exclusions in this Agreement."
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "standard-need-to-know": {
+    "heading": "Disclosure to Representatives",
+    "paragraphs": [
+      "The Receiving Party may disclose Confidential Information to its directors, officers, employees, professional advisers and contractors (its \"Representatives\") who need to know it for the Purpose, provided that each of them is informed of its confidential nature and is bound by obligations of confidentiality no less protective than those in this Agreement.",
+      "The Receiving Party is responsible for any act or omission of its Representatives that would be a breach of this Agreement if done by the Receiving Party."
+    ]
+  },
+  "standard-advisers": {
+    "heading": "Representatives",
+    "paragraphs": [
+      "\"Representatives\" means the officers, employees, legal advisers, accountants and financial advisers of the Receiving Party. The Receiving Party shall limit disclosure of the Confidential Information to those Representatives who require it for the Purpose, and shall ensure that they comply with this Agreement as if they were party to it."
+    ]
+  }
+}

@@ -52,6 +52,23 @@ Clause bodies always use standard wording; clause-deviation plants belong to UC3
 - **smoke:** `nda-sample-01` plus 3 hand-written NDAs (#4, #5).
 - **dev / test:** 20 generated NDAs, 12 dev and 8 test (#7). Each metadata plant appears at least twice in dev and at least once in test.
 
+## Results
+
+Dev split: 12 generated NDAs (#7), Haiku, 3 runs, recorded 2026-11-22. The prompt was not tuned against this corpus.
+
+| Field | Mean | Stdev | Min | Max |
+|---|---:|---:|---:|---:|
+| parties | 100.0% | 0.0% | 100.0% | 100.0% |
+| effectiveDate | 100.0% | 0.0% | 100.0% | 100.0% |
+| term | 100.0% | 0.0% | 100.0% | 100.0% |
+| survivalPeriod | 100.0% | 0.0% | 100.0% | 100.0% |
+| governingLaw | 100.0% | 0.0% | 100.0% | 100.0% |
+| mutuality | 100.0% | 0.0% | 100.0% | 100.0% |
+
+`effectiveDate 100.0% · term 100.0% → target 98%: MET`
+
+No failures and no failed case runs (36 calls). **The effective-date/term target is met.** The deferred decision below is not triggered, but this stands only until the answer key has been reviewed (#9). The test split has not been run.
+
 ## Deferred decision
 
 - **If effective-date/term accuracy is below 98%** after the answer key has been reviewed (#9): revisit then. Candidate responses are bounded prompt improvement with in-context examples on dev, or reshaping UC1 (e.g. dropping the failing field). Do not decide in advance.

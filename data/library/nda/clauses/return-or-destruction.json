@@ -1,0 +1,15 @@
+{
+  "standard-on-request": {
+    "heading": "Return or Destruction",
+    "paragraphs": [
+      "On the written request of the Disclosing Party, the Receiving Party shall promptly return or destroy all documents and materials containing Confidential Information and, if requested, confirm in writing that it has done so.",
+      "The Receiving Party may keep copies that it is required to keep by law or regulation, or that are held in automatic electronic back-up systems, provided that they remain subject to this Agreement."
+    ]
+  },
+  "standard-certify": {
+    "heading": "Return of Materials",
+    "paragraphs": [
+      "Upon the expiry or termination of this Agreement, or earlier at the request of the Disclosing Party, the Receiving Party shall return or securely destroy all Confidential Information in its possession or control and shall certify the destruction in writing if the Disclosing Party asks it to."
+    ]
+  }
+}

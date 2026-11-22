@@ -1,0 +1,37 @@
+{
+  "id": "nda-gen-17",
+  "split": "test",
+  "seed": 1017,
+  "parties": [
+    {
+      "name": "Hartwell Agritech Limited",
+      "short": "Hartwell",
+      "affiliates": true
+    },
+    {
+      "name": "Prairie Rose Seeds Inc.",
+      "short": "Prairie Rose"
+    }
+  ],
+  "purpose": "a possible field trial of drought-tolerant seed varieties",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2026-03-09",
+    "phrasing": "numerals"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 60
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 60,
+    "unit": "years",
+    "phrasing": "fixed"
+  },
+  "governingLaw": "ontario",
+  "courts": "ontario"
+}

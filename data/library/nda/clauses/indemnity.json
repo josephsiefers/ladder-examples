@@ -1,0 +1,15 @@
+{
+  "standard-breach": {
+    "heading": "Indemnity",
+    "paragraphs": [
+      "The Receiving Party shall indemnify the Disclosing Party against all losses, damages, costs and expenses, including reasonable legal fees, that the Disclosing Party incurs as a direct result of any breach of this Agreement by the Receiving Party or its Representatives."
+    ]
+  },
+  "standard-third-party": {
+    "heading": "Indemnification",
+    "paragraphs": [
+      "The Receiving Party shall indemnify and hold harmless the Disclosing Party from and against any claims, losses and reasonable costs arising out of an unauthorised disclosure or use of Confidential Information by the Receiving Party or any of its Representatives.",
+      "The Disclosing Party shall notify the Receiving Party promptly of any claim for which it seeks indemnity and shall take reasonable steps to mitigate its loss."
+    ]
+  }
+}

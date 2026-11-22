@@ -1,0 +1,39 @@
+{
+  "id": "nda-gen-18",
+  "split": "test",
+  "seed": 1018,
+  "parties": [
+    {
+      "name": "Delphine Cosmetics Inc.",
+      "short": "Delphine"
+    },
+    {
+      "name": "Orchard Row Retail LLC",
+      "short": "Orchard Row"
+    }
+  ],
+  "purpose": "a possible exclusive retail launch of Delphine's skincare range",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 0,
+    "recital": "plain"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-12-01",
+    "phrasing": "words"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 18,
+    "unit": "months"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 30,
+    "unit": "months",
+    "phrasing": "like-term"
+  },
+  "governingLaw": "new-york",
+  "courts": "new-york"
+}

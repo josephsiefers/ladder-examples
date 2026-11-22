@@ -10,6 +10,7 @@
   "scripts": {
     "ladder": "tsx src/cli.ts",
     "eval": "tsx src/cli.ts eval",
+    "generate": "tsx scripts/generate.ts",
     "test": "vitest run",
     "typecheck": "node node_modules/typescript/bin/tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsbuildinfo",
     "lint": "oxlint --deny-warnings",

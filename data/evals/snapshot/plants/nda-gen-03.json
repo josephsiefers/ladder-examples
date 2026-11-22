@@ -1,0 +1,35 @@
+{
+  "id": "nda-gen-03",
+  "split": "dev",
+  "seed": 1003,
+  "parties": [
+    {
+      "name": "Tidewell Energy Systems Limited",
+      "short": "Tidewell",
+      "affiliates": true
+    },
+    {
+      "name": "Quillon Software Ltd",
+      "short": "Quillon"
+    }
+  ],
+  "purpose": "a possible integration of Quillon's scheduling software with Tidewell's battery controllers",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "last-signature"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 30
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "years",
+    "phrasing": "trade-secrets-indefinite"
+  },
+  "governingLaw": "california",
+  "courts": "california"
+}

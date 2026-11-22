@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-03"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Tidewell Energy Systems Limited",
+        "role": "both"
+      },
+      {
+        "name": "Quillon Software Ltd",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 30
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "governingLaw": "california",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "6.1"
+    ],
+    "survivalPeriod": [
+      "6.2"
+    ],
+    "governingLaw": [
+      "3.1"
+    ],
+    "mutuality": [
+      "1.3",
+      "1.4"
+    ]
+  }
+}

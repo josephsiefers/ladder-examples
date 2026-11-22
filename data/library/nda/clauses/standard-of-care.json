@@ -1,0 +1,15 @@
+{
+  "standard-reasonable-care": {
+    "heading": "Confidentiality Obligations",
+    "paragraphs": [
+      "The Receiving Party shall keep the Confidential Information secret and confidential and shall protect it using at least the degree of care that it uses to protect its own confidential information of a similar nature, and in any event no less than a reasonable degree of care."
+    ]
+  },
+  "standard-security": {
+    "heading": "Standard of Care",
+    "paragraphs": [
+      "The Receiving Party shall hold the Confidential Information in strict confidence, shall store it securely, and shall take all reasonable steps to prevent its unauthorised disclosure, copying or use.",
+      "The Receiving Party shall notify the Disclosing Party promptly on becoming aware of any unauthorised disclosure or use of the Confidential Information."
+    ]
+  }
+}

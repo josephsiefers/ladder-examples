@@ -1,0 +1,33 @@
+{
+  "id": "nda-gen-09",
+  "split": "dev",
+  "seed": 1009,
+  "parties": [
+    {
+      "name": "Hollis & Crane Consulting LLP",
+      "short": "Hollis & Crane"
+    },
+    {
+      "name": "Mirabel Genomics Inc.",
+      "short": "Mirabel"
+    }
+  ],
+  "purpose": "a possible collaboration on population sequencing studies",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2026-02-02",
+    "phrasing": "numerals"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 90
+  },
+  "survivalPeriod": {
+    "kind": "indefinite"
+  },
+  "governingLaw": "california",
+  "courts": "delaware"
+}

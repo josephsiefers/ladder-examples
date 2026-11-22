@@ -1,0 +1,14 @@
+{
+  "standard-no-rights": {
+    "heading": "No Licence",
+    "paragraphs": [
+      "All Confidential Information remains the property of the Disclosing Party. No licence or other right under any patent, copyright, trade mark, trade secret or other intellectual property right is granted to the Receiving Party by this Agreement or by any disclosure of Confidential Information."
+    ]
+  },
+  "standard-reserved": {
+    "heading": "Intellectual Property",
+    "paragraphs": [
+      "The Disclosing Party reserves all rights in its Confidential Information. Nothing in this Agreement grants the Receiving Party any rights in or to the Confidential Information other than the right to use it for the Purpose in accordance with this Agreement."
+    ]
+  }
+}

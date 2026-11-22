@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-06"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Veridian Payments Pte. Ltd.",
+        "role": "discloser"
+      },
+      {
+        "name": "Saltmarsh Analytics Limited",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-11-30"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 60
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "governingLaw": "delaware",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "12.1"
+    ],
+    "survivalPeriod": [
+      "12.2"
+    ],
+    "governingLaw": [
+      "13.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

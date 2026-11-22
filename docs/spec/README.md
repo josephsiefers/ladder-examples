@@ -94,7 +94,8 @@ src/usecases/02-intake-triage/  each: index.ts, schema.ts, prompts.ts, eval.ts
 scripts/                        check-tokens, generate (assembler)
 data/firm/                      fake firm systems: contracts/, intake/
 data/library/                   clause-variant library (generator input)
-data/evals/<eval>/<split>/      gold cases, one JSON per case; plant specs
+data/evals/<eval>/<split>/      gold cases, one JSON per case
+data/evals/<eval>/plants/       plant specs, one JSON per generated case
 .cache/llm/                     committed LLM cache
 out/  reports/                  gitignored: firm writes, eval run records, review sheets
 ```

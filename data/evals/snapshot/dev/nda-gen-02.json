@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-02"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Corvid Therapeutics, Inc.",
+        "role": "discloser"
+      },
+      {
+        "name": "Lantern Ridge Capital LLC",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-07-14"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 18
+    },
+    "governingLaw": "new-york",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "13.1"
+    ],
+    "survivalPeriod": [
+      "13.2"
+    ],
+    "governingLaw": [
+      "7.1"
+    ],
+    "mutuality": [
+      "1.4"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "nda-gen-05",
+  "split": "dev",
+  "seed": 1005,
+  "parties": [
+    {
+      "name": "Brackenfield Foods Limited",
+      "short": "Brackenfield"
+    },
+    {
+      "name": "Northcote Logistics Inc.",
+      "short": "Northcote"
+    }
+  ],
+  "purpose": "a possible cold-chain distribution partnership",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2026-01-21",
+    "phrasing": "words"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "months"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "months",
+    "phrasing": "like-term"
+  },
+  "governingLaw": "ontario",
+  "courts": "new-york"
+}

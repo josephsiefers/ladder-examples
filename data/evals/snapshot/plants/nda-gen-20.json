@@ -1,0 +1,36 @@
+{
+  "id": "nda-gen-20",
+  "split": "test",
+  "seed": 1020,
+  "parties": [
+    {
+      "name": "Brannock Freight Inc.",
+      "short": "Brannock"
+    },
+    {
+      "name": "Elmstead Software LLC",
+      "short": "Elmstead"
+    }
+  ],
+  "purpose": "a possible pilot of Elmstead's route-planning software",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 1,
+    "recital": "plain"
+  },
+  "effectiveDate": {
+    "kind": "not-stated"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 90
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "years",
+    "phrasing": "fixed"
+  },
+  "governingLaw": "delaware",
+  "courts": "delaware"
+}

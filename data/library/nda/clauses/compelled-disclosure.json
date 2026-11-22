@@ -1,0 +1,15 @@
+{
+  "standard-notice": {
+    "heading": "Compelled Disclosure",
+    "paragraphs": [
+      "If the Receiving Party is required by law, regulation, court order or the rules of a stock exchange to disclose any Confidential Information, it may do so provided that, to the extent lawful, it gives the Disclosing Party prompt written notice of the requirement, consults with the Disclosing Party on the form of the disclosure, and discloses only the portion of the Confidential Information that it is legally required to disclose."
+    ]
+  },
+  "standard-protective-order": {
+    "heading": "Legally Required Disclosure",
+    "paragraphs": [
+      "Where the Receiving Party or any of its Representatives is requested or required by legal process to disclose Confidential Information, the Receiving Party shall, where permitted, notify the Disclosing Party promptly so that the Disclosing Party may seek a protective order or other appropriate remedy.",
+      "The Receiving Party shall give the Disclosing Party reasonable assistance, at the Disclosing Party's cost, in seeking any such order."
+    ]
+  }
+}

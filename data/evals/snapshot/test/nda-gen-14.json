@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-14"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Albright Water Technologies Limited",
+        "role": "discloser"
+      },
+      {
+        "name": "Calder Infrastructure Partners LLP",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-10-22"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 30
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "16.1"
+    ],
+    "survivalPeriod": [
+      "16.2"
+    ],
+    "governingLaw": [
+      "7.1"
+    ],
+    "mutuality": [
+      "1.4"
+    ]
+  }
+}

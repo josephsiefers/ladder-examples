@@ -1,0 +1,46 @@
+{
+  "input": {
+    "contractId": "nda-gen-04"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Orrin Medical Devices Inc.",
+        "role": "recipient"
+      },
+      {
+        "name": "Halcyon Clinical Research LLC",
+        "role": "discloser"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "not-stated"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 12
+    },
+    "survivalPeriod": {
+      "kind": "indefinite"
+    },
+    "governingLaw": "singapore",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "term": [
+      "6.1"
+    ],
+    "survivalPeriod": [
+      "6.2"
+    ],
+    "governingLaw": [
+      "14.1"
+    ],
+    "mutuality": [
+      "1.2"
+    ]
+  }
+}

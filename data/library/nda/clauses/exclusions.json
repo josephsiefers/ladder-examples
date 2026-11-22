@@ -1,0 +1,15 @@
+{
+  "standard-four-limbs": {
+    "heading": "Exclusions",
+    "paragraphs": [
+      "The obligations in this Agreement do not apply to information that the Receiving Party can show: (a) is or becomes publicly available other than through a breach of this Agreement; (b) was lawfully in its possession free of any duty of confidence before it was disclosed by the Disclosing Party; (c) is lawfully received from a third party who is free to disclose it; or (d) is independently developed by or for the Receiving Party without use of the Confidential Information."
+    ]
+  },
+  "standard-burden": {
+    "heading": "Information Not Covered",
+    "paragraphs": [
+      "Confidential Information does not include information which is or becomes generally available to the public other than as a result of a disclosure by the Receiving Party or its Representatives, which was available to the Receiving Party on a non-confidential basis before its disclosure, or which the Receiving Party develops independently without reference to the Confidential Information.",
+      "The Receiving Party bears the burden of showing that any of these exclusions applies."
+    ]
+  }
+}

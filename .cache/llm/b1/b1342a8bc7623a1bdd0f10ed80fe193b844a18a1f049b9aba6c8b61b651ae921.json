@@ -1,0 +1,246 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are a paralegal at a law firm. You read one contract and record its contract snapshot for the matter record. Record only what the contract states; never guess or infer a value it does not state.\n\nEach paragraph of the contract is marked with its number, e.g. [7.1]. Read the whole contract before answering: the values you need may be anywhere in it.\n\nFields:\n\nparties\n  Every party to the contract, as {name, role}.\n  - name: the legal entity name exactly as the contract gives it, e.g. \"Kestrel Bioanalytics Limited\". Leave out defined short names, addresses, company numbers, and any extension such as \"and its Affiliates\" or \"and its subsidiaries\".\n  - role: \"discloser\" if the party only discloses confidential information, \"recipient\" if it only receives it, \"both\" if it does both. In a mutual agreement every party is \"both\".\n\neffectiveDate\n  The date the agreement takes effect.\n  - {kind: \"date\", value: \"YYYY-MM-DD\"} when the contract states a calendar date, however it is written (\"3 March 2025\", \"the third day of March, two thousand and twenty-five\" both become \"2025-03-03\").\n  - {kind: \"last-signature\"} when it takes effect on the date of the last signature (or similar wording) rather than a stated date.\n  - {kind: \"not-stated\"} when the contract gives no effective date.\n\nterm\n  How long the agreement itself runs. This is NOT the survival period: ignore how long confidentiality obligations last after the agreement ends.\n  - {kind: \"fixed\", months} for a fixed duration, converted to months (\"two (2) years\" is 24).\n  - {kind: \"until-terminated\", noticeDays} when it runs until a party terminates it on notice, with the notice period in days (convert weeks or months to days: one month is 30 days).\n  - {kind: \"not-stated\"} when the contract gives no term.\n\nsurvivalPeriod\n  How long the confidentiality obligations continue after the agreement expires or terminates. This is NOT the term.\n  - {kind: \"fixed\", months}, converted to months (\"five (5) years\" is 60). If different information has different survival periods, use the period that applies to Confidential Information in general.\n  - {kind: \"indefinite\"} when the obligations survive with no end date for Confidential Information in general.\n  - {kind: \"not-stated\"} when the contract does not say the obligations survive.\n\ngoverningLaw\n  The law the parties chose to govern the contract. This is NOT the courts or jurisdiction for disputes: a contract governed by New York law with disputes heard in Delaware courts has governingLaw \"new-york\".\n  One of: \"england-and-wales\" (also \"English law\" or \"the laws of England\"), \"new-york\", \"delaware\", \"california\", \"ontario\", \"singapore\", \"other\" (any other law that is stated), or \"not-stated\" (no governing law clause).\n\nmutuality\n  \"mutual\" if both parties disclose and protect confidential information; \"one-way\" if only one party discloses and only the other protects. Decide from the obligations, not the title or recitals: a recital mentioning \"mutual discussions\" does not make a one-way agreement mutual.\n\n\"Not stated\" is always a valid answer. An invented value is worse than \"not-stated\".",
+    "prompt": "Record the contract snapshot for this contract.\n\n<contract id=\"nda-gen-09\">\n# Mutual Confidentiality Agreement\n\n## 1. Parties and Background\n[1.1] This Mutual Confidentiality Agreement (this \"Agreement\") is entered into by and between Hollis & Crane Consulting LLP (\"Hollis & Crane\") and Mirabel Genomics Inc. (\"Mirabel\"), each a \"party\".\n[1.2] This Agreement is dated 2 February 2026 (the \"Effective Date\").\n[1.3] Hollis & Crane and Mirabel wish to exchange information for a possible collaboration on population sequencing studies (the \"Purpose\"). Each of them may disclose Confidential Information to the other, and in this Agreement the \"Disclosing Party\" is the party disclosing Confidential Information and the \"Receiving Party\" is the party receiving it.\n\n## 2. Confidential Information\n[2.1] \"Confidential Information\" means all information disclosed by or on behalf of the Disclosing Party to the Receiving Party in connection with the Purpose, whether disclosed orally, in writing, electronically or by inspection, and whether or not marked as confidential, including business plans, financial information, technical data, software, know-how, customer information and trade secrets.\n[2.2] Confidential Information also includes all notes, analyses, compilations and other materials prepared by the Receiving Party or its Representatives to the extent that they contain or reflect any information described above.\n\n## 3. No Warranty\n[3.1] All Confidential Information is provided \"as is\". The Disclosing Party gives no warranty or representation, express or implied, as to its accuracy, completeness or fitness for any purpose.\n\n## 4. Intellectual Property\n[4.1] The Disclosing Party reserves all rights in its Confidential Information. Nothing in this Agreement grants the Receiving Party any rights in or to the Confidential Information other than the right to use it for the Purpose in accordance with this Agreement.\n\n## 5. Use of Confidential Information\n[5.1] The Receiving Party shall use the Confidential Information solely for the Purpose and for no other purpose whatsoever, and shall not use it to the detriment of the Disclosing Party.\n\n## 6. Information Not Covered\n[6.1] Confidential Information does not include information which is or becomes generally available to the public other than as a result of a disclosure by the Receiving Party or its Representatives, which was available to the Receiving Party on a non-confidential basis before its disclosure, or which the Receiving Party develops independently without reference to the Confidential Information.\n[6.2] The Receiving Party bears the burden of showing that any of these exclusions applies.\n\n## 7. Term and Termination\n[7.1] Either party may terminate this Agreement at any time on ninety (90) days' written notice to the other; until then it remains in force.\n[7.2] The Receiving Party's obligations of confidentiality survive the expiry or termination of this Agreement and continue indefinitely, until the Confidential Information falls within one of the exclusions in this Agreement.\n[7.3] The expiry or termination of this Agreement does not affect any rights, remedies, obligations or liabilities of the parties that have accrued before it takes effect.\n\n## 8. Confidentiality Obligations\n[8.1] The Receiving Party shall keep the Confidential Information secret and confidential and shall protect it using at least the degree of care that it uses to protect its own confidential information of a similar nature, and in any event no less than a reasonable degree of care.\n\n## 9. Representatives\n[9.1] \"Representatives\" means the officers, employees, legal advisers, accountants and financial advisers of the Receiving Party. The Receiving Party shall limit disclosure of the Confidential Information to those Representatives who require it for the Purpose, and shall ensure that they comply with this Agreement as if they were party to it.\n\n## 10. Equitable Relief\n[10.1] Any unauthorised disclosure or use of Confidential Information may cause the Disclosing Party irreparable harm. The Disclosing Party may therefore apply for an injunction to restrain any breach or threatened breach of this Agreement without proving actual damage.\n[10.2] The rights and remedies in this Agreement are cumulative and are in addition to any rights or remedies provided by law.\n\n## 11. Law and Jurisdiction\n[11.1] This Agreement shall be governed by and construed in accordance with the laws of the State of California, and the parties submit to the exclusive jurisdiction of the state and federal courts located in the State of Delaware.\n[11.2] This clause applies equally to any dispute or claim arising out of or in connection with this Agreement, whether contractual or non-contractual.\n\n## 12. Indemnification\n[12.1] The Receiving Party shall indemnify and hold harmless the Disclosing Party from and against any claims, losses and reasonable costs arising out of an unauthorised disclosure or use of Confidential Information by the Receiving Party or any of its Representatives.\n[12.2] The Disclosing Party shall notify the Receiving Party promptly of any claim for which it seeks indemnity and shall take reasonable steps to mitigate its loss.\n\n## 13. Return or Destruction\n[13.1] On the written request of the Disclosing Party, the Receiving Party shall promptly return or destroy all documents and materials containing Confidential Information and, if requested, confirm in writing that it has done so.\n[13.2] The Receiving Party may keep copies that it is required to keep by law or regulation, or that are held in automatic electronic back-up systems, provided that they remain subject to this Agreement.\n\n## 14. General\n[14.1] This Agreement is the entire agreement between the parties concerning its subject matter and supersedes all earlier understandings about that subject matter. It may be amended only in writing signed by both of them.\n[14.2] Neither party may assign this Agreement without the prior written consent of the other. This Agreement may be signed in any number of counterparts, each of which is an original.\n\n## 15. Limitation of Liability\n[15.1] Neither party shall be liable to the other under this Agreement for any indirect or consequential loss, or for any loss of profit, revenue or goodwill, save that nothing in this Agreement limits the liability of the Receiving Party for a breach of its obligations of confidentiality.\n\n## 16. No Solicitation of Staff\n[16.1] The Receiving Party shall not, while this Agreement remains in force, induce or attempt to induce any officer or senior employee of the Disclosing Party who is involved in the Purpose to leave the employment of the Disclosing Party.\n\n## 17. Legally Required Disclosure\n[17.1] Where the Receiving Party or any of its Representatives is requested or required by legal process to disclose Confidential Information, the Receiving Party shall, where permitted, notify the Disclosing Party promptly so that the Disclosing Party may seek a protective order or other appropriate remedy.\n[17.2] The Receiving Party shall give the Disclosing Party reasonable assistance, at the Disclosing Party's cost, in seeking any such order.\n\n## 18. Signatures\n[18.1] Signed for and on behalf of Hollis & Crane Consulting LLP by its authorised signatory. Date: ____________.\n[18.2] Signed for and on behalf of Mirabel Genomics Inc. by its authorised signatory. Date: ____________.\n</contract>",
+    "schemaName": "contract-snapshot",
+    "jsonSchema": {
+      "$defs": {
+        "__schema0": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "{minLength: 1}"
+            },
+            "role": {
+              "enum": [
+                "discloser",
+                "recipient",
+                "both"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "role"
+          ]
+        },
+        "__schema1": {
+          "type": "integer",
+          "description": "{exclusiveMinimum: 0, maximum: 9007199254740991}"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "minItems": 1
+        },
+        "effectiveDate": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "{pattern: \"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))$\"}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "last-signature"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "term": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "until-terminated"
+                },
+                "noticeDays": {
+                  "type": "integer",
+                  "description": "{minimum: 0, maximum: 9007199254740991}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "noticeDays"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "survivalPeriod": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "indefinite"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "governingLaw": {
+          "enum": [
+            "england-and-wales",
+            "new-york",
+            "delaware",
+            "california",
+            "ontario",
+            "singapore",
+            "other",
+            "not-stated"
+          ]
+        },
+        "mutuality": {
+          "enum": [
+            "mutual",
+            "one-way"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "parties",
+        "effectiveDate",
+        "term",
+        "survivalPeriod",
+        "governingLaw",
+        "mutuality"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "parties": [
+      {
+        "name": "Hollis & Crane Consulting LLP",
+        "role": "both"
+      },
+      {
+        "name": "Mirabel Genomics Inc.",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2026-02-02"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 90
+    },
+    "survivalPeriod": {
+      "kind": "indefinite"
+    },
+    "governingLaw": "california",
+    "mutuality": "mutual"
+  },
+  "usage": {
+    "inputTokens": 5191,
+    "outputTokens": 350
+  },
+  "latencyMs": 2057.1037730000007,
+  "recordedAt": "2026-11-22T20:54:30.006Z"
+}

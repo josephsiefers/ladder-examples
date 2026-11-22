@@ -1,0 +1,39 @@
+{
+  "id": "nda-gen-10",
+  "split": "dev",
+  "seed": 1010,
+  "parties": [
+    {
+      "name": "Cobalt Harbour Shipping Limited",
+      "short": "Cobalt Harbour"
+    },
+    {
+      "name": "Wrenfield Insurance Brokers Ltd",
+      "short": "Wrenfield"
+    }
+  ],
+  "purpose": "a possible cargo insurance programme for Cobalt Harbour's fleet",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 0,
+    "recital": "plain"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-05-12",
+    "phrasing": "words"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "years"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 60,
+    "unit": "years",
+    "phrasing": "trade-secrets-indefinite"
+  },
+  "governingLaw": "england-and-wales",
+  "courts": "england-and-wales"
+}

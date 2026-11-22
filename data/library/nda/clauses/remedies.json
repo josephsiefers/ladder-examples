@@ -1,0 +1,15 @@
+{
+  "standard-injunction": {
+    "heading": "Remedies",
+    "paragraphs": [
+      "The Receiving Party acknowledges that damages alone may not be an adequate remedy for a breach of this Agreement, and that the Disclosing Party is entitled to seek injunctive relief, specific performance or other equitable relief for any threatened or actual breach, in addition to any other remedy available to it."
+    ]
+  },
+  "standard-irreparable-harm": {
+    "heading": "Equitable Relief",
+    "paragraphs": [
+      "Any unauthorised disclosure or use of Confidential Information may cause the Disclosing Party irreparable harm. The Disclosing Party may therefore apply for an injunction to restrain any breach or threatened breach of this Agreement without proving actual damage.",
+      "The rights and remedies in this Agreement are cumulative and are in addition to any rights or remedies provided by law."
+    ]
+  }
+}

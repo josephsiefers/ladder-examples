@@ -1,0 +1,34 @@
+{
+  "id": "nda-gen-16",
+  "split": "test",
+  "seed": 1016,
+  "parties": [
+    {
+      "name": "Silverline Health Inc.",
+      "short": "Silverline"
+    },
+    {
+      "name": "Tamsin Biologics Inc.",
+      "short": "Tamsin"
+    }
+  ],
+  "purpose": "a possible licence of Tamsin's antibody platform",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 1,
+    "recital": "plain"
+  },
+  "effectiveDate": {
+    "kind": "not-stated"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "years"
+  },
+  "survivalPeriod": {
+    "kind": "indefinite"
+  },
+  "governingLaw": "california",
+  "courts": "california"
+}

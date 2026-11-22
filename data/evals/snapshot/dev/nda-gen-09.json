@@ -1,0 +1,50 @@
+{
+  "input": {
+    "contractId": "nda-gen-09"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Hollis & Crane Consulting LLP",
+        "role": "both"
+      },
+      {
+        "name": "Mirabel Genomics Inc.",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2026-02-02"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 90
+    },
+    "survivalPeriod": {
+      "kind": "indefinite"
+    },
+    "governingLaw": "california",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "7.1"
+    ],
+    "survivalPeriod": [
+      "7.2"
+    ],
+    "governingLaw": [
+      "11.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

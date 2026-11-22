@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-15"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Juniper Lane Robotics Pte. Ltd.",
+        "role": "both"
+      },
+      {
+        "name": "Marchetti Automation Ltd",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 12
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "governingLaw": "singapore",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "14.1"
+    ],
+    "survivalPeriod": [
+      "14.2"
+    ],
+    "governingLaw": [
+      "7.1"
+    ],
+    "mutuality": [
+      "1.3",
+      "1.4"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "nda-gen-07",
+  "split": "dev",
+  "seed": 1007,
+  "parties": [
+    {
+      "name": "Ferncliff Instruments Ltd",
+      "short": "Ferncliff"
+    },
+    {
+      "name": "Ostrander Materials Inc.",
+      "short": "Ostrander"
+    }
+  ],
+  "purpose": "a possible joint bid to supply sensor housings",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "last-signature"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 18,
+    "unit": "months"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "months",
+    "phrasing": "trade-secrets-indefinite"
+  },
+  "governingLaw": "england-and-wales",
+  "courts": "singapore"
+}

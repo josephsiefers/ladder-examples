@@ -1,0 +1,52 @@
+{
+  "input": {
+    "contractId": "nda-gen-13"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Riverglass Media Inc.",
+        "role": "both"
+      },
+      {
+        "name": "Fennimore Studios LLC",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-04-15"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "governingLaw": "delaware",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "8.1"
+    ],
+    "survivalPeriod": [
+      "8.2"
+    ],
+    "governingLaw": [
+      "11.1"
+    ],
+    "mutuality": [
+      "1.3",
+      "1.4"
+    ]
+  }
+}

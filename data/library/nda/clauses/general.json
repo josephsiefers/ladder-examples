@@ -1,0 +1,16 @@
+{
+  "standard-entire-agreement": {
+    "heading": "General",
+    "paragraphs": [
+      "This Agreement is the entire agreement between the parties concerning its subject matter and supersedes all earlier understandings about that subject matter. It may be amended only in writing signed by both of them.",
+      "Neither party may assign this Agreement without the prior written consent of the other. This Agreement may be signed in any number of counterparts, each of which is an original."
+    ]
+  },
+  "standard-miscellaneous": {
+    "heading": "Miscellaneous",
+    "paragraphs": [
+      "No failure or delay in exercising any right under this Agreement operates as a waiver of it. If any provision of this Agreement is found to be invalid, the remaining provisions continue in full force.",
+      "This Agreement does not oblige either party to enter into any further agreement or transaction."
+    ]
+  }
+}

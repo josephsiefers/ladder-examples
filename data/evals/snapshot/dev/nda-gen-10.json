@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-10"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Cobalt Harbour Shipping Limited",
+        "role": "discloser"
+      },
+      {
+        "name": "Wrenfield Insurance Brokers Ltd",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-05-12"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 60
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "8.1"
+    ],
+    "survivalPeriod": [
+      "8.2"
+    ],
+    "governingLaw": [
+      "4.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

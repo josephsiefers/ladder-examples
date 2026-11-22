@@ -1,0 +1,39 @@
+{
+  "id": "nda-gen-02",
+  "split": "dev",
+  "seed": 1002,
+  "parties": [
+    {
+      "name": "Corvid Therapeutics, Inc.",
+      "short": "Corvid"
+    },
+    {
+      "name": "Lantern Ridge Capital LLC",
+      "short": "Lantern Ridge"
+    }
+  ],
+  "purpose": "a possible minority investment by Lantern Ridge in Corvid",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 0,
+    "recital": "mutual-discussions"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-07-14",
+    "phrasing": "words"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "years"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 18,
+    "unit": "months",
+    "phrasing": "fixed"
+  },
+  "governingLaw": "new-york",
+  "courts": "delaware"
+}

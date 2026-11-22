@@ -1,0 +1,38 @@
+{
+  "id": "nda-gen-08",
+  "split": "dev",
+  "seed": 1008,
+  "parties": [
+    {
+      "name": "Pemberton Aerospace Limited",
+      "short": "Pemberton",
+      "affiliates": true
+    },
+    {
+      "name": "Larkspur Machining LLC",
+      "short": "Larkspur"
+    }
+  ],
+  "purpose": "a possible supply of Larkspur's precision components to Pemberton",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 1,
+    "recital": "mutual-discussions"
+  },
+  "effectiveDate": {
+    "kind": "not-stated"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "months"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 12,
+    "unit": "months",
+    "phrasing": "fixed"
+  },
+  "governingLaw": "new-york",
+  "courts": "new-york"
+}

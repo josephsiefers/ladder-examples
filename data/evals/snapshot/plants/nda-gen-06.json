@@ -1,0 +1,39 @@
+{
+  "id": "nda-gen-06",
+  "split": "dev",
+  "seed": 1006,
+  "parties": [
+    {
+      "name": "Veridian Payments Pte. Ltd.",
+      "short": "Veridian"
+    },
+    {
+      "name": "Saltmarsh Analytics Limited",
+      "short": "Saltmarsh",
+      "affiliates": true
+    }
+  ],
+  "purpose": "a possible fraud-scoring pilot using Veridian's transaction data",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 0,
+    "recital": "plain"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-11-30",
+    "phrasing": "numerals"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 60
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "years",
+    "phrasing": "fixed"
+  },
+  "governingLaw": "delaware",
+  "courts": "delaware"
+}

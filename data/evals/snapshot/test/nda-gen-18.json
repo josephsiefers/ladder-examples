@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-18"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Delphine Cosmetics Inc.",
+        "role": "discloser"
+      },
+      {
+        "name": "Orchard Row Retail LLC",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-12-01"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 18
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 30
+    },
+    "governingLaw": "new-york",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "11.1"
+    ],
+    "survivalPeriod": [
+      "11.2"
+    ],
+    "governingLaw": [
+      "15.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

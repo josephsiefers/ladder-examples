@@ -1,0 +1,15 @@
+{
+  "standard-sole-purpose": {
+    "heading": "Use of Confidential Information",
+    "paragraphs": [
+      "The Receiving Party shall use the Confidential Information solely for the Purpose and for no other purpose whatsoever, and shall not use it to the detriment of the Disclosing Party."
+    ]
+  },
+  "standard-restricted-use": {
+    "heading": "Permitted Purpose",
+    "paragraphs": [
+      "The Receiving Party may use the Confidential Information only to the extent necessary for the Purpose.",
+      "The Receiving Party shall not reverse engineer, decompile or analyse the composition of any sample, prototype or software included in the Confidential Information, except as the Purpose strictly requires."
+    ]
+  }
+}

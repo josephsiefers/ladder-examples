@@ -1,0 +1,46 @@
+{
+  "input": {
+    "contractId": "nda-gen-16"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Silverline Health Inc.",
+        "role": "recipient"
+      },
+      {
+        "name": "Tamsin Biologics Inc.",
+        "role": "discloser"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "not-stated"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "survivalPeriod": {
+      "kind": "indefinite"
+    },
+    "governingLaw": "california",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "term": [
+      "6.1"
+    ],
+    "survivalPeriod": [
+      "6.2"
+    ],
+    "governingLaw": [
+      "14.1"
+    ],
+    "mutuality": [
+      "1.2"
+    ]
+  }
+}

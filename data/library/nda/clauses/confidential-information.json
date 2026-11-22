@@ -1,0 +1,22 @@
+{
+  "standard-broad": {
+    "heading": "Confidential Information",
+    "paragraphs": [
+      "\"Confidential Information\" means all information disclosed by or on behalf of the Disclosing Party to the Receiving Party in connection with the Purpose, whether disclosed orally, in writing, electronically or by inspection, and whether or not marked as confidential, including business plans, financial information, technical data, software, know-how, customer information and trade secrets.",
+      "Confidential Information also includes all notes, analyses, compilations and other materials prepared by the Receiving Party or its Representatives to the extent that they contain or reflect any information described above."
+    ]
+  },
+  "standard-marked": {
+    "heading": "Definition of Confidential Information",
+    "paragraphs": [
+      "In this Agreement, \"Confidential Information\" means any information of a confidential nature, in whatever form, that the Disclosing Party or its Representatives make available to the Receiving Party for the Purpose, including information that is marked as confidential and information that a reasonable person would understand to be confidential from its nature or the circumstances of its disclosure."
+    ]
+  },
+  "standard-evaluation": {
+    "heading": "Evaluation Material",
+    "paragraphs": [
+      "\"Confidential Information\" means all information concerning the business, operations, products, technology or finances of the Disclosing Party that is furnished to the Receiving Party or its Representatives, whether before or after the signing of this Agreement, together with any trade secrets of the Disclosing Party.",
+      "Confidential Information remains the property of the Disclosing Party at all times."
+    ]
+  }
+}

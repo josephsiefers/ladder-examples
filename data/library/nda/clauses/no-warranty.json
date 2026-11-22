@@ -1,0 +1,15 @@
+{
+  "standard-as-is": {
+    "heading": "No Warranty",
+    "paragraphs": [
+      "All Confidential Information is provided \"as is\". The Disclosing Party gives no warranty or representation, express or implied, as to its accuracy, completeness or fitness for any purpose."
+    ]
+  },
+  "standard-no-reliance": {
+    "heading": "No Representations",
+    "paragraphs": [
+      "The Disclosing Party makes no representation or warranty as to the accuracy or completeness of the Confidential Information, and shall have no liability to the Receiving Party or its Representatives resulting from their use of it.",
+      "Only those representations and warranties that are made in a definitive written agreement, when and if signed, shall have any legal effect."
+    ]
+  }
+}

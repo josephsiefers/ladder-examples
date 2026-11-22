@@ -1,0 +1,51 @@
+{
+  "input": {
+    "contractId": "nda-gen-01"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Ashgrove Robotics Limited",
+        "role": "both"
+      },
+      {
+        "name": "Penhallow Data Ltd",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-03-03"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 60
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "14.1"
+    ],
+    "survivalPeriod": [
+      "14.2"
+    ],
+    "governingLaw": [
+      "8.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "nda-gen-11",
+  "split": "dev",
+  "seed": 1011,
+  "parties": [
+    {
+      "name": "Sunstone Learning Pte. Ltd.",
+      "short": "Sunstone"
+    },
+    {
+      "name": "Arden Publishing Limited",
+      "short": "Arden"
+    }
+  ],
+  "purpose": "a possible co-publishing arrangement for school mathematics courses",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-09-01",
+    "phrasing": "numerals"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 12,
+    "unit": "years"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "years",
+    "phrasing": "like-term"
+  },
+  "governingLaw": "singapore",
+  "courts": "england-and-wales"
+}

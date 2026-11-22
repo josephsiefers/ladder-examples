@@ -1,0 +1,47 @@
+{
+  "input": {
+    "contractId": "nda-gen-08"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Pemberton Aerospace Limited",
+        "role": "recipient"
+      },
+      {
+        "name": "Larkspur Machining LLC",
+        "role": "discloser"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "not-stated"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 24
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 12
+    },
+    "governingLaw": "new-york",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "term": [
+      "4.1"
+    ],
+    "survivalPeriod": [
+      "4.2"
+    ],
+    "governingLaw": [
+      "9.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

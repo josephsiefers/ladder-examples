@@ -72,7 +72,7 @@ So each run passes its run number as the call's **sample index**, and the index 
 
 | Use case | Rung | Status |
 |---|---|---|
-| [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built; smoke eval run (dev eval to come) |
+| [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built; dev eval run: target met |
 | [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Planned |
 | [UC3 NDA review](#uc3-nda-review-future) | Prompt chaining + sectioning, then voting | Future |
 | [UC4 Minimal edit](#uc4-minimal-edit-future) | Evaluator-optimizer | Future |
@@ -118,7 +118,7 @@ The snapshot is followed by one line with the model, input and output tokens, an
 
 ```sh
 npm run eval -- snapshot --split smoke --runs 3   # 4 smoke NDAs × 3 runs, replayed from the committed cache
-npm run eval -- snapshot                          # error: Eval 'snapshot': split dev has no cases yet.
+npm run eval -- snapshot --runs 3                 # the 12 generated dev NDAs × 3 runs, replayed from the committed cache
 ```
 
 Each field is scored exact-match after normalisation (case-folded, whitespace collapsed, trailing punctuation stripped). Parties are compared as an order-insensitive set of (name, role). An invented value where the contract states nothing scores false. Gold cases live in [data/evals/snapshot/](data/evals/snapshot/), one JSON file per case, with the evidence paragraph for each field.
@@ -144,7 +144,52 @@ Smoke results (Haiku, 3 runs, recorded 2026-11-22; replay them with `--replay-on
 
 One failure: in 1 of 3 runs, `nda-sample-04`'s "laws of the Republic of Singapore" came back as `other` instead of `singapore`. Totals: 12 calls, 58,236 input tokens, 3,634 output tokens. Before the cache existed, a separate run of the same eval missed it in 2 of 3 runs.
 
-Four hand-written cases say little about the 98% target, which is measured on the dev split (to come). They do show the misses are not consistent: the same contract gets a different governing law on different runs, which a single run would hide.
+Four hand-written cases say little about the 98% target, which is measured on the dev split. They do show the misses are not consistent: the same contract gets a different governing law on different runs, which a single run would hide.
+
+**The generated corpus**
+
+The dev and test splits are 20 generated NDAs (`nda-gen-01` to `nda-gen-20`: 12 dev, 8 test), built by a deterministic generator whose answer keys are correct by construction:
+
+```sh
+npm run generate -- ndas && git status --short   # rebuilds all 20 and prints the coverage table; no diff
+```
+
+- The **clause-variant library** ([data/library/nda/](data/library/nda/)) holds 2–3 standard wordings for each of the 15 playbook clause types (plus general boilerplate), and the metadata phrasings with `{{placeholders}}`. Standard wording never states a jurisdiction, duration, date or party role, so it can't contradict a planted value.
+- Each NDA has a **plant spec** ([data/evals/snapshot/plants/](data/evals/snapshot/plants/)): its split, seed, parties, mutuality, metadata values, and the phrasings that express them.
+- The **assembler** ([scripts/generate/](scripts/generate/)) picks the clause variants, wordings and clause order with a seeded RNG, numbers the contract in the firm's format, and fills the placeholders. It writes the contract to `data/firm/contracts/` and a gold case to `data/evals/snapshot/<split>/`. The gold snapshot is computed from the spec, and the evidence is the paragraph each value landed in. A value that is not stated has no evidence.
+
+Every metadata plant appears at least twice in dev and once in test:
+
+| Plant | Dev (min 2) | Test (min 1) |
+|---|---:|---:|
+| effective date in numerals | 4 | 2 |
+| effective date in words | 3 | 2 |
+| effective date at last signature | 3 | 2 |
+| effective date not stated | 2 | 2 |
+| term in months | 4 | 2 |
+| term in years | 4 | 3 |
+| term until terminated on notice | 4 | 3 |
+| survival period that looks like the term | 3 | 2 |
+| survival indefinite for trade secrets | 3 | 1 |
+| survival indefinite | 3 | 2 |
+| one-way with a mutual recital | 2 | 1 |
+| governing law ≠ courts | 5 | 2 |
+| party and its Affiliates | 3 | 2 |
+
+Dev results (Haiku, 12 generated NDAs, 3 runs, recorded 2026-11-22; replay them with `--replay-only`):
+
+| Field | Mean | Stdev | Min | Max |
+|---|---:|---:|---:|---:|
+| parties | 100.0% | 0.0% | 100.0% | 100.0% |
+| effectiveDate | 100.0% | 0.0% | 100.0% | 100.0% |
+| term | 100.0% | 0.0% | 100.0% | 100.0% |
+| survivalPeriod | 100.0% | 0.0% | 100.0% | 100.0% |
+| governingLaw | 100.0% | 0.0% | 100.0% | 100.0% |
+| mutuality | 100.0% | 0.0% | 100.0% | 100.0% |
+
+`effectiveDate 100.0% · term 100.0% → target 98%: MET`
+
+No failures and no failed case runs. Totals: 36 calls, 187,245 input tokens, 12,150 output tokens. **The target was met on the dev split, with the prompt unchanged** (it was not tuned against this corpus). This result is provisional until a human has reviewed the answer key (#9). The test split has not been run.
 
 ### UC2 Intake triage
 

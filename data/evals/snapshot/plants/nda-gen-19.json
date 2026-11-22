@@ -1,0 +1,32 @@
+{
+  "id": "nda-gen-19",
+  "split": "test",
+  "seed": 1019,
+  "parties": [
+    {
+      "name": "Kittering Systems Limited",
+      "short": "Kittering"
+    },
+    {
+      "name": "Vossberg Cloud Services Inc.",
+      "short": "Vossberg"
+    }
+  ],
+  "purpose": "a possible migration of Kittering's billing platform to Vossberg's hosting",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "last-signature"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "years"
+  },
+  "survivalPeriod": {
+    "kind": "indefinite"
+  },
+  "governingLaw": "england-and-wales",
+  "courts": "delaware"
+}

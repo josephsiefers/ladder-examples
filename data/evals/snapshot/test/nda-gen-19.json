@@ -1,0 +1,49 @@
+{
+  "input": {
+    "contractId": "nda-gen-19"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Kittering Systems Limited",
+        "role": "both"
+      },
+      {
+        "name": "Vossberg Cloud Services Inc.",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "survivalPeriod": {
+      "kind": "indefinite"
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "12.1"
+    ],
+    "survivalPeriod": [
+      "12.2"
+    ],
+    "governingLaw": [
+      "16.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

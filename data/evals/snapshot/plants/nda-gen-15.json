@@ -1,0 +1,35 @@
+{
+  "id": "nda-gen-15",
+  "split": "test",
+  "seed": 1015,
+  "parties": [
+    {
+      "name": "Juniper Lane Robotics Pte. Ltd.",
+      "short": "Juniper Lane"
+    },
+    {
+      "name": "Marchetti Automation Ltd",
+      "short": "Marchetti"
+    }
+  ],
+  "purpose": "a possible distribution agreement for Juniper Lane's inspection drones",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "last-signature"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 12,
+    "unit": "months"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "months",
+    "phrasing": "trade-secrets-indefinite"
+  },
+  "governingLaw": "singapore",
+  "courts": "singapore"
+}

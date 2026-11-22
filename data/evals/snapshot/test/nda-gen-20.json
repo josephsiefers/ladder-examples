@@ -1,0 +1,47 @@
+{
+  "input": {
+    "contractId": "nda-gen-20"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Brannock Freight Inc.",
+        "role": "recipient"
+      },
+      {
+        "name": "Elmstead Software LLC",
+        "role": "discloser"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "not-stated"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 90
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "governingLaw": "delaware",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "term": [
+      "14.1"
+    ],
+    "survivalPeriod": [
+      "14.2"
+    ],
+    "governingLaw": [
+      "16.1"
+    ],
+    "mutuality": [
+      "1.2"
+    ]
+  }
+}

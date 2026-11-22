@@ -1,0 +1,247 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are a paralegal at a law firm. You read one contract and record its contract snapshot for the matter record. Record only what the contract states; never guess or infer a value it does not state.\n\nEach paragraph of the contract is marked with its number, e.g. [7.1]. Read the whole contract before answering: the values you need may be anywhere in it.\n\nFields:\n\nparties\n  Every party to the contract, as {name, role}.\n  - name: the legal entity name exactly as the contract gives it, e.g. \"Kestrel Bioanalytics Limited\". Leave out defined short names, addresses, company numbers, and any extension such as \"and its Affiliates\" or \"and its subsidiaries\".\n  - role: \"discloser\" if the party only discloses confidential information, \"recipient\" if it only receives it, \"both\" if it does both. In a mutual agreement every party is \"both\".\n\neffectiveDate\n  The date the agreement takes effect.\n  - {kind: \"date\", value: \"YYYY-MM-DD\"} when the contract states a calendar date, however it is written (\"3 March 2025\", \"the third day of March, two thousand and twenty-five\" both become \"2025-03-03\").\n  - {kind: \"last-signature\"} when it takes effect on the date of the last signature (or similar wording) rather than a stated date.\n  - {kind: \"not-stated\"} when the contract gives no effective date.\n\nterm\n  How long the agreement itself runs. This is NOT the survival period: ignore how long confidentiality obligations last after the agreement ends.\n  - {kind: \"fixed\", months} for a fixed duration, converted to months (\"two (2) years\" is 24).\n  - {kind: \"until-terminated\", noticeDays} when it runs until a party terminates it on notice, with the notice period in days (convert weeks or months to days: one month is 30 days).\n  - {kind: \"not-stated\"} when the contract gives no term.\n\nsurvivalPeriod\n  How long the confidentiality obligations continue after the agreement expires or terminates. This is NOT the term.\n  - {kind: \"fixed\", months}, converted to months (\"five (5) years\" is 60). If different information has different survival periods, use the period that applies to Confidential Information in general.\n  - {kind: \"indefinite\"} when the obligations survive with no end date for Confidential Information in general.\n  - {kind: \"not-stated\"} when the contract does not say the obligations survive.\n\ngoverningLaw\n  The law the parties chose to govern the contract. This is NOT the courts or jurisdiction for disputes: a contract governed by New York law with disputes heard in Delaware courts has governingLaw \"new-york\".\n  One of: \"england-and-wales\" (also \"English law\" or \"the laws of England\"), \"new-york\", \"delaware\", \"california\", \"ontario\", \"singapore\", \"other\" (any other law that is stated), or \"not-stated\" (no governing law clause).\n\nmutuality\n  \"mutual\" if both parties disclose and protect confidential information; \"one-way\" if only one party discloses and only the other protects. Decide from the obligations, not the title or recitals: a recital mentioning \"mutual discussions\" does not make a one-way agreement mutual.\n\n\"Not stated\" is always a valid answer. An invented value is worse than \"not-stated\".",
+    "prompt": "Record the contract snapshot for this contract.\n\n<contract id=\"nda-gen-10\">\n# Non-Disclosure Agreement\n\n## 1. Parties and Background\n[1.1] This Non-Disclosure Agreement (this \"Agreement\") is entered into by and between Cobalt Harbour Shipping Limited (\"Cobalt Harbour\") and Wrenfield Insurance Brokers Ltd (\"Wrenfield\"), each a \"party\".\n[1.2] This Agreement is dated as of the twelfth day of May, two thousand and twenty-five (the \"Effective Date\").\n[1.3] Cobalt Harbour (the \"Disclosing Party\") intends to disclose Confidential Information to Wrenfield (the \"Receiving Party\") for a possible cargo insurance programme for Cobalt Harbour's fleet (the \"Purpose\"). Wrenfield will not disclose confidential information under this Agreement, which imposes obligations of confidentiality on Wrenfield only.\n\n## 2. Evaluation Material\n[2.1] \"Confidential Information\" means all information concerning the business, operations, products, technology or finances of the Disclosing Party that is furnished to the Receiving Party or its Representatives, whether before or after the signing of this Agreement, together with any trade secrets of the Disclosing Party.\n[2.2] Confidential Information remains the property of the Disclosing Party at all times.\n\n## 3. No Licence\n[3.1] All Confidential Information remains the property of the Disclosing Party. No licence or other right under any patent, copyright, trade mark, trade secret or other intellectual property right is granted to the Receiving Party by this Agreement or by any disclosure of Confidential Information.\n\n## 4. Law and Jurisdiction\n[4.1] This Agreement and any dispute arising out of it are governed by the laws of England and Wales.\n[4.2] Each party submits to the exclusive jurisdiction of the courts of England and Wales.\n[4.3] This clause applies equally to any dispute or claim arising out of or in connection with this Agreement, whether contractual or non-contractual.\n\n## 5. Indemnity\n[5.1] The Receiving Party shall indemnify the Disclosing Party against all losses, damages, costs and expenses, including reasonable legal fees, that the Disclosing Party incurs as a direct result of any breach of this Agreement by the Receiving Party or its Representatives.\n\n## 6. Representatives\n[6.1] \"Representatives\" means the officers, employees, legal advisers, accountants and financial advisers of the Receiving Party. The Receiving Party shall limit disclosure of the Confidential Information to those Representatives who require it for the Purpose, and shall ensure that they comply with this Agreement as if they were party to it.\n\n## 7. Liability\n[7.1] Nothing in this Agreement limits or excludes any liability for fraud, for death or personal injury caused by negligence, or for any other liability that cannot be limited or excluded by law.\n[7.2] Subject to the preceding paragraph, neither party shall be liable for any special, indirect or consequential loss arising out of this Agreement, other than loss arising from an unauthorised disclosure of Confidential Information.\n\n## 8. Duration\n[8.1] This Agreement shall remain in force for a period of three (3) years from the date on which it takes effect, unless terminated earlier by agreement in writing.\n[8.2] The Receiving Party's obligations of confidentiality survive the expiry or termination of this Agreement for five (5) years.\n[8.3] In respect of any Confidential Information that is a trade secret, those obligations continue indefinitely, for as long as the information remains a trade secret.\n[8.4] Termination or expiry of this Agreement shall not release the Receiving Party from liability for any breach of this Agreement committed before it takes effect.\n\n## 9. Permitted Purpose\n[9.1] The Receiving Party may use the Confidential Information only to the extent necessary for the Purpose.\n[9.2] The Receiving Party shall not reverse engineer, decompile or analyse the composition of any sample, prototype or software included in the Confidential Information, except as the Purpose strictly requires.\n\n## 10. No Warranty\n[10.1] All Confidential Information is provided \"as is\". The Disclosing Party gives no warranty or representation, express or implied, as to its accuracy, completeness or fitness for any purpose.\n\n## 11. Exclusions\n[11.1] The obligations in this Agreement do not apply to information that the Receiving Party can show: (a) is or becomes publicly available other than through a breach of this Agreement; (b) was lawfully in its possession free of any duty of confidence before it was disclosed by the Disclosing Party; (c) is lawfully received from a third party who is free to disclose it; or (d) is independently developed by or for the Receiving Party without use of the Confidential Information.\n\n## 12. Return or Destruction\n[12.1] On the written request of the Disclosing Party, the Receiving Party shall promptly return or destroy all documents and materials containing Confidential Information and, if requested, confirm in writing that it has done so.\n[12.2] The Receiving Party may keep copies that it is required to keep by law or regulation, or that are held in automatic electronic back-up systems, provided that they remain subject to this Agreement.\n\n## 13. Compelled Disclosure\n[13.1] If the Receiving Party is required by law, regulation, court order or the rules of a stock exchange to disclose any Confidential Information, it may do so provided that, to the extent lawful, it gives the Disclosing Party prompt written notice of the requirement, consults with the Disclosing Party on the form of the disclosure, and discloses only the portion of the Confidential Information that it is legally required to disclose.\n\n## 14. General\n[14.1] This Agreement is the entire agreement between the parties concerning its subject matter and supersedes all earlier understandings about that subject matter. It may be amended only in writing signed by both of them.\n[14.2] Neither party may assign this Agreement without the prior written consent of the other. This Agreement may be signed in any number of counterparts, each of which is an original.\n\n## 15. Standard of Care\n[15.1] The Receiving Party shall hold the Confidential Information in strict confidence, shall store it securely, and shall take all reasonable steps to prevent its unauthorised disclosure, copying or use.\n[15.2] The Receiving Party shall notify the Disclosing Party promptly on becoming aware of any unauthorised disclosure or use of the Confidential Information.\n\n## 16. Remedies\n[16.1] The Receiving Party acknowledges that damages alone may not be an adequate remedy for a breach of this Agreement, and that the Disclosing Party is entitled to seek injunctive relief, specific performance or other equitable relief for any threatened or actual breach, in addition to any other remedy available to it.\n\n## 17. No Solicitation of Staff\n[17.1] The Receiving Party shall not, while this Agreement remains in force, induce or attempt to induce any officer or senior employee of the Disclosing Party who is involved in the Purpose to leave the employment of the Disclosing Party.\n\n## 18. Signatures\n[18.1] Cobalt Harbour Shipping Limited, by its duly authorised representative. Date: ____________.\n[18.2] Wrenfield Insurance Brokers Ltd, by its duly authorised representative. Date: ____________.\n</contract>",
+    "schemaName": "contract-snapshot",
+    "jsonSchema": {
+      "$defs": {
+        "__schema0": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "{minLength: 1}"
+            },
+            "role": {
+              "enum": [
+                "discloser",
+                "recipient",
+                "both"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "role"
+          ]
+        },
+        "__schema1": {
+          "type": "integer",
+          "description": "{exclusiveMinimum: 0, maximum: 9007199254740991}"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "minItems": 1
+        },
+        "effectiveDate": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "{pattern: \"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))$\"}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "last-signature"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "term": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "until-terminated"
+                },
+                "noticeDays": {
+                  "type": "integer",
+                  "description": "{minimum: 0, maximum: 9007199254740991}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "noticeDays"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "survivalPeriod": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "indefinite"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "governingLaw": {
+          "enum": [
+            "england-and-wales",
+            "new-york",
+            "delaware",
+            "california",
+            "ontario",
+            "singapore",
+            "other",
+            "not-stated"
+          ]
+        },
+        "mutuality": {
+          "enum": [
+            "mutual",
+            "one-way"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "parties",
+        "effectiveDate",
+        "term",
+        "survivalPeriod",
+        "governingLaw",
+        "mutuality"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 2
+  },
+  "value": {
+    "parties": [
+      {
+        "name": "Cobalt Harbour Shipping Limited",
+        "role": "discloser"
+      },
+      {
+        "name": "Wrenfield Insurance Brokers Ltd",
+        "role": "recipient"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "date",
+      "value": "2025-05-12"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 60
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "one-way"
+  },
+  "usage": {
+    "inputTokens": 5206,
+    "outputTokens": 373
+  },
+  "latencyMs": 1887.3310469999997,
+  "recordedAt": "2026-11-22T20:54:36.557Z"
+}

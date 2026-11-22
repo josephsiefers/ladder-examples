@@ -1,0 +1,50 @@
+{
+  "input": {
+    "contractId": "nda-gen-07"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Ferncliff Instruments Ltd",
+        "role": "both"
+      },
+      {
+        "name": "Ostrander Materials Inc.",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 18
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "mutual"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "8.1"
+    ],
+    "survivalPeriod": [
+      "8.2"
+    ],
+    "governingLaw": [
+      "17.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

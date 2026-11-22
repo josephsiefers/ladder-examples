@@ -1,0 +1,49 @@
+{
+  "input": {
+    "contractId": "nda-gen-12"
+  },
+  "gold": {
+    "parties": [
+      {
+        "name": "Thornbury Mining Corp.",
+        "role": "recipient"
+      },
+      {
+        "name": "Kingsmere Geoscience Inc.",
+        "role": "discloser"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "until-terminated",
+      "noticeDays": 45
+    },
+    "survivalPeriod": {
+      "kind": "indefinite"
+    },
+    "governingLaw": "ontario",
+    "mutuality": "one-way"
+  },
+  "evidence": {
+    "parties": [
+      "1.1"
+    ],
+    "effectiveDate": [
+      "1.2"
+    ],
+    "term": [
+      "6.1"
+    ],
+    "survivalPeriod": [
+      "6.2"
+    ],
+    "governingLaw": [
+      "5.1"
+    ],
+    "mutuality": [
+      "1.3"
+    ]
+  }
+}

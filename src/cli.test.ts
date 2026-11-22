@@ -112,8 +112,13 @@ describe("ladder CLI", () => {
 
       expect(code).toBe(1);
       expect(out).toEqual([]);
+      const generated = Array.from(
+        { length: 20 },
+        (_, i) => `nda-gen-${String(i + 1).padStart(2, "0")}`,
+      );
+      const samples = ["nda-sample-01", "nda-sample-02", "nda-sample-03", "nda-sample-04"];
       expect(err).toEqual([
-        "error: Contract 'does-not-exist' not found. Known contracts: nda-sample-01, nda-sample-02, nda-sample-03, nda-sample-04.",
+        `error: Contract 'does-not-exist' not found. Known contracts: ${[...generated, ...samples].join(", ")}.`,
       ]);
     });
   });

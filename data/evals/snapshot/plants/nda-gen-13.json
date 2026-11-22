@@ -1,0 +1,38 @@
+{
+  "id": "nda-gen-13",
+  "split": "test",
+  "seed": 1013,
+  "parties": [
+    {
+      "name": "Riverglass Media Inc.",
+      "short": "Riverglass"
+    },
+    {
+      "name": "Fennimore Studios LLC",
+      "short": "Fennimore",
+      "affiliates": true
+    }
+  ],
+  "purpose": "a possible co-production of a documentary series",
+  "mutuality": {
+    "kind": "mutual"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-04-15",
+    "phrasing": "numerals"
+  },
+  "term": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "years"
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 36,
+    "unit": "years",
+    "phrasing": "like-term"
+  },
+  "governingLaw": "delaware",
+  "courts": "new-york"
+}

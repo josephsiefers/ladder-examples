@@ -1,0 +1,38 @@
+{
+  "id": "nda-gen-14",
+  "split": "test",
+  "seed": 1014,
+  "parties": [
+    {
+      "name": "Albright Water Technologies Limited",
+      "short": "Albright"
+    },
+    {
+      "name": "Calder Infrastructure Partners LLP",
+      "short": "Calder"
+    }
+  ],
+  "purpose": "a possible acquisition of Albright by Calder",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 0,
+    "recital": "mutual-discussions"
+  },
+  "effectiveDate": {
+    "kind": "date",
+    "value": "2025-10-22",
+    "phrasing": "words"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 30
+  },
+  "survivalPeriod": {
+    "kind": "fixed",
+    "months": 24,
+    "unit": "months",
+    "phrasing": "fixed"
+  },
+  "governingLaw": "england-and-wales",
+  "courts": "england-and-wales"
+}

@@ -1,0 +1,246 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are a paralegal at a law firm. You read one contract and record its contract snapshot for the matter record. Record only what the contract states; never guess or infer a value it does not state.\n\nEach paragraph of the contract is marked with its number, e.g. [7.1]. Read the whole contract before answering: the values you need may be anywhere in it.\n\nFields:\n\nparties\n  Every party to the contract, as {name, role}.\n  - name: the legal entity name exactly as the contract gives it, e.g. \"Kestrel Bioanalytics Limited\". Leave out defined short names, addresses, company numbers, and any extension such as \"and its Affiliates\" or \"and its subsidiaries\".\n  - role: \"discloser\" if the party only discloses confidential information, \"recipient\" if it only receives it, \"both\" if it does both. In a mutual agreement every party is \"both\".\n\neffectiveDate\n  The date the agreement takes effect.\n  - {kind: \"date\", value: \"YYYY-MM-DD\"} when the contract states a calendar date, however it is written (\"3 March 2025\", \"the third day of March, two thousand and twenty-five\" both become \"2025-03-03\").\n  - {kind: \"last-signature\"} when it takes effect on the date of the last signature (or similar wording) rather than a stated date.\n  - {kind: \"not-stated\"} when the contract gives no effective date.\n\nterm\n  How long the agreement itself runs. This is NOT the survival period: ignore how long confidentiality obligations last after the agreement ends.\n  - {kind: \"fixed\", months} for a fixed duration, converted to months (\"two (2) years\" is 24).\n  - {kind: \"until-terminated\", noticeDays} when it runs until a party terminates it on notice, with the notice period in days (convert weeks or months to days: one month is 30 days).\n  - {kind: \"not-stated\"} when the contract gives no term.\n\nsurvivalPeriod\n  How long the confidentiality obligations continue after the agreement expires or terminates. This is NOT the term.\n  - {kind: \"fixed\", months}, converted to months (\"five (5) years\" is 60). If different information has different survival periods, use the period that applies to Confidential Information in general.\n  - {kind: \"indefinite\"} when the obligations survive with no end date for Confidential Information in general.\n  - {kind: \"not-stated\"} when the contract does not say the obligations survive.\n\ngoverningLaw\n  The law the parties chose to govern the contract. This is NOT the courts or jurisdiction for disputes: a contract governed by New York law with disputes heard in Delaware courts has governingLaw \"new-york\".\n  One of: \"england-and-wales\" (also \"English law\" or \"the laws of England\"), \"new-york\", \"delaware\", \"california\", \"ontario\", \"singapore\", \"other\" (any other law that is stated), or \"not-stated\" (no governing law clause).\n\nmutuality\n  \"mutual\" if both parties disclose and protect confidential information; \"one-way\" if only one party discloses and only the other protects. Decide from the obligations, not the title or recitals: a recital mentioning \"mutual discussions\" does not make a one-way agreement mutual.\n\n\"Not stated\" is always a valid answer. An invented value is worse than \"not-stated\".",
+    "prompt": "Record the contract snapshot for this contract.\n\n<contract id=\"nda-gen-07\">\n# Mutual Confidentiality Agreement\n\n## 1. Parties and Background\n[1.1] This Mutual Confidentiality Agreement (the \"Agreement\") is made between Ferncliff Instruments Ltd (\"Ferncliff\") and Ostrander Materials Inc. (\"Ostrander\").\n[1.2] This Agreement takes effect on the date on which it has been signed by both parties, being the later of the dates of signature below (the \"Effective Date\").\n[1.3] Ferncliff and Ostrander wish to exchange information for a possible joint bid to supply sensor housings (the \"Purpose\"). Each of them may disclose Confidential Information to the other, and in this Agreement the \"Disclosing Party\" is the party disclosing Confidential Information and the \"Receiving Party\" is the party receiving it.\n\n## 2. Confidential Information\n[2.1] \"Confidential Information\" means all information disclosed by or on behalf of the Disclosing Party to the Receiving Party in connection with the Purpose, whether disclosed orally, in writing, electronically or by inspection, and whether or not marked as confidential, including business plans, financial information, technical data, software, know-how, customer information and trade secrets.\n[2.2] Confidential Information also includes all notes, analyses, compilations and other materials prepared by the Receiving Party or its Representatives to the extent that they contain or reflect any information described above.\n\n## 3. Legally Required Disclosure\n[3.1] Where the Receiving Party or any of its Representatives is requested or required by legal process to disclose Confidential Information, the Receiving Party shall, where permitted, notify the Disclosing Party promptly so that the Disclosing Party may seek a protective order or other appropriate remedy.\n[3.2] The Receiving Party shall give the Disclosing Party reasonable assistance, at the Disclosing Party's cost, in seeking any such order.\n\n## 4. Equitable Relief\n[4.1] Any unauthorised disclosure or use of Confidential Information may cause the Disclosing Party irreparable harm. The Disclosing Party may therefore apply for an injunction to restrain any breach or threatened breach of this Agreement without proving actual damage.\n[4.2] The rights and remedies in this Agreement are cumulative and are in addition to any rights or remedies provided by law.\n\n## 5. Intellectual Property\n[5.1] The Disclosing Party reserves all rights in its Confidential Information. Nothing in this Agreement grants the Receiving Party any rights in or to the Confidential Information other than the right to use it for the Purpose in accordance with this Agreement.\n\n## 6. Indemnification\n[6.1] The Receiving Party shall indemnify and hold harmless the Disclosing Party from and against any claims, losses and reasonable costs arising out of an unauthorised disclosure or use of Confidential Information by the Receiving Party or any of its Representatives.\n[6.2] The Disclosing Party shall notify the Receiving Party promptly of any claim for which it seeks indemnity and shall take reasonable steps to mitigate its loss.\n\n## 7. Representatives\n[7.1] \"Representatives\" means the officers, employees, legal advisers, accountants and financial advisers of the Receiving Party. The Receiving Party shall limit disclosure of the Confidential Information to those Representatives who require it for the Purpose, and shall ensure that they comply with this Agreement as if they were party to it.\n\n## 8. Duration\n[8.1] This Agreement shall remain in force for a period of eighteen (18) months from the date on which it takes effect, unless terminated earlier by agreement in writing.\n[8.2] The Receiving Party's obligations of confidentiality survive the expiry or termination of this Agreement for thirty-six (36) months.\n[8.3] In respect of any Confidential Information that is a trade secret, those obligations continue indefinitely, for as long as the information remains a trade secret.\n[8.4] Termination or expiry of this Agreement shall not release the Receiving Party from liability for any breach of this Agreement committed before it takes effect.\n\n## 9. Standard of Care\n[9.1] The Receiving Party shall hold the Confidential Information in strict confidence, shall store it securely, and shall take all reasonable steps to prevent its unauthorised disclosure, copying or use.\n[9.2] The Receiving Party shall notify the Disclosing Party promptly on becoming aware of any unauthorised disclosure or use of the Confidential Information.\n\n## 10. Permitted Purpose\n[10.1] The Receiving Party may use the Confidential Information only to the extent necessary for the Purpose.\n[10.2] The Receiving Party shall not reverse engineer, decompile or analyse the composition of any sample, prototype or software included in the Confidential Information, except as the Purpose strictly requires.\n\n## 11. Liability\n[11.1] Nothing in this Agreement limits or excludes any liability for fraud, for death or personal injury caused by negligence, or for any other liability that cannot be limited or excluded by law.\n[11.2] Subject to the preceding paragraph, neither party shall be liable for any special, indirect or consequential loss arising out of this Agreement, other than loss arising from an unauthorised disclosure of Confidential Information.\n\n## 12. Return or Destruction\n[12.1] On the written request of the Disclosing Party, the Receiving Party shall promptly return or destroy all documents and materials containing Confidential Information and, if requested, confirm in writing that it has done so.\n[12.2] The Receiving Party may keep copies that it is required to keep by law or regulation, or that are held in automatic electronic back-up systems, provided that they remain subject to this Agreement.\n\n## 13. Miscellaneous\n[13.1] No failure or delay in exercising any right under this Agreement operates as a waiver of it. If any provision of this Agreement is found to be invalid, the remaining provisions continue in full force.\n[13.2] This Agreement does not oblige either party to enter into any further agreement or transaction.\n\n## 14. No Solicitation of Staff\n[14.1] The Receiving Party shall not, while this Agreement remains in force, induce or attempt to induce any officer or senior employee of the Disclosing Party who is involved in the Purpose to leave the employment of the Disclosing Party.\n\n## 15. No Representations\n[15.1] The Disclosing Party makes no representation or warranty as to the accuracy or completeness of the Confidential Information, and shall have no liability to the Receiving Party or its Representatives resulting from their use of it.\n[15.2] Only those representations and warranties that are made in a definitive written agreement, when and if signed, shall have any legal effect.\n\n## 16. Exclusions\n[16.1] The obligations in this Agreement do not apply to information that the Receiving Party can show: (a) is or becomes publicly available other than through a breach of this Agreement; (b) was lawfully in its possession free of any duty of confidence before it was disclosed by the Disclosing Party; (c) is lawfully received from a third party who is free to disclose it; or (d) is independently developed by or for the Receiving Party without use of the Confidential Information.\n\n## 17. Law and Jurisdiction\n[17.1] This Agreement and any dispute arising out of it are governed by the laws of England and Wales.\n[17.2] Each party submits to the exclusive jurisdiction of the courts of the Republic of Singapore.\n[17.3] This clause applies equally to any dispute or claim arising out of or in connection with this Agreement, whether contractual or non-contractual.\n\n## 18. Signatures\n[18.1] Ferncliff Instruments Ltd, by its duly authorised representative. Date: ____________.\n[18.2] Ostrander Materials Inc., by its duly authorised representative. Date: ____________.\n</contract>",
+    "schemaName": "contract-snapshot",
+    "jsonSchema": {
+      "$defs": {
+        "__schema0": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "{minLength: 1}"
+            },
+            "role": {
+              "enum": [
+                "discloser",
+                "recipient",
+                "both"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "role"
+          ]
+        },
+        "__schema1": {
+          "type": "integer",
+          "description": "{exclusiveMinimum: 0, maximum: 9007199254740991}"
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "minItems": 1
+        },
+        "effectiveDate": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "{pattern: \"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))$\"}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "last-signature"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "term": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "until-terminated"
+                },
+                "noticeDays": {
+                  "type": "integer",
+                  "description": "{minimum: 0, maximum: 9007199254740991}"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "noticeDays"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "survivalPeriod": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "fixed"
+                },
+                "months": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "months"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "indefinite"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "not-stated"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ]
+            }
+          ]
+        },
+        "governingLaw": {
+          "enum": [
+            "england-and-wales",
+            "new-york",
+            "delaware",
+            "california",
+            "ontario",
+            "singapore",
+            "other",
+            "not-stated"
+          ]
+        },
+        "mutuality": {
+          "enum": [
+            "mutual",
+            "one-way"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "parties",
+        "effectiveDate",
+        "term",
+        "survivalPeriod",
+        "governingLaw",
+        "mutuality"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "parties": [
+      {
+        "name": "Ferncliff Instruments Ltd",
+        "role": "both"
+      },
+      {
+        "name": "Ostrander Materials Inc.",
+        "role": "both"
+      }
+    ],
+    "effectiveDate": {
+      "kind": "last-signature"
+    },
+    "term": {
+      "kind": "fixed",
+      "months": 18
+    },
+    "survivalPeriod": {
+      "kind": "fixed",
+      "months": 36
+    },
+    "governingLaw": "england-and-wales",
+    "mutuality": "mutual"
+  },
+  "usage": {
+    "inputTokens": 5371,
+    "outputTokens": 325
+  },
+  "latencyMs": 1997.5309759999996,
+  "recordedAt": "2026-11-22T20:54:21.952Z"
+}

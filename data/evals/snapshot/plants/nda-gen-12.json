@@ -1,0 +1,33 @@
+{
+  "id": "nda-gen-12",
+  "split": "dev",
+  "seed": 1012,
+  "parties": [
+    {
+      "name": "Thornbury Mining Corp.",
+      "short": "Thornbury"
+    },
+    {
+      "name": "Kingsmere Geoscience Inc.",
+      "short": "Kingsmere"
+    }
+  ],
+  "purpose": "a possible review of Kingsmere's survey data for Thornbury's exploration programme",
+  "mutuality": {
+    "kind": "one-way",
+    "discloser": 1,
+    "recital": "plain"
+  },
+  "effectiveDate": {
+    "kind": "last-signature"
+  },
+  "term": {
+    "kind": "until-terminated",
+    "noticeDays": 45
+  },
+  "survivalPeriod": {
+    "kind": "indefinite"
+  },
+  "governingLaw": "ontario",
+  "courts": "ontario"
+}
