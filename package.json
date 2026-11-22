@@ -13,7 +13,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "oxlint --deny-warnings",
     "format": "biome check --write",
-    "format:check": "biome check"
+    "format:check": "biome check",
+    "prepare": "husky",
+    "check-tokens": "tsx scripts/check-tokens.ts"
   },
   "dependencies": {
     "commander": "^15.1.0"
@@ -21,9 +23,15 @@
   "devDependencies": {
     "@biomejs/biome": "^2.6.8",
     "@types/node": "^22.20.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.1",
     "oxlint": "^1.94.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.1.1"
+  },
+  "lint-staged": {
+    "*": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+    "*.{ts,tsx,mts,cts}": "oxlint --deny-warnings"
   }
 }

@@ -68,7 +68,7 @@ Future use cases record their discovery card, justification sentence, and **open
 
 ### Pre-commit hook (in order)
 1. Token-size check on staged content: about chars ÷ 4, limit 5,000 per file. Exempt: lockfiles, `.cache/llm/**`, `out/**`, `reports/**`, binaries. Failure messages tell the agent how to split the file.
-2. `biome format --write` on staged files (via lint-staged).
+2. `biome check --write` on staged files (via lint-staged): formatting plus import order, matching `npm run format:check`. Biome's linter is off, so nothing else runs.
 3. `oxlint` on staged files.
 4. `tsc --noEmit` on the whole project.
 5. `depcruise` on the whole project.
