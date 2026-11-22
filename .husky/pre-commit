@@ -31,8 +31,9 @@ failed() {
 npm run --silent check-tokens -- --staged >"$out/check-tokens" 2>&1 &
 tokens=$!
 
-# 3. lint-staged prints live, since it is the only step in the foreground.
-if npx --no-install lint-staged --concurrent false; then
+# 3. lint-staged prints live, since it is the only step in the foreground. Called by path, not
+#    through npx, which costs ~0.4s to start and this step gates the two that follow.
+if node_modules/.bin/lint-staged --concurrent false; then
   # 4. Whole-project typecheck and boundary check, in parallel.
   npm run --silent typecheck >"$out/typecheck" 2>&1 &
   typecheck=$!

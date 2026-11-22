@@ -10,13 +10,13 @@
   "scripts": {
     "ladder": "tsx src/cli.ts",
     "test": "vitest run",
-    "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsbuildinfo",
     "lint": "oxlint --deny-warnings",
     "format": "biome check --write",
     "format:check": "biome check",
     "prepare": "husky",
-    "check-tokens": "tsx scripts/check-tokens.ts",
-    "depcruise": "depcruise src scripts '*.ts' --output-type err-long",
+    "check-tokens": "node scripts/check-tokens.ts",
+    "depcruise": "depcruise src scripts '*.ts' --output-type err-long --cache",
     "mutate": "node --import ./scripts/stryker-typescript6.mjs node_modules/@stryker-mutator/core/bin/stryker.js run"
   },
   "dependencies": {

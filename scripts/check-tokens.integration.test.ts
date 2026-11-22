@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { runCheck } from "./check-tokens";
 
-const TSX = fileURLToPath(new URL("../node_modules/.bin/tsx", import.meta.url));
 const SCRIPT = fileURLToPath(new URL("./check-tokens.ts", import.meta.url));
 
 const OVERSIZED = `# Big\n${"x".repeat(24_000)}`;
@@ -122,11 +121,15 @@ describe("check-tokens <paths>", () => {
 });
 
 describe("check-tokens as a command", () => {
+  // Plain node, as `npm run check-tokens` runs it: Node strips the types itself.
   it("writes the report to stderr and exits with its status", () => {
     write("big.md", OVERSIZED);
     git("add", "big.md");
 
-    const result = spawnSync(TSX, [SCRIPT, "--staged"], { cwd: repo, encoding: "utf8" });
+    const result = spawnSync(process.execPath, [SCRIPT, "--staged"], {
+      cwd: repo,
+      encoding: "utf8",
+    });
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("big.md: ~6,002 tokens (limit 5,000)");
