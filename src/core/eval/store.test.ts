@@ -3,8 +3,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
-import { runRecord } from "./eval.fixtures";
-import { createEvalStore, EmptySplitError, InvalidCaseError } from "./store";
+import { caseRun, runRecord } from "./eval.fixtures";
+import {
+  createEvalStore,
+  EmptySplitError,
+  InvalidCaseError,
+  InvalidRunRecordError,
+  NoRunRecordError,
+} from "./store";
 import type { EvalDefinition } from "./types";
 
 const definition = {
@@ -104,5 +110,78 @@ describe("saveRunRecord", () => {
 
     expect(path).toBe(join(root, "reports", "evals", "toy-dev-2026-11-22T09-00-00-000Z.json"));
     expect(JSON.parse(await readFile(path, "utf8"))).toEqual(record);
+  });
+});
+
+const recordAt = (startedAt: string, split: "dev" | "smoke" = "dev") =>
+  runRecord([caseRun("a", 0, { colour: true, size: false })], { eval: "toy", split, startedAt });
+
+describe("run records for review", () => {
+  it("finds the latest record of the eval and split", async () => {
+    const latest = recordAt("2026-11-22T21:00:00.000Z");
+    for (const record of [
+      recordAt("2026-11-22T09:00:00.000Z"),
+      latest,
+      recordAt("2026-11-22T10:00:00.000Z"),
+      recordAt("2026-11-23T09:00:00.000Z", "smoke"),
+      runRecord([], { eval: "toy-two", split: "dev", startedAt: "2026-11-24T09:00:00.000Z" }),
+    ]) {
+      await store().saveRunRecord(record);
+    }
+
+    const found = await store().latestRunRecord("toy", "dev");
+
+    expect(found.record).toEqual(latest);
+    expect(found.path).toBe(
+      join(root, "reports", "evals", "toy-dev-2026-11-22T21-00-00-000Z.json"),
+    );
+  });
+
+  it("says clearly when the eval has no record for the split", async () => {
+    await store().saveRunRecord(recordAt("2026-11-22T09:00:00.000Z", "smoke"));
+
+    await expect(store().latestRunRecord("toy", "dev")).rejects.toThrow(NoRunRecordError);
+    await expect(store().latestRunRecord("toy", "dev")).rejects.toThrow(
+      "Eval 'toy' has no run record for split dev yet; run the eval first.",
+    );
+  });
+
+  it("loads a chosen record by its path", async () => {
+    const record = recordAt("2026-11-22T09:00:00.000Z");
+    const path = await store().saveRunRecord(record);
+
+    await expect(store().loadRunRecord(path)).resolves.toEqual({ record, path });
+  });
+
+  it("says clearly when a chosen record does not exist", async () => {
+    const path = join(root, "missing.json");
+
+    await expect(store().loadRunRecord(path)).rejects.toThrow(
+      new InvalidRunRecordError(path, "no such file"),
+    );
+  });
+
+  it.each([
+    { problem: "is not JSON", content: "{ nope", detail: /not valid JSON/ },
+    { problem: "is not a run record", content: '{ "eval": "toy" }', detail: /results/ },
+  ])("names the file when a chosen record $problem", async ({ content, detail }) => {
+    const path = join(root, "broken.json");
+    await writeFile(path, content);
+
+    const loading = store().loadRunRecord(path);
+
+    await expect(loading).rejects.toThrow(InvalidRunRecordError);
+    await expect(loading).rejects.toThrow(path);
+    await expect(loading).rejects.toThrow(detail);
+  });
+
+  it("saves a review sheet as Markdown next to the run records and returns its path", async () => {
+    const path = await store().saveReviewSheet(recordAt("2026-11-22T09:00:00.000Z"), "# Sheet\n");
+
+    expect(path).toBe(
+      join(root, "reports", "evals", "toy-dev-2026-11-22T09-00-00-000Z.review-sheet.md"),
+    );
+    expect(await readFile(path, "utf8")).toBe("# Sheet\n");
+    await expect(store().latestRunRecord("toy", "dev")).rejects.toThrow(NoRunRecordError);
   });
 });

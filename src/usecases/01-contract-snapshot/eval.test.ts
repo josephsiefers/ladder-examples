@@ -44,6 +44,26 @@ describe("snapshot eval", () => {
   });
 });
 
+/** Paragraph 1.2 of nda-sample-01, as written in the firm's copy. */
+const PARAGRAPH_1_2 =
+  "The Parties wish to explore a possible collaboration in which Marlow's laboratory data platform would be integrated with Kestrel's sample-analysis services (the \"Purpose\").";
+
+describe("snapshot eval evidence text", () => {
+  const definition = createSnapshotEval({ documents: createFirmDocuments() });
+
+  it("is the text of the cited paragraph in the case's contract", async () => {
+    await expect(definition.evidenceText({ contractId: "nda-sample-01" }, "1.2")).resolves.toBe(
+      PARAGRAPH_1_2,
+    );
+  });
+
+  it("is undefined for a paragraph the contract does not have", async () => {
+    await expect(
+      definition.evidenceText({ contractId: "nda-sample-01" }, "99.1"),
+    ).resolves.toBeUndefined();
+  });
+});
+
 describe("snapshot smoke cases", () => {
   it("are the four hand-written NDAs, each citing evidence paragraphs its contract has", async () => {
     const documents = createFirmDocuments();

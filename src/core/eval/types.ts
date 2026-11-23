@@ -40,6 +40,8 @@ export interface EvalDefinition<Input, Value> {
   describe(value: Value): Record<string, string>;
   /** The line saying whether the eval met its target, e.g. `term 96.3% → target 98%: NOT MET`. */
   target(stats: readonly FieldStats[]): string;
+  /** The text of one of a case's evidence paragraphs, for the review sheet; undefined if it has none by that ID. */
+  evidenceText(input: Input, paragraphId: string): Promise<string | undefined>;
 }
 
 /** The result of one (case, run) pair. A thrown error scores every field false. */

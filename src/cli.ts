@@ -1,8 +1,9 @@
-import { relative } from "node:path";
+import { relative, resolve } from "node:path";
 import { Argument, Command, CommanderError, InvalidArgumentError, Option } from "commander";
 import packageJson from "../package.json" with { type: "json" };
 import { createFirmDocuments } from "./core/documents";
 import {
+  buildReviewSheet,
   createEvalStore,
   DEFAULT_CONCURRENCY,
   DEFAULT_RUNS,
@@ -53,6 +54,8 @@ interface EvalOptions {
   split: Split;
   runs: number;
   concurrency: number;
+  reviewSheet?: boolean;
+  record?: string;
 }
 
 function positiveInteger(value: string): number {
@@ -77,6 +80,31 @@ async function runEvalCommand<Input, Value>(
   const path = await deps.evalStore.saveRunRecord(record);
   deps.stdout(renderReport(record, definition.target));
   deps.stdout(`\nRun record: ${relative(process.cwd(), path)}`);
+}
+
+/**
+ * Builds the answer-key review sheet of a chosen run record, or else the latest one of the split,
+ * and saves it beside the record. No model is called.
+ */
+async function reviewSheetCommand<Input, Value>(
+  definition: EvalDefinition<Input, Value>,
+  { split, record: chosen }: EvalOptions,
+  deps: CliDeps,
+): Promise<void> {
+  const { record, path } = chosen
+    ? await deps.evalStore.loadRunRecord(resolve(chosen))
+    : await deps.evalStore.latestRunRecord(definition.name, split);
+  const shownPath = relative(process.cwd(), path);
+  if (record.eval !== definition.name) {
+    throw new Error(
+      `Run record ${shownPath} is of eval '${record.eval}', not '${definition.name}'.`,
+    );
+  }
+  deps.stderr(`Building the review sheet of ${shownPath}…`);
+  const cases = await deps.evalStore.loadCases(definition, record.split);
+  const sheet = await buildReviewSheet(definition, record, cases);
+  const sheetPath = await deps.evalStore.saveReviewSheet(record, sheet.markdown);
+  deps.stdout(`Review sheet: ${relative(process.cwd(), sheetPath)} · ${sheet.summary}`);
 }
 
 export function buildProgram(deps: CliDeps): Command {
@@ -113,7 +141,12 @@ export function buildProgram(deps: CliDeps): Command {
     });
 
   const evals: Record<string, (options: EvalOptions) => Promise<void>> = {
-    snapshot: (options) => runEvalCommand(createSnapshotEval(deps), options, cachedDeps()),
+    snapshot: (options) =>
+      (options.reviewSheet ? reviewSheetCommand : runEvalCommand)(
+        createSnapshotEval(deps),
+        options,
+        cachedDeps(),
+      ),
   };
   program
     .command("eval")
@@ -132,6 +165,16 @@ export function buildProgram(deps: CliDeps): Command {
       "case runs in flight at once",
       positiveInteger,
       DEFAULT_CONCURRENCY,
+    )
+    .option(
+      "--review-sheet",
+      "instead of running the eval, build the answer-key review sheet of the split's latest run record",
+    )
+    .addOption(
+      new Option(
+        "--record <path>",
+        "with --review-sheet: the run record to review instead of the latest (its own split is used)",
+      ).implies({ reviewSheet: true }),
     )
     .action(async (name: string, options: EvalOptions) => {
       await evals[name]?.(options);

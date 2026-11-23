@@ -31,6 +31,7 @@ function toyEval(overrides: Partial<EvalDefinition<{ text: string }, Toy>> = {})
     }),
     describe: (value) => ({ colour: value.colour, size: String(value.size) }),
     target: () => "no target",
+    evidenceText: async () => undefined,
     ...overrides,
   };
   return definition;

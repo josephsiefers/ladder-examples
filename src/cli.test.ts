@@ -1,8 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { buildProgram, type CliDeps, run } from "./cli";
 import { createFirmDocuments } from "./core/documents";
-import { EmptySplitError, type EvalStore, type RunRecord, type Split } from "./core/eval";
-import { type CacheStore, createFakeLlm, createMemoryCacheStore } from "./core/llm";
+import {
+  EmptySplitError,
+  type EvalStore,
+  NoRunRecordError,
+  type RunRecord,
+  type Split,
+} from "./core/eval";
+import {
+  type CacheStore,
+  createFakeLlm,
+  createMemoryCacheStore,
+  type StructuredRequest,
+} from "./core/llm";
 
 const SNAPSHOT = {
   parties: [
@@ -16,33 +27,57 @@ const SNAPSHOT = {
   mutuality: "mutual",
 };
 
-/** An in-memory eval store holding one gold case per split listed. */
+/** An in-memory eval store holding one gold case per split listed; saved records are kept by path. */
 function fakeEvalStore(splits: Split[]) {
   const saved: RunRecord[] = [];
+  const records = new Map<string, RunRecord>();
+  const sheets = new Map<string, string>();
+  const recordPath = (record: RunRecord) =>
+    `${process.cwd()}/reports/evals/${record.eval}-${record.split}-${saved.indexOf(record)}.json`;
   const store: EvalStore = {
     async loadCases(definition, split) {
       if (!splits.includes(split)) throw new EmptySplitError(definition.name, split);
       const input = { contractId: "nda-sample-01" };
-      return [{ id: "nda-sample-01", split, input, gold: SNAPSHOT }] as never;
+      const evidence = { effectiveDate: ["1.1"], term: ["9.1"] };
+      return [{ id: "nda-sample-01", split, input, gold: SNAPSHOT, evidence }] as never;
     },
     async saveRunRecord(record) {
       saved.push(record);
-      return `${process.cwd()}/reports/evals/${record.eval}-${record.split}.json`;
+      const path = recordPath(record);
+      records.set(path, record);
+      return path;
+    },
+    async latestRunRecord(evalName, split) {
+      const record = saved.findLast((each) => each.eval === evalName && each.split === split);
+      if (!record) throw new NoRunRecordError(evalName, split);
+      return { record, path: recordPath(record) };
+    },
+    async loadRunRecord(path) {
+      const record = records.get(path);
+      if (!record) throw new Error(`ENOENT: ${path}`);
+      return { record, path };
+    },
+    async saveReviewSheet(record, markdown) {
+      const path = recordPath(record).replace(/\.json$/, ".review-sheet.md");
+      sheets.set(path, markdown);
+      return path;
     },
   };
-  return { store, saved };
+  return { store, saved, sheets };
 }
 
 function fakeDeps({
   splits = ["smoke", "dev"],
   llmCache = createMemoryCacheStore(),
+  answer = () => SNAPSHOT,
 }: {
   splits?: Split[];
   llmCache?: CacheStore;
+  answer?: (request: StructuredRequest<unknown>) => unknown;
 } = {}) {
   const out: string[] = [];
   const err: string[] = [];
-  const llm = createFakeLlm(() => SNAPSHOT, {
+  const llm = createFakeLlm(answer, {
     usage: { inputTokens: 2400, outputTokens: 150 },
     latencyMs: 1500,
   });
@@ -55,13 +90,17 @@ function fakeDeps({
     stdout: (text) => out.push(text),
     stderr: (text) => err.push(text),
   };
-  return { deps, llm, out, err, saved: evals.saved };
+  return { deps, llm, out, err, saved: evals.saved, sheets: evals.sheets };
 }
 
 const argv = (...args: string[]) => ["node", "ladder", ...args];
 
 /** An eval report without its totals line, which differs between live and cached runs. */
 const table = (report = "") => report.split("\n\nTotals:")[0];
+
+/** The model gets the effective date wrong in the second run. */
+const answer = ({ sampleIndex }: StructuredRequest<unknown>) =>
+  sampleIndex === 1 ? { ...SNAPSHOT, effectiveDate: { kind: "last-signature" } } : SNAPSHOT;
 
 describe("ladder CLI", () => {
   it("is named ladder", () => {
@@ -141,7 +180,7 @@ describe("ladder CLI", () => {
       expect(report).toContain(
         "Totals: 2 calls · live 2 · cached 0 · 4,800 input tokens · 300 output tokens",
       );
-      expect(recordLine).toBe("\nRun record: reports/evals/snapshot-smoke.json");
+      expect(recordLine).toBe("\nRun record: reports/evals/snapshot-smoke-0.json");
     });
 
     it("replays a second run from the cache: zero live calls and an identical table", async () => {
@@ -252,6 +291,83 @@ describe("ladder CLI", () => {
       expect(code).toBe(1);
       expect(err.join("\n")).toMatch(message);
       expect(llm.calls).toEqual([]);
+    });
+  });
+
+  describe("eval --review-sheet", () => {
+    it("builds the review sheet of the latest run record without calling the model", async () => {
+      const { deps, llm, out, err, sheets } = fakeDeps({ answer });
+      await run(argv("eval", "snapshot", "--split", "smoke", "--runs", "1"), deps);
+      await run(argv("eval", "snapshot", "--runs", "2"), deps);
+      await run(argv("eval", "snapshot", "--split", "smoke", "--runs", "1"), deps);
+      llm.calls.length = 0;
+      out.length = 0;
+      err.length = 0;
+
+      const code = await run(argv("eval", "snapshot", "--review-sheet", "--replay-only"), deps);
+
+      expect(code).toBe(0);
+      expect(llm.calls).toEqual([]);
+      expect(err).toEqual(["Building the review sheet of reports/evals/snapshot-dev-1.json…"]);
+      expect(out).toEqual([
+        "Review sheet: reports/evals/snapshot-dev-1.review-sheet.md · 1 disagreement row · random sample of 5 of 5 agreeing rows",
+      ]);
+      const sheet = [...sheets.values()][0] ?? "";
+      expect(sheet).toMatch(/^# Review sheet: eval snapshot · split dev · run of /);
+      expect(sheet).toContain(
+        "| nda-sample-01 | effectiveDate | 2025-03-03 | 2025-03-03 | ✗ last signature | [1.1] This Mutual Non-Disclosure Agreement",
+      );
+      expect(sheet).toContain(
+        "| nda-sample-01 | parties | Kestrel Bioanalytics Limited (both); Marlow Data Systems Ltd (both) | ",
+      );
+      expect(sheet).toContain("(no sentence: field should be absent) |");
+    });
+
+    it("builds it from a chosen run record, on that record's split", async () => {
+      const { deps, out, sheets } = fakeDeps();
+      await run(argv("eval", "snapshot", "--split", "smoke", "--runs", "1"), deps);
+      await run(argv("eval", "snapshot", "--runs", "1"), deps);
+      out.length = 0;
+
+      const code = await run(
+        argv("eval", "snapshot", "--record", "reports/evals/snapshot-smoke-0.json"),
+        deps,
+      );
+
+      expect(code).toBe(0);
+      expect(out[0]).toMatch(
+        /^Review sheet: reports\/evals\/snapshot-smoke-0\.review-sheet\.md · /,
+      );
+      expect([...sheets.values()][0]).toMatch(/^# Review sheet: eval snapshot · split smoke · /);
+    });
+
+    it("refuses a chosen record of another eval", async () => {
+      const { deps, err, saved, sheets } = fakeDeps();
+      await run(argv("eval", "snapshot", "--runs", "1"), deps);
+      const record = saved[0] as RunRecord;
+      record.eval = "triage";
+
+      const code = await run(
+        argv("eval", "snapshot", "--record", "reports/evals/snapshot-dev-0.json"),
+        deps,
+      );
+
+      expect(code).toBe(1);
+      expect(err.at(-1)).toBe(
+        "error: Run record reports/evals/snapshot-dev-0.json is of eval 'triage', not 'snapshot'.",
+      );
+      expect(sheets.size).toBe(0);
+    });
+
+    it("says clearly when there is no run record to review", async () => {
+      const { deps, err } = fakeDeps();
+
+      const code = await run(argv("eval", "snapshot", "--review-sheet"), deps);
+
+      expect(code).toBe(1);
+      expect(err).toEqual([
+        "error: Eval 'snapshot' has no run record for split dev yet; run the eval first.",
+      ]);
     });
   });
 });

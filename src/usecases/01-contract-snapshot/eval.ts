@@ -42,5 +42,11 @@ export function createSnapshotEval({
     score: scoreSnapshot,
     describe: describeSnapshot,
     target: snapshotTarget,
+    async evidenceText({ contractId }, paragraphId) {
+      const contract = await documents.readContract(contractId);
+      return contract.sections
+        .flatMap((section) => section.paragraphs)
+        .find((paragraph) => paragraph.id === paragraphId)?.text;
+    },
   };
 }

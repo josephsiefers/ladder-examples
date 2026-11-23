@@ -1,3 +1,4 @@
+import { plural, row } from "./markdown";
 import { fieldStats } from "./stats";
 import type { FieldStats, RunRecord } from "./types";
 
@@ -7,13 +8,6 @@ const count = new Intl.NumberFormat("en-GB");
 export function formatPercent(accuracy: number): string {
   return `${(accuracy * 100).toFixed(1)}%`;
 }
-
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
-
-/** A Markdown table cell: pipes escaped, line breaks flattened. */
-const cell = (text: string) => text.replaceAll("|", "\\|").replaceAll(/\s*\n\s*/g, " ");
-
-const row = (cells: string[]) => `| ${cells.map(cell).join(" | ")} |`;
 
 /**
  * The eval report in Markdown: per-field stats across runs, the definition's target line, the

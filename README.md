@@ -68,6 +68,18 @@ So each run passes its run number as the call's **sample index**, and the index 
 - **Totals** are calls (split into live and cached), tokens, failed case runs and wall time. Cached calls count the tokens of the original live call.
 - **Splits:** `smoke` holds a few hand-written cases for demos and quick checks. `dev` is where prompts get tuned. `test` is held out: it loads only with an explicit `--split test`, and prompts are never tuned against it. The default split is `dev`.
 
+## Checking the answer key: the review sheet
+
+A wrong gold label marks a correct model answer as a failure, and can make a use case look as if it needs redesigning. So after a generated dataset's first eval, a human checks the answer key by reading. No legal knowledge is needed.
+
+```sh
+npm run eval -- snapshot --review-sheet                                       # from the latest dev run record
+npm run eval -- snapshot --review-sheet --split smoke                         # from the latest smoke run record
+npm run eval -- snapshot --record reports/evals/snapshot-dev-<stamp>.json     # from a chosen run record
+```
+
+No model is called. The sheet is saved as Markdown beside its run record (`reports/evals/<record>.review-sheet.md`). It lists one row per (case, field): the answer key's value, what the model said in each run (`✗` where a run differed from the key), and the source sentence, which is the text of the evidence paragraph the answer key cites. A field the key says is not stated shows "(no sentence: field should be absent)". **Disagreements** come first: every row where any run differed from the key. Then comes a random sample of 10 agreeing rows, with a fixed seed so the same record always gives the same sheet. For each row, does the source sentence say what the answer key says? On a disagreement row, decide whether the model, the key, or neither is right.
+
 ## Use cases
 
 | Use case | Rung | Status |
@@ -189,7 +201,7 @@ Dev results (Haiku, 12 generated NDAs, 3 runs, recorded 2026-11-22; replay them 
 
 `effectiveDate 100.0% · term 100.0% → target 98%: MET`
 
-No failures and no failed case runs. Totals: 36 calls, 187,245 input tokens, 12,150 output tokens. **The target was met on the dev split, with the prompt unchanged** (it was not tuned against this corpus). This result is provisional until a human has reviewed the answer key (#9). The test split has not been run.
+No failures and no failed case runs. Totals: 36 calls, 187,245 input tokens, 12,150 output tokens. **The target was met on the dev split, with the prompt unchanged** (it was not tuned against this corpus). This result is provisional until a human has reviewed the answer key (#9) using the run's [review sheet](#checking-the-answer-key-the-review-sheet). The test split has not been run.
 
 ### UC2 Intake triage
 
