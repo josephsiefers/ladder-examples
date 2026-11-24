@@ -104,7 +104,7 @@ out/  reports/                  gitignored: firm writes, eval run records, revie
 - `npm test` passes.
 - The pre-commit hook passes on the commit. `--no-verify` is never used.
 - `npm run mutate` scores ≥ 70% on the modules the ticket touched (deterministic code only).
-- Use-case tickets run their eval live with `--runs 3` and paste the report table into the README and the issue's closing comment.
-- One commit on `master` referencing the issue, then the issue is closed.
+- Use-case tickets run their eval live with `--runs 3` and paste the report table into the README and the PR body.
+- One PR per ticket, with `Closes #<n>` in its body. A human squash-merges it into `master`, which closes the issue.
 - The ticket fits one agent session (≤ ~150k tokens of context). If it turns out bigger, stop, split it, and comment on the issue instead of pushing through.
 - Each ticket's **Demo** commands work exactly as written.

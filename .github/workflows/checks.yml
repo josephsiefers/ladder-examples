@@ -1,0 +1,34 @@
+# The automated checks: the deterministic gate every PR must pass before a human merges it.
+# Branch protection on `master` requires this job. Mutation testing is left out because it is
+# slow; the implementer runs it, scoped to the modules a ticket touched.
+
+name: checks
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run depcruise
+      - run: npm test

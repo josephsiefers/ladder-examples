@@ -1,0 +1,13 @@
+name: Set up Claude Code
+description: >-
+  Installs the pinned Claude Code CLI and the plugin whose skills the factory's prompts use.
+  Node must already be set up.
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        npm install --global @anthropic-ai/claude-code@2.1.318
+        claude plugin marketplace add anthropics/claude-plugins-official || true
+        claude plugin install mattpocock-skills@claude-plugins-official
