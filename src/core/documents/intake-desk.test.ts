@@ -77,6 +77,39 @@ describe("intake documents", () => {
     ]);
   });
 
+  it("tolerates indentation, extra blank lines and whitespace-only lines between paragraphs", async () => {
+    await writeIntake(
+      "intake-a",
+      "\n  # Heads of Terms  \n\n\n\n  12.10 First line\n    second line.\n   \nSee 4.2 above.\n4.2a is not a number.\n",
+    );
+
+    expect(await firm().readIntake("intake-a")).toEqual({
+      id: "intake-a",
+      title: "Heads of Terms",
+      paragraphs: [
+        { id: "12.10", text: "First line second line." },
+        { text: "See 4.2 above. 4.2a is not a number." },
+      ],
+    });
+  });
+
+  it("does not take a '#' inside the first line as a title", async () => {
+    await writeIntake("intake-a", "Re: # Heads of Terms\n\nText.\n");
+
+    await expect(firm().readIntake("intake-a")).rejects.toMatchObject({
+      name: "MalformedIntakeError",
+    });
+  });
+
+  it("says so when the firm has no intake documents", async () => {
+    const read = firm().readIntake("intake-a");
+
+    await expect(read).rejects.toMatchObject({
+      name: "IntakeNotFoundError",
+      message: "Intake document 'intake-a' not found. Known intake documents: (none).",
+    });
+  });
+
   it("rejects a document without a title line", async () => {
     await writeIntake("intake-a", "\nNo title here.\n");
 
@@ -90,12 +123,13 @@ describe("intake documents", () => {
 
   it("reports an unknown ID as not found, listing the known IDs", async () => {
     await writeIntake("intake-a", "# A\n\nText.\n");
+    await writeIntake("intake-b", "# B\n\nText.\n");
 
     const read = firm().readIntake("../intake-a");
 
     await expect(read).rejects.toThrow(IntakeNotFoundError);
     await expect(read).rejects.toThrow(
-      "Intake document '../intake-a' not found. Known intake documents: intake-a.",
+      "Intake document '../intake-a' not found. Known intake documents: intake-a, intake-b.",
     );
   });
 

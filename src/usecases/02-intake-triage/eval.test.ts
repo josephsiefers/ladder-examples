@@ -29,6 +29,16 @@ const llm = createFakeLlm((request) => {
   return request.sampleIndex === 0 ? { docType: "nope" } : { docType: "other", rationale: "LOI." };
 });
 
+/** One field's stats with the same accuracy in its only run. */
+const stat = (field: string, mean: number) => ({
+  field,
+  perRun: [mean],
+  mean,
+  stdev: 0,
+  min: mean,
+  max: mean,
+});
+
 async function report() {
   const record = await runEval(definition, CASES, { llm, split: "smoke", runs: 2 });
   return renderReport(record, definition.target, definition.analysis?.(record, CASES));
@@ -74,6 +84,51 @@ describe("the triage eval", () => {
         "| hybrid | 50.0% | 2 |",
       ].join("\n"),
     );
+  });
+
+  it("lays out the analysis section exactly", async () => {
+    const clean = CASES.slice(1);
+    const record = await runEval(definition, clean, { llm, split: "smoke", runs: 1 });
+
+    expect(definition.analysis?.(record, clean)).toBe(
+      [
+        "Overall accuracy, pooled over 1 case run: 0.0%",
+        "",
+        "### Per type (pooled over all runs)",
+        "",
+        "| Type | Precision | Recall | Support |",
+        "|---|---:|---:|---:|",
+        "| nda | n/a | n/a | 0 |",
+        "| msa | n/a | n/a | 0 |",
+        "| dpa | n/a | n/a | 0 |",
+        "| sow | n/a | n/a | 0 |",
+        "| other | n/a | 0.0% | 1 |",
+        "",
+        "### Confusion matrix (pooled over all runs)",
+        "",
+        "| Gold \\ Predicted | nda | msa | dpa | sow | other | (no valid answer) |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+        "| nda | 0 | 0 | 0 | 0 | 0 | 0 |",
+        "| msa | 0 | 0 | 0 | 0 | 0 | 0 |",
+        "| dpa | 0 | 0 | 0 | 0 | 0 | 0 |",
+        "| sow | 0 | 0 | 0 | 0 | 0 | 0 |",
+        "| other | 0 | 0 | 0 | 0 | 0 | 1 |",
+        "",
+        "### Clean vs hybrid",
+        "",
+        "| Ambiguity | Accuracy | Case runs |",
+        "|---|---:|---:|",
+        "| clean | 0.0% | 1 |",
+        "| hybrid | n/a | 0 |",
+      ].join("\n"),
+    );
+  });
+
+  it("reads the docType field's mean for the target line, whatever else is in the stats", () => {
+    expect(definition.target([stat("other", 0.1), stat("docType", 0.8)])).toMatch(
+      /^docType accuracy 80\.0% \(mean of runs\)/,
+    );
+    expect(definition.target([])).toMatch(/^docType accuracy 0\.0%/);
   });
 
   it("says n/a for an empty group", async () => {

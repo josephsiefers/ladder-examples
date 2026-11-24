@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-hand-01\">\n# One-Way Confidentiality Agreement\n\nFrom: Priya Raman, Head of Corporate Development, Halden Robotics Ltd To: Legal intake\n\nPlease review the attached agreement before Thursday. Brightwater Capital Partners want to look at our books ahead of a possible minority investment, and they have asked us to use their form. Only we will be sharing information; they will not be sending us anything of substance.\n\n## 1. Parties and Background\n\n[1.1] This agreement is made on 4 November 2026 between Halden Robotics Ltd, a company registered in England and Wales with number 09812274, whose registered office is at 14 Canal Wharf, Leeds LS11 5PS (the \"Discloser\"), and Brightwater Capital Partners LLP, a limited liability partnership registered in England and Wales with number OC417730, whose registered office is at 3 Lombard Court, London EC3V 9AA (the \"Recipient\").\n\n[1.2] The Discloser intends to make available to the Recipient certain information about its business, finances, products and intellectual property so that the Recipient can evaluate a possible investment in the Discloser (the \"Purpose\").\n\n## 2. Confidential Information\n\n[2.1] \"Confidential Information\" means all information, in any form, disclosed by or on behalf of the Discloser to the Recipient in connection with the Purpose, whether before or after the date of this agreement, including financial statements, management accounts, forecasts, customer lists, source code, designs and the existence and status of the discussions between the parties.\n\n[2.2] Confidential Information does not include information that is or becomes public other than through a breach of this agreement, that was lawfully in the Recipient's possession before disclosure, that the Recipient receives from a third party who is free to disclose it, or that the Recipient develops independently without use of the Confidential Information.\n\n## 3. Obligations of the Recipient\n\n[3.1] The Recipient shall keep the Confidential Information secret, shall use it only for the Purpose, and shall not disclose it to any person except its partners, employees and professional advisers who need to know it for the Purpose and who are bound by duties of confidentiality no less strict than those in this agreement.\n\n[3.2] The Recipient shall protect the Confidential Information with at least the degree of care it uses for its own confidential information, and in any event no less than reasonable care.\n\n[3.3] The Recipient may disclose Confidential Information to the extent required by law, by a court or by any regulatory authority, provided that it gives the Discloser prompt written notice where lawful to do so and discloses only the part that is legally required.\n\n## 4. Return of Information\n\n[4.1] On the Discloser's written request, or if the Recipient decides not to proceed with the investment, the Recipient shall promptly return or destroy all Confidential Information and any notes or analyses containing it, and confirm in writing that it has done so, save for copies it must keep to comply with law or its internal compliance policies.\n\n## 5. Term\n\n[5.1] This agreement continues for two years from its date. The Recipient's obligations under clause 3 survive for three years after it ends.\n\n## 6. No Commitment\n\n[6.1] Nothing in this agreement obliges either party to proceed with any investment or other transaction, and no licence of any intellectual property is granted by it.\n\n## 7. Remedies\n\n[7.1] The Recipient acknowledges that damages alone may not be an adequate remedy for a breach of this agreement and that the Discloser may seek an injunction or other equitable relief.\n\n## 8. Governing Law\n\n[8.1] This agreement and any dispute arising from it are governed by the law of England and Wales, and the courts of England and Wales have exclusive jurisdiction.\n\nSigned for Halden Robotics Ltd by Priya Raman, Director. Signed for Brightwater Capital Partners LLP by Thomas Ekwueme, Partner.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "docType": "nda",
+    "rationale": "The document is a one-way confidentiality agreement whose primary purpose is to protect information Halden discloses to Brightwater so it can evaluate a possible investment; nearly all clauses define confidential information and the recipient's secrecy obligations, so it is an NDA despite its investment context."
+  },
+  "usage": {
+    "inputTokens": 2267,
+    "outputTokens": 109
+  },
+  "latencyMs": 925.6900790000002,
+  "recordedAt": "2026-11-24T02:58:12.575Z"
+}

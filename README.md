@@ -85,7 +85,7 @@ No model is called. The sheet is saved as Markdown beside its run record (`repor
 | Use case | Rung | Status |
 |---|---|---|
 | [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built; dev eval run: target met |
-| [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Planned |
+| [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Routing by type built; smoke eval run |
 | [UC3 NDA review](#uc3-nda-review-future) | Prompt chaining + sectioning, then voting | Future |
 | [UC4 Minimal edit](#uc4-minimal-edit-future) | Evaluator-optimizer | Future |
 | [UC5 Diligence question](#uc5-diligence-question-future) | Orchestrator-workers | Future |
@@ -205,7 +205,66 @@ No failures and no failed case runs. Totals: 36 calls, 187,245 input tokens, 12,
 
 ### UC2 Intake triage
 
-_Not built yet._ Spec: [uc2-intake-triage.md](docs/spec/use-cases/uc2-intake-triage.md).
+Reads one **intake document**, decides its **document type** (NDA, MSA, DPA, SOW or other) and sends it to its team's **queue**. Spec: [uc2-intake-triage.md](docs/spec/use-cases/uc2-intake-triage.md). This is routing by type; the easy/hard cascade (#13) comes later.
+
+**Discovery card**
+
+- **Outcome:** intake documents reach the right team's queue the same day.
+- **Process:** a clerk reads each document, decides its type and forwards it. Odd ones go to a senior associate.
+- **Data:** about 400 documents a week, roughly 75% templated NDAs. Inbox history records where each document went.
+- **Quality:** a misroute costs about a day. NDAs sent down the wrong path waste associate time.
+- **Constraints:** the cheap path must handle the clean NDAs. Big-model spend goes only where it is needed.
+
+**Design: routing**
+
+```
+intake document ──▶ classify [LLM] ──▶ routing table [code] ──▶ queue
+core/documents      Haiku: docType     nda → nda-review           routeToQueue
+                    + rationale        msa, sow → commercial      (only with --route)
+                                       dpa → privacy
+                                       other → senior-associate
+```
+
+> "I'd start with routing because there are five distinct document types, each with its own playbook and team, and most volume is easy NDAs a small model can handle. I'd add voting or human review on low-confidence documents only if evals show hybrid documents being misrouted."
+
+The model only classifies. The queue always comes from the routing table ([routing.ts](src/usecases/02-intake-triage/routing.ts)), a typed constant that must cover every document type, so a model can never invent a queue. The prompt ([prompts.ts](src/usecases/02-intake-triage/prompts.ts)) defines each type by its **primary purpose**, says a **hybrid document** still has exactly one type, and works one example: an MSA with a confidentiality section is `msa`. `nda-review` is a stub queue until UC3 exists.
+
+**Run it**
+
+```sh
+npm run ladder -- triage intake-hand-03            # classify one document; prints its type, rationale and queue
+npm run ladder -- triage intake-hand-03 --route    # ...and file it in that queue
+npm run ladder -- triage --all --route             # every intake document, one line each
+```
+
+Routing goes through the translation layer's `routeToQueue`, which appends `{id, queue, rationale, routedAt}` to `out/firm/queues/<queue>.jsonl` (gitignored) and returns a receipt. The use case never sees a path.
+
+**Eval**
+
+```sh
+npm run eval -- triage --split smoke --runs 3   # 5 hand-written intake documents × 3 runs, replayed from the committed cache
+```
+
+The eval never routes. It scores the document type against gold and reports overall accuracy, per-type precision and recall, a 5×5 confusion matrix, and accuracy on clean vs hybrid documents (pooled over all runs). The **upgrade trigger** is hybrid accuracy materially below clean accuracy.
+
+The smoke split is five hand-written documents, one per type; the MSA (with a confidentiality section) and a letter of intent (with a binding confidentiality paragraph) are the hybrids. [docs/evals/triage-smoke.md](docs/evals/triage-smoke.md) describes each and holds the full report.
+
+Smoke results (Haiku, 3 runs, recorded live 2026-11-24; replay them with `--replay-only`). docType accuracy is 100.0% in every run (stdev 0.0%), and precision and recall are 100.0% for every type:
+
+| Gold \ Predicted | nda | msa | dpa | sow | other |
+|---|---:|---:|---:|---:|---:|
+| nda | 3 | 0 | 0 | 0 | 0 |
+| msa | 0 | 3 | 0 | 0 | 0 |
+| dpa | 0 | 0 | 3 | 0 | 0 |
+| sow | 0 | 0 | 0 | 3 | 0 |
+| other | 0 | 0 | 0 | 0 | 3 |
+
+| Ambiguity | Accuracy | Case runs |
+|---|---:|---:|
+| clean | 100.0% | 9 |
+| hybrid | 100.0% | 6 |
+
+No failures. Totals: 15 calls (all live), 33,915 input tokens, 1,669 output tokens. Five hand-written documents, one per type, show the pipeline works end to end. They cannot show whether the upgrade trigger fires: that needs the generated dev split with more hybrids (#11).
 
 ### UC3 NDA review (future)
 

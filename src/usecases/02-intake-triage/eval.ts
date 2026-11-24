@@ -69,7 +69,7 @@ function triageAnalysis(
   const all = predictions(record, cases);
   const matrix = confusionMatrix(DOC_TYPES, all);
   return [
-    `Overall accuracy, pooled over ${all.length} case runs: ${formatRate(accuracy(all))}`,
+    `Overall accuracy, pooled over ${all.length} case run${all.length === 1 ? "" : "s"}: ${formatRate(accuracy(all))}`,
     "",
     "### Per type (pooled over all runs)",
     "",
