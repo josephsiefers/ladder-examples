@@ -1,0 +1,222 @@
+# The implementer task. Starts when the owner adds `ready-for-agent` to a ticket. Builds the ticket on
+# `agent/issue-<n>` and opens a draft PR, which starts the checks and the automated review.
+#
+# Three jobs, so the runner that runs Claude never holds the factory's GitHub token:
+#   claim    token, code from master only: labels, guards, the ticket → artifact
+#   build    no token: Claude builds the ticket → its commits as a git bundle, plus the PR text
+#   publish  token, a fresh runner, code from master only: pushes the bundle and opens the PR
+# `publish` reads only text and a git bundle from `build`, and runs nothing from it. A bundle that
+# touches `.github/workflows/` is refused at push, because the token has no Workflows permission.
+#
+# The factory's token is the owner's, so the sender check can't tell the owner from the factory.
+# What keeps runs from triggering themselves is that no run ever adds `ready-for-agent`.
+
+name: implement
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+env:
+  ISSUE: ${{ github.event.issue.number }}
+  BRANCH: agent/issue-${{ github.event.issue.number }}
+  OWNER: ${{ github.repository_owner }}
+  GH_REPO: ${{ github.repository }}
+  RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+jobs:
+  claim:
+    if: github.event.label.name == 'ready-for-agent' && github.event.sender.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # On the job, not the workflow: the runs' own label changes start runs whose jobs are skipped,
+    # and a skipped job never joins the group, so it can't displace a real request.
+    concurrency:
+      group: implement-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    outputs:
+      go: ${{ steps.claim.outputs.go }}
+    env:
+      GH_TOKEN: ${{ secrets.FACTORY_GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: .github/factory
+          persist-credentials: false
+
+      - name: Claim the ticket, unless a run has it, a PR is open, or a blocker isn't closed
+        id: claim
+        run: |
+          stop() {
+            gh issue comment "$ISSUE" --body "Not starting: $1"
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          }
+          gh issue edit "$ISSUE" --remove-label ready-for-agent
+          working=$(gh issue view "$ISSUE" --json labels --jq '[.labels[].name] | index("agent-working") // empty')
+          [ -z "$working" ] || stop "a run is already working on this ticket."
+          open_pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          [ -z "$open_pr" ] || stop "PR #$open_pr is already open for this ticket."
+          blockers=$(gh api "repos/$GH_REPO/issues/$ISSUE/dependencies/blocked_by" \
+            --jq '[.[] | select(.state == "open") | "#\(.number)"] | join(", ")')
+          [ -z "$blockers" ] || stop "blocked by $blockers. Add \`ready-for-agent\` again once they are closed."
+          mkdir -p "$RUNNER_TEMP/ticket"
+          bash .github/factory/ticket.sh "$ISSUE" > "$RUNNER_TEMP/ticket/ticket.md"
+          gh issue edit "$ISSUE" --add-label agent-working
+          echo "go=true" >> "$GITHUB_OUTPUT"
+
+      - if: steps.claim.outputs.go == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ticket
+          path: ${{ runner.temp }}/ticket/ticket.md
+
+      - name: Hand the ticket back after a failure
+        if: failure()
+        run: |
+          gh issue comment "$ISSUE" --body "The implementer run failed before it started: $RUN_URL. Add \`ready-for-agent\` again to retry."
+          gh issue edit "$ISSUE" --add-label ready-for-human --remove-label agent-working
+
+  build:
+    needs: claim
+    if: needs.claim.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      OWNER_ID: ${{ github.repository_owner_id }}
+    steps:
+      # The runner context isn't available in job-level env, so the paths are set here.
+      - name: Set the paths
+        run: |
+          echo "OUT_DIR=$RUNNER_TEMP/factory/out" >> "$GITHUB_ENV"
+          echo "TICKET_FILE=$RUNNER_TEMP/factory/ticket.md" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - uses: ./.github/actions/setup-claude
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ticket
+          path: ${{ runner.temp }}/factory
+
+      - name: Prepare the branch and the eval key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          git switch --create "$BRANCH"
+          git config user.name "$OWNER (factory)"
+          git config user.email "$OWNER_ID+$OWNER@users.noreply.github.com"
+          # The app's CLI loads .envrc (gitignored) for live evals. The key stays out of the
+          # environment, where Claude Code would pick it up instead of the OAuth token.
+          printf 'export ANTHROPIC_API_KEY=%s\n' "$ANTHROPIC_API_KEY" > .envrc
+          mkdir -p "$OUT_DIR"
+
+      - name: Build the ticket
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          prompt=$(envsubst '$ISSUE $BRANCH $TICKET_FILE $OUT_DIR' < .github/factory/implement.md)
+          claude -p "$prompt" \
+            --model claude-opus-5-5 \
+            --settings .github/factory/implement-settings.json \
+            --add-dir "$RUNNER_TEMP/factory" \
+            --output-format stream-json --verbose \
+            > "$RUNNER_TEMP/factory/transcript.jsonl"
+          jq -r 'select(.type == "result") | .result' "$RUNNER_TEMP/factory/transcript.jsonl"
+
+      - name: Bundle the commits
+        run: |
+          [ ! -f "$OUT_DIR/blocked.md" ] || exit 0
+          if [ ! -f "$OUT_DIR/pr-title.txt" ] || [ ! -f "$OUT_DIR/pr-body.md" ]; then
+            echo "::error::The run wrote neither a PR title and body nor blocked.md."
+            exit 1
+          fi
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::The run left changes uncommitted:"
+            git status --short
+            exit 1
+          fi
+          if [ "$(git rev-list --count origin/master..HEAD)" = 0 ]; then
+            echo "::error::The run made no commits."
+            exit 1
+          fi
+          git bundle create "$OUT_DIR/commits.bundle" "$BRANCH" ^origin/master
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: outcome
+          path: ${{ runner.temp }}/factory/out
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transcript-issue-${{ github.event.issue.number }}
+          path: ${{ runner.temp }}/factory/transcript.jsonl
+          if-no-files-found: ignore
+
+  publish:
+    needs: [claim, build]
+    if: always() && needs.claim.result == 'success' && needs.claim.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ secrets.FACTORY_GITHUB_TOKEN }}
+    steps:
+      - name: Set the paths
+        run: echo "OUT=$RUNNER_TEMP/outcome" >> "$GITHUB_ENV"
+
+      - if: needs.build.result == 'success'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - if: needs.build.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: outcome
+          path: ${{ runner.temp }}/outcome
+
+      - name: Open the draft PR, or hand the ticket back
+        if: needs.build.result == 'success'
+        run: |
+          if [ -f "$OUT/blocked.md" ]; then
+            gh issue comment "$ISSUE" --body-file "$OUT/blocked.md"
+            gh issue edit "$ISSUE" --add-label ready-for-human
+            exit 0
+          fi
+          git fetch "$OUT/commits.bundle" "refs/heads/$BRANCH:refs/heads/$BRANCH"
+          if [ "$(git rev-list --count "origin/master..$BRANCH")" = 0 ]; then
+            echo "::error::The bundle holds no commits on top of master."
+            exit 1
+          fi
+          # No npm ci ran here, so no hooks are installed; hooksPath makes sure none run.
+          git -c core.hooksPath=/dev/null push --force \
+            "https://x-access-token:$GH_TOKEN@github.com/$GH_REPO.git" "refs/heads/$BRANCH:refs/heads/$BRANCH"
+          printf '\n\nCloses #%s\n' "$ISSUE" >> "$OUT/pr-body.md"
+          gh pr create --draft --base master --head "$BRANCH" \
+            --title "$(head -n 1 "$OUT/pr-title.txt" | cut -c1-200)" --body-file "$OUT/pr-body.md"
+
+      - name: Hand the ticket back after a failure
+        if: failure() || needs.build.result != 'success'
+        run: |
+          gh issue comment "$ISSUE" --body "The implementer run failed: $RUN_URL. Its transcript is attached to the run. Add \`ready-for-agent\` again to retry."
+          gh issue edit "$ISSUE" --add-label ready-for-human
+
+      - name: Release the ticket
+        if: always()
+        run: gh issue edit "$ISSUE" --remove-label agent-working

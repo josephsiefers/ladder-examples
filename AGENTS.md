@@ -69,4 +69,8 @@ The `typescript6` alias also installs a `tsc`, and npm linked it over TypeScript
 
 ## Definition of done
 
-`docs/spec/README.md` (Definition of done) is the authoritative list, and every item on it applies to every ticket. Until a ticket's tooling exists, say in the closing comment which items were skipped.
+`docs/spec/README.md` (Definition of done) is the authoritative list, and every item on it applies to every ticket. Until a ticket's tooling exists, say in the PR body which items were skipped.
+
+## Software factory
+
+GitHub Actions runs an implementer task (`ready-for-agent` on a ticket) and an automated review task (a PR opens, or `agent-review` on it). Only the owner adds those two labels; a run never does. See `docs/agents/factory.md`.

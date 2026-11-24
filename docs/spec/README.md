@@ -24,7 +24,7 @@ Future use cases record their discovery card, justification sentence, and **open
 ### Shape
 - One firm, one use case per rung. No single pipeline is forced to use every rung, because that would contradict the ladder's own rule.
 - Where a use case is meant to show a climb, the eval decides. If the eval does not justify the climb, the README says so honestly. Results are never rigged. The one exception is a deliberately labelled anti-pattern demo in UC3b.
-- Out of scope: Word/OOXML output, firm tenancy and deployment, ADRs, CI.
+- Out of scope: Word/OOXML output, firm tenancy and deployment, ADRs.
 
 ### Models
 - `claude-haiku-5-5` by default everywhere. `claude-sonnet-5-5` only where the design calls for a larger model (UC2's hard route), or where an eval justifies it.
@@ -104,7 +104,7 @@ out/  reports/                  gitignored: firm writes, eval run records, revie
 - `npm test` passes.
 - The pre-commit hook passes on the commit. `--no-verify` is never used.
 - `npm run mutate` scores ≥ 70% on the modules the ticket touched (deterministic code only).
-- Use-case tickets run their eval live with `--runs 3` and paste the report table into the README and the issue's closing comment.
-- One commit on `master` referencing the issue, then the issue is closed.
+- Use-case tickets run their eval live with `--runs 3` and paste the report table into the README and the PR body.
+- One PR per ticket, with `Closes #<n>` in its body. A human squash-merges it into `master`, which closes the issue.
 - The ticket fits one agent session (≤ ~150k tokens of context). If it turns out bigger, stop, split it, and comment on the issue instead of pushing through.
 - Each ticket's **Demo** commands work exactly as written.
