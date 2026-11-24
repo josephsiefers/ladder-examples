@@ -1,0 +1,4 @@
+{
+  "input": { "documentId": "intake-hand-01" },
+  "gold": { "docType": "nda", "ambiguity": "clean" }
+}

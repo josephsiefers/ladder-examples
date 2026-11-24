@@ -1,7 +1,7 @@
 import { relative, resolve } from "node:path";
 import { Argument, Command, CommanderError, InvalidArgumentError, Option } from "commander";
 import packageJson from "../package.json" with { type: "json" };
-import { createFirmDocuments } from "./core/documents";
+import { createFirmDocuments, type FirmDocuments } from "./core/documents";
 import {
   buildReviewSheet,
   createEvalStore,
@@ -21,18 +21,23 @@ import {
   createCachedLlm,
   createFileCacheStore,
   formatCallSummary,
+  type Llm,
 } from "./core/llm";
+import { createSnapshotEval, snapshotContract } from "./usecases/01-contract-snapshot";
 import {
-  createSnapshotEval,
-  type SnapshotDeps,
-  snapshotContract,
-} from "./usecases/01-contract-snapshot";
+  createTriageEval,
+  type TriageResult,
+  triageAll,
+  triageDocument,
+} from "./usecases/02-intake-triage";
 
 /**
  * Everything a command touches outside its own code, so tests can run the CLI offline. `llm` is
  * the live LLM; commands call it through the LLM cache in `llmCache`.
  */
-export interface CliDeps extends SnapshotDeps {
+export interface CliDeps {
+  llm: Llm;
+  documents: FirmDocuments;
   llmCache: CacheStore;
   evalStore: EvalStore;
   stdout: (text: string) => void;
@@ -78,7 +83,7 @@ async function runEvalCommand<Input, Value>(
   );
   const record = await runEval(definition, cases, { llm: deps.llm, split, runs, concurrency });
   const path = await deps.evalStore.saveRunRecord(record);
-  deps.stdout(renderReport(record, definition.target));
+  deps.stdout(renderReport(record, definition.target, definition.analysis?.(record, cases)));
   deps.stdout(`\nRun record: ${relative(process.cwd(), path)}`);
 }
 
@@ -105,6 +110,12 @@ async function reviewSheetCommand<Input, Value>(
   const sheet = await buildReviewSheet(definition, record, cases);
   const sheetPath = await deps.evalStore.saveReviewSheet(record, sheet.markdown);
   deps.stdout(`Review sheet: ${relative(process.cwd(), sheetPath)} · ${sheet.summary}`);
+}
+
+/** One triaged document on one line, e.g. `intake-hand-02 · msa → commercial · routed (position 1)`. */
+function triageLine({ documentId, classification, queue, receipt }: TriageResult): string {
+  const routed = receipt ? `routed (position ${receipt.position})` : "not routed";
+  return `${documentId} · ${classification.docType} → ${queue} · ${routed}`;
 }
 
 export function buildProgram(deps: CliDeps): Command {
@@ -140,10 +151,50 @@ export function buildProgram(deps: CliDeps): Command {
       deps.stdout(formatCallSummary(result));
     });
 
+  program
+    .command("triage")
+    .description(
+      "UC2: classify an intake document's type and name its queue; --route files it there",
+    )
+    .argument("[documentId]", "intake document ID in the firm's intake, e.g. intake-hand-03")
+    .option("--all", "triage every intake document, printing one line each")
+    .option("--route", "route each document to its queue (from the routing table, not the model)")
+    .action(
+      async (
+        documentId: string | undefined,
+        { all, route }: { all?: boolean; route?: boolean },
+      ) => {
+        if ((documentId === undefined) === !all) {
+          throw new Error("Name one intake document ID, or pass --all.");
+        }
+        const options = { route: route === true };
+        if (all) {
+          for (const result of await triageAll(cachedDeps(), options)) {
+            deps.stdout(triageLine(result));
+          }
+          return;
+        }
+        const result = await triageDocument(documentId ?? "", cachedDeps(), options);
+        deps.stdout(JSON.stringify(result.classification, null, 2));
+        deps.stdout(
+          result.receipt
+            ? `routed to ${result.queue} (position ${result.receipt.position}, ${result.receipt.routedAt})`
+            : `queue ${result.queue} (not routed; pass --route to file it)`,
+        );
+        deps.stdout(formatCallSummary(result));
+      },
+    );
+
   const evals: Record<string, (options: EvalOptions) => Promise<void>> = {
     snapshot: (options) =>
       (options.reviewSheet ? reviewSheetCommand : runEvalCommand)(
         createSnapshotEval(deps),
+        options,
+        cachedDeps(),
+      ),
+    triage: (options) =>
+      (options.reviewSheet ? reviewSheetCommand : runEvalCommand)(
+        createTriageEval(deps),
         options,
         cachedDeps(),
       ),

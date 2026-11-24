@@ -101,6 +101,14 @@ describe("renderReport", () => {
     );
   });
 
+  it("puts an eval's own analysis section between the target line and the failures", () => {
+    const record = runRecord([caseRun("x", 0, { date: true })]);
+
+    expect(renderReport(record, () => "met", "### Confusion matrix\n\n| a |")).toContain(
+      "\nmet\n\n### Confusion matrix\n\n| a |\n\n### Failures\n",
+    );
+  });
+
   it("names a single case and a single run in the singular", () => {
     const record = runRecord([caseRun("x", 0, { date: false })]);
 
