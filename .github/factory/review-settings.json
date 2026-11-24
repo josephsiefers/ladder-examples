@@ -6,7 +6,6 @@
       "Grep",
       "Skill",
       "Agent",
-      "Write",
       "TodoWrite",
       "Bash(git diff *)",
       "Bash(git log *)",
@@ -17,7 +16,7 @@
       "Bash(ls)",
       "Bash(ls *)"
     ],
-    "deny": ["Edit", "Bash(git push *)", "Bash(gh *)", "Bash(npm *)", "Bash(npx *)", "Bash(node *)"]
+    "deny": ["Edit", "Bash(git push *)", "Bash(gh *)", "Bash(git *--output*)"]
   },
   "skillOverrides": {
     "deep-research": "off",

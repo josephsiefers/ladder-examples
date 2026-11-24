@@ -96,14 +96,19 @@ jobs:
           # --setting-sources user: ignore any .claude/settings.json the PR brings. The plugin
           # install lives in user settings, so the skills still load.
           # --tools: only the tools a review uses, to keep the starting context small. Agent is
-          # for the code-review skill's parallel sub-agents. WebSearch and WebFetch are for current
-          # docs, and are left off the allow list so auto mode judges each call.
-          # --permission-mode auto: a classifier judges each call the settings' allow and deny rules
-          # don't decide, instead of refusing it. The deny rules still hold.
+          # for the code-review skill's parallel sub-agents. No web tools: this job holds a secret
+          # and reads untrusted PR text, and a fetch could send the secret out.
+          # --permission-mode dontAsk: a call off the allow list is refused, not judged by auto
+          # mode's classifier. The allow list is what keeps the review from running the PR's code
+          # (bash -c, sh, env npm, yarn, python...), which a deny list can't cover.
+          # --allowedTools: Write only into the out dir, so the review can't change the PR checkout.
+          # Path rules for Write are spelled Edit(...); the leading / makes "//abs/path", an
+          # absolute path. The settings' bare "Edit" deny matches only the Edit tool, not this.
           claude -p "$prompt" \
             --model claude-opus-5-5 \
-            --tools "Bash,Read,Write,Skill,Agent,WebSearch,WebFetch" \
-            --permission-mode auto \
+            --tools "Bash,Read,Write,Skill,Agent" \
+            --permission-mode dontAsk \
+            --allowedTools "Edit(/${OUT_DIR}/**)" \
             --setting-sources user \
             --settings ../factory/.github/factory/review-settings.json \
             --add-dir "$RUNNER_TEMP/factory" \
