@@ -2,7 +2,7 @@
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues for josephsiefers/ode-examples (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
+Issues are tracked in GitHub Issues for josephsiefers/ladder-examples (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

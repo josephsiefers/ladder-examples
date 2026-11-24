@@ -15,7 +15,7 @@ Vocabulary is defined in [GLOSSARY.md](../../GLOSSARY.md). Pattern definitions f
 | UC5 Diligence question | Orchestrator-workers | [uc5](use-cases/uc5-diligence-question.md) |
 | UC6 Diligence investigation | Agent | [uc6](use-cases/uc6-diligence-investigation.md) |
 
-Tickets are GitHub sub-issues of [#1](https://github.com/josephsiefers/ode-examples/issues/1), with native blocking links. GitHub is the only record of ticket status and build order.
+Tickets are GitHub sub-issues of [#1](https://github.com/josephsiefers/ladder-examples/issues/1), with native blocking links. GitHub is the only record of ticket status and build order.
 
 Future use cases record their discovery card, justification sentence, and **open questions**. A later grilling session settles those questions, using this spec as its reference, before any tickets are written.
 

@@ -1,5 +1,5 @@
 {
-  "name": "ode-examples",
+  "name": "ladder-examples",
   "version": "0.1.0",
   "private": true,
   "description": "A worked example of the design ladder: one law firm's contract-review needs, each solved at the lowest rung of LLM pattern that its discovery facts justify.",
