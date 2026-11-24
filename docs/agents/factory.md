@@ -16,6 +16,7 @@ The automated checks (`.github/workflows/checks.yml`) run on every PR, and branc
 - **The review reads the PR but runs nothing from it.** Its prompts, permissions and scripts come from `master`, and Claude ignores any `.claude/` settings the PR brings. So a change to `.github/factory/` only takes effect once it is merged.
 - **A run reads only what the owner wrote** on a ticket: its body and the owner's comments. The repo is public, and anyone can comment.
 - **Prompts and tool permissions** live in `.github/factory/`. A prompt or permission change is a factory change, and gets human review like any other.
+- **Claude runs in auto mode.** A call the settings' allow and deny rules don't decide goes to a classifier model, which runs it or blocks it; it is never left waiting for approval. Deny rules hold in every mode, so the review denies `npm`, `npx` and `node` to keep running nothing from the PR. Each workflow passes `--tools` with only the tools its task uses, and the settings turn off the bundled skills the prompts don't use, to keep the starting context small. `WebSearch` and `WebFetch` are there for current docs, and are on no allow list, so the classifier judges every call.
 
 ## Secrets
 
@@ -25,6 +26,6 @@ The automated checks (`.github/workflows/checks.yml`) run on every PR, and branc
 | `FACTORY_GITHUB_TOKEN` | A fine-grained personal access token for this repo only: Contents, Issues and Pull requests read/write. No Workflows permission, so runs can't change `.github/workflows/`. It expires: rotate it before then. |
 | `ANTHROPIC_API_KEY` | The app's live evals. The workflow writes it to `.envrc`, which Claude is denied reading. |
 
-The Claude job does hold `CLAUDE_CODE_OAUTH_TOKEN` and, in the implementer, `ANTHROPIC_API_KEY`. Code Claude writes and runs (an npm script, a test) can read both. Denying Claude `.envrc` stops casual exposure, not a determined injection. Treat both as keys you can revoke and replace; the GitHub token is the one kept out of reach.
+The Claude job does hold `CLAUDE_CODE_OAUTH_TOKEN` and, in the implementer, `ANTHROPIC_API_KEY`. Code Claude writes and runs (an npm script, a test) can read both. Denying Claude `.envrc` stops casual exposure, not a determined injection. The network is open, and the auto-mode classifier blocks sending secrets out, but it is a model's judgement, not a guarantee. Treat both as keys you can revoke and replace; the GitHub token is the one kept out of reach.
 
 Set them, the labels and branch protection with `scripts/setup-factory.sh`. To rotate one token, re-run it and press Enter through the stages you don't need.
