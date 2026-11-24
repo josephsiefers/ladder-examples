@@ -24,7 +24,7 @@ Future use cases record their discovery card, justification sentence, and **open
 ### Shape
 - One firm, one use case per rung. No single pipeline is forced to use every rung, because that would contradict the ladder's own rule.
 - Where a use case is meant to show a climb, the eval decides. If the eval does not justify the climb, the README says so honestly. Results are never rigged. The one exception is a deliberately labelled anti-pattern demo in UC3b.
-- Out of scope: Word/OOXML output, firm tenancy and deployment, ADRs, CI.
+- Out of scope: Word/OOXML output, firm tenancy and deployment, ADRs.
 
 ### Models
 - `claude-haiku-5-5` by default everywhere. `claude-sonnet-5-5` only where the design calls for a larger model (UC2's hard route), or where an eval justifies it.

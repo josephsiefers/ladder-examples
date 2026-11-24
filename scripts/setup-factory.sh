@@ -292,22 +292,27 @@ step "Token name: '${REPO#*/} factory'."
 step "Expiration: pick one, and put a reminder in your calendar to rotate it."
 note "  When it expires every run fails; re-run this stage with the new token."
 step "Repository access: 'Only select repositories' → $REPO."
-step "Repository permissions: Contents, Issues, Pull requests → 'Read and write'."
+step "Repository permissions: add Contents, Issues and Pull requests, and set each"
+step "to 'Read and write'. They start as 'Read-only', which is not enough."
 note "  Metadata (read-only) is added for you. Leave Workflows off."
 step "Click 'Generate token', then copy it (starts github_pat_)."
 ask_secret FACTORY_GITHUB_TOKEN "Paste the token:"
-if GH_TOKEN="$FACTORY_GITHUB_TOKEN" gh api "repos/$REPO/issues?per_page=1" >/dev/null 2>&1; then
-  printf '  %s✓ the token can read %s%s\n' "$GREEN" "$REPO" "$RESET"
+# Write access, tested by creating and deleting a throwaway label. No workflow listens for it.
+if GH_TOKEN="$FACTORY_GITHUB_TOKEN" gh label create factory-token-check --repo "$REPO" --force >/dev/null 2>&1 &&
+   GH_TOKEN="$FACTORY_GITHUB_TOKEN" gh label delete factory-token-check --repo "$REPO" --yes >/dev/null 2>&1; then
+  printf '  %s✓ the token can write to %s%s\n' "$GREEN" "$REPO" "$RESET"
 else
-  warn "The token couldn't read $REPO's issues. Check its repository access."
+  warn "The token can't write to $REPO. Check its repository access, and that Contents,"
+  warn "Issues and Pull requests are 'Read and write'. You can edit the token in place."
 fi
 set_secret FACTORY_GITHUB_TOKEN "$FACTORY_GITHUB_TOKEN"
 pause
 
 # ── 7 ─────────────────────────────────────────────────────────────────────
 stage "Get the checks running on master"
-say "Branch protection can only require a check GitHub has seen run."
-step "Commit and push the 'factory' branch, open its PR, and merge it."
+say "Branch protection can only require a check GitHub has seen run on master."
+step "Merge the factory PR. Its merge into master starts the 'checks' run this stage waits for."
+note "  A passing run on the PR itself doesn't count: it ran on the PR's branch, not master."
 while true; do
   conclusion=$(gh run list --repo "$REPO" --workflow checks.yml --branch master --limit 1 \
     --json conclusion --jq '.[0].conclusion // empty' 2>/dev/null || true)
