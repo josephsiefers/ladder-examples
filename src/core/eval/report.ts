@@ -11,12 +11,13 @@ export function formatPercent(accuracy: number): string {
 
 /**
  * The eval report in Markdown: per-field stats across runs, the definition's target line, the
- * failures list, and totals (live and cached calls counted apart; cached calls report the
- * original call's usage).
+ * eval's own optional `analysis` section (Markdown), the failures list, and totals (live and
+ * cached calls counted apart; cached calls report the original call's usage).
  */
 export function renderReport(
   record: RunRecord,
   target: (stats: readonly FieldStats[]) => string,
+  analysis?: string,
 ): string {
   const stats = fieldStats(record);
   return [
@@ -30,6 +31,7 @@ export function renderReport(
     "",
     target(stats),
     "",
+    ...(analysis === undefined ? [] : [analysis, ""]),
     "### Failures",
     "",
     ...failuresTable(record),

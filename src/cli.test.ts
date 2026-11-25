@@ -271,7 +271,7 @@ describe("ladder CLI", () => {
     });
 
     it.each([
-      { problem: "an unknown eval", args: ["eval", "triage"], message: /snapshot/ },
+      { problem: "an unknown eval", args: ["eval", "nda-review"], message: /snapshot, triage/ },
       {
         problem: "an unknown split",
         args: ["eval", "snapshot", "--split", "train"],

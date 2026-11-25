@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-hand-04\">\n# Statement of Work No. 3: Returns Module Rollout\n\nForwarded by Daniel Osei, IT Programme Manager, Fennick Logistics plc: \"Third SOW under the Corvane MSA. Commercial terms look in line with the first two, but please check the acceptance wording and the fixed-fee cap.\"\n\n## 1. Parties and Background\n\n[1.1] This Statement of Work is made on 20 November 2026 between Fennick Logistics plc (the \"Customer\") and Corvane Systems Limited (the \"Supplier\") under the Master Services Agreement between them dated 18 November 2026 (the \"MSA\").\n\n[1.2] This Statement of Work incorporates the terms of the MSA. Terms defined in the MSA have the same meaning here. Nothing in this Statement of Work varies the MSA.\n\n## 2. Scope of Services\n\n[2.1] The Supplier shall configure, test and deploy the returns management module of its warehouse management software at the Customer's distribution centres in Daventry, Doncaster and Bristol.\n\n[2.2] The services include: a two-week discovery phase to document the Customer's current returns process; configuration of the module to the agreed design; integration with the Customer's carrier booking system through the Supplier's standard connector; user acceptance testing support; and training for up to forty Customer staff, delivered on site.\n\n[2.3] Out of scope: changes to the carrier booking system itself, data migration of historical returns older than twelve months, and any hardware.\n\n## 3. Deliverables and Milestones\n\n[3.1] Milestone 1, Design document approved by the Customer: by 15 January 2027.\n\n[3.2] Milestone 2, Module configured and integrated in the test environment: by 26 February 2027.\n\n[3.3] Milestone 3, User acceptance testing passed at all three sites: by 2 April 2027.\n\n[3.4] Milestone 4, Go-live and two weeks of hypercare completed: by 30 April 2027.\n\n## 4. Acceptance\n\n[4.1] The Customer shall test each deliverable against the acceptance criteria in Annex A within ten working days of delivery and either accept it or give written reasons for rejection. A deliverable is treated as accepted if the Customer does not respond in that period or uses it in live operation.\n\n[4.2] If a deliverable is rejected, the Supplier shall correct it and resubmit it within ten working days, and the acceptance process shall repeat.\n\n## 5. Fees\n\n[5.1] The services are provided on a time and materials basis at the day rates in the MSA rate card, subject to a cap of £186,000 excluding VAT. The Supplier shall not exceed the cap without a change request signed by both parties.\n\n[5.2] The Supplier shall invoice 25% of the fees incurred on achieving each milestone. Reasonable travel and accommodation expenses for on-site work are recharged at cost, up to £9,500 in total.\n\n## 6. Personnel and Governance\n\n[6.1] The Supplier shall provide a named project manager, a solution architect and two configuration consultants. The Supplier shall not replace the project manager without the Customer's consent, not to be unreasonably withheld.\n\n[6.2] The parties shall hold a weekly progress meeting and a monthly steering meeting attended by the Customer's programme manager and the Supplier's account director.\n\n## 7. Customer Dependencies\n\n[7.1] The Customer shall provide test data, access to its carrier booking system test environment, and the availability of named process owners at each site. The Supplier is not responsible for delay caused by the Customer failing to meet these dependencies, and the milestone dates shall be extended accordingly.\n\n## 8. Change Control\n\n[8.1] Either party may request a change to the scope, timetable or fees by written change request. No change is binding until both parties sign it.\n\nSigned for Fennick Logistics plc by Daniel Osei. Signed for Corvane Systems Limited by Helen Achterberg.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 2
+  },
+  "value": {
+    "docType": "sow",
+    "rationale": "The document is a Statement of Work No. 3 whose primary purpose is to order one specific project (the returns module rollout) under the existing Corvane MSA, setting out its scope, milestones, acceptance, and capped time-and-materials fees for that project."
+  },
+  "usage": {
+    "inputTokens": 2302,
+    "outputTokens": 98
+  },
+  "latencyMs": 663.2338890000001,
+  "recordedAt": "2026-11-24T02:58:15.356Z"
+}
