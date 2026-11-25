@@ -16,7 +16,7 @@ Five hand-written intake documents in [data/firm/intake/](../../data/firm/intake
 
 ## Full report
 
-`npm run eval -- triage --split smoke --runs 3`, recorded live 2026-11-24 with Haiku (`--live`, so no call was replayed):
+`npm run eval -- triage --split smoke --runs 3` with Haiku. Every call was recorded live: twelve on 2026-11-24 with `--live`, and `intake-hand-05`'s three on 2026-11-25, after its paragraph IDs started being parsed and its prompt changed:
 
 ```
 ## Eval triage · split smoke · 5 cases × 3 runs
@@ -60,7 +60,7 @@ Overall accuracy, pooled over 15 case runs: 100.0%
 
 None.
 
-Totals: 15 calls · live 15 · cached 0 · 33,915 input tokens · 1,669 output tokens · 0 failed case runs · wall time 6.0 s
+Totals: 15 calls · live 3 · cached 12 · 33,939 input tokens · 1,756 output tokens · 0 failed case runs · wall time 2.4 s
 ```
 
-Replaying from the committed cache gives the same report, except the totals line counts the 15 calls as cached.
+Replaying from the committed cache gives the same report, except the totals line counts all 15 calls as cached.

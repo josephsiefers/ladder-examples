@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-hand-05\">\n# Letter of Intent: Proposed Acquisition of the Ashby Bakery Business\n\nFrom: Marcus Lyle, Finance Director, Greystone Foods Ltd To: Legal intake\n\nHello, attached is the letter of intent we propose to send to the owners of Ashby Bakery. It has a confidentiality paragraph in it, so I wasn't sure whether it should go to the NDA team. We would like to send it by the end of next week, so a quick turnaround would be appreciated.\n\nPrivate and confidential. Subject to contract.\n\nMr and Mrs Ashby Ashby Bakery Limited 22 Mill Street Market Harborough LE16 7AD\n\n24 November 2026\n\nDear Mr and Mrs Ashby,\n\nFurther to our recent meetings, we are pleased to set out the principal terms on which Greystone Foods Ltd (\"Greystone\") would be willing to acquire the entire issued share capital of Ashby Bakery Limited (the \"Company\"). Except where stated below, this letter is not intended to be legally binding and records only our present intentions.\n\n[1] Price. Greystone proposes to pay £4,200,000 for the shares on a cash-free, debt-free basis, assuming a normal level of working capital. Of the price, £3,600,000 would be paid on completion and £600,000 would be deferred for twelve months and paid subject to the Company achieving revenue of at least £5,000,000 in the year following completion.\n\n[2] Due diligence. Our offer is subject to satisfactory financial, legal, commercial and environmental due diligence. We would expect to complete due diligence within six weeks of your acceptance of this letter, and we would ask you to give our advisers reasonable access to the Company's records, premises and senior staff for that purpose.\n\n[3] Employees. We value the Company's staff and its reputation in the region. We intend to keep the bakery at Mill Street operating and to retain all current employees on their existing terms. We would like Mrs Ashby to stay on as managing director for a transitional period of at least eighteen months, on terms to be agreed.\n\n[4] Conditions. Completion would be conditional on the signing of a share purchase agreement containing warranties and indemnities customary for a transaction of this kind, the approval of Greystone's board, and the consent of the Company's landlord to the change of control under the Mill Street lease.\n\n[5] Exclusivity. In return for Greystone committing time and cost to due diligence, you agree that for eight weeks from the date you countersign this letter neither you nor the Company will solicit, encourage or enter into discussions with any other person about the sale of the Company or its business. This paragraph is legally binding.\n\n[6] Confidentiality. Each of us will keep the existence and terms of this letter, and any information received from the other in connection with the proposed acquisition, confidential, and will not disclose it to anyone other than our professional advisers and financiers, except where required by law. This paragraph is legally binding and will continue to apply for two years whether or not the acquisition proceeds.\n\n[7] Costs. Each party will bear its own costs in connection with the proposed acquisition, whether or not it completes.\n\n[8] Governing law. This letter, and any dispute arising from it, is governed by the law of England and Wales.\n\nWe look forward to working with you. If you are content with these terms, please sign and return a copy of this letter.\n\nYours sincerely,\n\nMarcus Lyle, Finance Director, for and on behalf of Greystone Foods Ltd\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "docType": "other",
+    "rationale": "The document is a letter of intent setting out the principal non-binding terms for acquiring the shares of Ashby Bakery Limited; its binding confidentiality and exclusivity paragraphs are secondary to that primary purpose, so it is 'other' rather than 'nda'."
+  },
+  "usage": {
+    "inputTokens": 2142,
+    "outputTokens": 105
+  },
+  "latencyMs": 2382.237403,
+  "recordedAt": "2026-11-25T03:32:22.691Z"
+}

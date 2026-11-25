@@ -264,7 +264,7 @@ Smoke results (Haiku, 3 runs, recorded live 2026-11-24; replay them with `--repl
 | clean | 100.0% | 9 |
 | hybrid | 100.0% | 6 |
 
-No failures. Totals: 15 calls (all live), 33,915 input tokens, 1,669 output tokens. Five hand-written documents, one per type, show the pipeline works end to end. They cannot show whether the upgrade trigger fires: that needs the generated dev split with more hybrids (#11).
+No failures. Totals: 15 calls (all recorded live), 33,939 input tokens, 1,756 output tokens. Five hand-written documents, one per type, show the pipeline works end to end. They cannot show whether the upgrade trigger fires: that needs the generated dev split with more hybrids (#11).
 
 ### UC3 NDA review (future)
 

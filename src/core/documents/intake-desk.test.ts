@@ -77,6 +77,22 @@ describe("intake documents", () => {
     ]);
   });
 
+  it("keeps a list number as a paragraph ID without its dot, but not a bare number", async () => {
+    await writeIntake(
+      "intake-a",
+      "# Letter of Intent\n\n24 November 2026\n\n1. Price. We offer.\n\n12. Costs.\n\n3.Due diligence.\n",
+    );
+
+    const document = await firm().readIntake("intake-a");
+
+    expect(document.paragraphs).toEqual([
+      { text: "24 November 2026" },
+      { id: "1", text: "Price. We offer." },
+      { id: "12", text: "Costs." },
+      { text: "3.Due diligence." },
+    ]);
+  });
+
   it("tolerates indentation, extra blank lines and whitespace-only lines between paragraphs", async () => {
     await writeIntake(
       "intake-a",

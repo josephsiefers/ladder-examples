@@ -3,7 +3,7 @@ export const QUEUES = ["nda-review", "commercial", "privacy", "senior-associate"
 
 export type Queue = (typeof QUEUES)[number];
 
-/** One paragraph of an intake document. Numbered documents keep each paragraph's ID, e.g. `4.2`. */
+/** One paragraph of an intake document. Numbered documents keep each paragraph's ID, e.g. `4.2` or `6`. */
 export interface IntakeParagraph {
   id?: string;
   text: string;
@@ -64,11 +64,12 @@ export class MalformedIntakeError extends Error {
 }
 
 const TITLE = /^# (\S.*)/;
-const NUMBERED = /^(\d+\.\d+) (\S.*)/;
+/** A paragraph ID (see GLOSSARY.md): a clause number such as `4.2`, or a list number such as `6.`. */
+const PARAGRAPH_ID = /^(?:(\d+\.\d+)|(\d+)\.) (\S.*)/;
 
 /**
  * Parses an intake document: a `# Title` first line, then blank-line-separated paragraphs. A
- * paragraph starting with a number such as `4.2` keeps it as its ID.
+ * paragraph starting with a paragraph ID keeps it: `4.2` as `4.2`, and `6.` as `6`.
  */
 export function parseIntake(id: string, markdown: string): IntakeDocument {
   const [first = "", ...rest] = markdown.trim().split(/\r?\n/);
@@ -86,13 +87,15 @@ export function parseIntake(id: string, markdown: string): IntakeDocument {
     )
     .filter((text) => text !== "")
     .map((text): IntakeParagraph => {
-      const numbered = NUMBERED.exec(text);
-      return numbered ? { id: numbered[1] ?? "", text: numbered[2] ?? "" } : { text };
+      const match = PARAGRAPH_ID.exec(text);
+      if (match === null) return { text };
+      const [, clause, item, body = ""] = match;
+      return { id: clause ?? item ?? "", text: body };
     });
   return { id, title, paragraphs };
 }
 
-/** Renders an intake document for a prompt, numbered paragraphs marked `[N.M]`. */
+/** Renders an intake document for a prompt, numbered paragraphs marked `[4.2]` or `[6]`. */
 export function renderIntakeForPrompt(document: IntakeDocument): string {
   const paragraphs = document.paragraphs.map(({ id, text }) =>
     id === undefined ? text : `[${id}] ${text}`,
