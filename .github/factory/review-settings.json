@@ -2,11 +2,8 @@
   "permissions": {
     "allow": [
       "Read",
-      "Glob",
-      "Grep",
       "Skill",
       "Agent",
-      "TodoWrite",
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git show *)",
