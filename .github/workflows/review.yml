@@ -51,6 +51,7 @@ jobs:
         run: |
           echo "OUT_DIR=$RUNNER_TEMP/factory/out" >> "$GITHUB_ENV"
           echo "TICKET_FILE=$RUNNER_TEMP/factory/tickets.md" >> "$GITHUB_ENV"
+          echo "PR_BODY_FILE=$RUNNER_TEMP/factory/pr-body.md" >> "$GITHUB_ENV"
 
       - name: Check out the factory's files from master
         uses: actions/checkout@v5
@@ -74,9 +75,11 @@ jobs:
 
       - uses: ./factory/.github/actions/setup-claude
 
-      - name: Gather the tickets the PR closes
+      - name: Gather the PR body and the tickets the PR closes
         run: |
           mkdir -p "$OUT_DIR"
+          # The body carries the evidence for what the review can't run: demos, live evals.
+          gh pr view "$PR" --json body --jq .body > "$PR_BODY_FILE"
           issues=$(gh pr view "$PR" --json closingIssuesReferences --jq '.closingIssuesReferences[].number')
           if [ -z "$issues" ]; then
             echo "This PR closes no ticket, so there is no spec: skip the Spec axis." > "$TICKET_FILE"
@@ -92,7 +95,7 @@ jobs:
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
-          prompt=$(envsubst '$PR $TICKET_FILE $OUT_DIR' < ../factory/.github/factory/review.md)
+          prompt=$(envsubst '$PR $TICKET_FILE $PR_BODY_FILE $OUT_DIR' < ../factory/.github/factory/review.md)
           # --setting-sources user: ignore any .claude/settings.json the PR brings. The plugin
           # install lives in user settings, so the skills still load.
           # --tools: only the tools a review uses, to keep the starting context small. Agent is

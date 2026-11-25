@@ -146,6 +146,18 @@ jobs:
             > "$RUNNER_TEMP/factory/transcript.jsonl"
           jq -r 'select(.type == "result") | .result' "$RUNNER_TEMP/factory/transcript.jsonl"
 
+      # Claude can't see its own context size, so the Definition of done's "fits one session"
+      # item is measured here: the largest prompt the main thread sent, cache included.
+      - name: Record the run's peak context
+        run: |
+          [ -f "$OUT_DIR/pr-body.md" ] || exit 0
+          peak=$(jq -s '[.[] | select(.type == "assistant" and .parent_tool_use_id == null)
+            | .message.usage | (.input_tokens // 0) + (.cache_read_input_tokens // 0)
+            + (.cache_creation_input_tokens // 0)] | max // 0' "$RUNNER_TEMP/factory/transcript.jsonl")
+          verdict="within the Definition of done's ~150k limit"
+          [ "$peak" -le 150000 ] || verdict="over the Definition of done's ~150k limit"
+          printf '\n\n**Peak context:** %sk tokens, %s.\n' "$((peak / 1000))" "$verdict" >> "$OUT_DIR/pr-body.md"
+
       - name: Bundle the commits
         run: |
           [ ! -f "$OUT_DIR/blocked.md" ] || exit 0
