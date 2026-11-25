@@ -176,3 +176,40 @@ describe("buildReviewSheet", () => {
     });
   });
 });
+
+describe("buildReviewSheet: an eval's own layout", () => {
+  const layout = {
+    ...definition,
+    reviewSheet: {
+      sampleSize: 1,
+      fieldColumn: false,
+      headers: { case: "Document", expected: "Answer key", source: "Title + evidence" },
+    },
+  };
+
+  it("names the columns as the eval asks and leaves out the field column", async () => {
+    const record = runRecord([
+      caseRun("x", 0, { colour: false }),
+      caseRun("y", 0, { colour: true }),
+    ]);
+
+    const sheet = await buildReviewSheet(layout, record, CASES);
+
+    const lines = sheet.markdown.split("\n");
+    expect(lines).toContain("| Document | Answer key | Model said (run 1) | Title + evidence |");
+    expect(tableRows(sheet.markdown, "Disagreements")).toEqual([
+      "| x | gold | ✗ something else | [1.1] X is red. |",
+    ]);
+  });
+
+  it("samples as many agreeing rows as the eval asks, unless the caller overrides it", async () => {
+    const record = runRecord(["x", "y"].map((id) => caseRun(id, 0, { colour: true })));
+
+    expect(
+      tableRows((await buildReviewSheet(layout, record, CASES)).markdown, "Agreeing rows"),
+    ).toHaveLength(1);
+    const overridden = await buildReviewSheet(layout, record, CASES, { sampleSize: 2 });
+    expect(tableRows(overridden.markdown, "Agreeing rows")).toHaveLength(2);
+    expect(overridden.summary).toBe("0 disagreement rows · random sample of 2 of 2 agreeing rows");
+  });
+});

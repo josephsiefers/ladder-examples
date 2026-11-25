@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-07\">\n# Framework Services Agreement\n\n## 1. Parties and Background\n\n[1.1] This Master Services Agreement is made between Marchmont Properties Limited (the \"Supplier\") and Linden Print Ltd (the \"Customer\").\n\n[1.2] The Supplier provides technology consulting, implementation and support services. This agreement sets out the general terms on which the Supplier will provide services to the Customer from time to time. Each engagement will be described in a statement of work signed by both parties, and each statement of work forms a separate contract incorporating these terms.\n\n## 2. Change Control\n\n[2.1] The Customer may ask for changes to the services by written change request. The Supplier shall respond within ten working days with the impact of the change, and shall implement it only once the Customer accepts that impact in writing.\n\n## 3. Liability\n\n[3.1] Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each contract year is limited to the fees paid or payable in that year under all statements of work.\n\n## 4. Term and Termination\n\n[4.1] Either party may terminate this agreement or any statement of work immediately by notice if the other commits a material breach that is not remedied within thirty days of being notified of it.\n\n## 5. Services\n\n[5.1] The Supplier shall perform the services described in each statement of work with reasonable skill and care, in accordance with good industry practice, and using appropriately qualified personnel.\n\n[5.2] The Customer shall give the Supplier reasonable access to its premises, systems and staff as the services require, and shall make decisions promptly where the Supplier needs them.\n\n## 6. Fees and Payment\n\n[6.1] Fees are charged on a time and materials basis at the rates in the relevant statement of work, unless it states a fixed price.\n\n[6.2] The Supplier may increase its rates once in each contract year by no more than the increase in the Consumer Prices Index, on sixty days' written notice.\n\n## 7. Confidentiality\n\n[7.1] Each party may disclose confidential information to the other under this agreement. \"Confidential Information\" means all information of a confidential nature disclosed by a party, including its business plans, pricing, software, data and know-how.\n\n[7.2] Each party shall keep the other's Confidential Information confidential, use it only to perform this agreement, and disclose it only to its employees, contractors and advisers who need to know it and are bound by equivalent obligations.\n\n[7.3] These obligations do not apply to information that is public, already known to the receiving party, independently developed, or required to be disclosed by law. They survive termination of this agreement for five years.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 2
+  },
+  "value": {
+    "docType": "msa",
+    "rationale": "The document is titled and structured as a Master Services Agreement setting framework terms (services standard, change control, fees, liability, term and termination) under which specific engagements will later be ordered by statements of work. Its confidentiality section is only one part of a broader framework, so its primary purpose is the services framework, not an NDA."
+  },
+  "usage": {
+    "inputTokens": 1849,
+    "outputTokens": 117
+  },
+  "latencyMs": 1746.5905970000022,
+  "recordedAt": "2026-11-25T14:53:16.066Z"
+}

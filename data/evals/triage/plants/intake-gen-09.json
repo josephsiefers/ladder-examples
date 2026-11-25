@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-09",
+  "split": "dev",
+  "seed": 3063,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "engagement-letter",
+    "parties": [
+      {
+        "name": "Northcote Engineering Limited",
+        "short": "Northcote"
+      },
+      {
+        "name": "Calder & Finch LLP",
+        "short": "Calder & Finch"
+      }
+    ]
+  },
+  "ingredients": []
+}

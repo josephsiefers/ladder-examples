@@ -44,5 +44,28 @@
 - Overall accuracy, per-type precision and recall, a 5×5 confusion matrix, and accuracy on clean vs hybrid documents reported separately.
 - In the cascade (#13), three strategies side by side: `haiku`, `sonnet`, and `cascade`. Columns: accuracy, hybrid accuracy, escalation rate, cost per 1,000 documents, p50 and p95 latency.
 
+## Results
+
+**Dev split (#11)**: Haiku, 3 runs, 18 documents (14 clean, 4 hybrid), recorded live 2026-11-25. Prompt untuned.
+
+| Field | Mean | Stdev | Min | Max |
+|---|---:|---:|---:|---:|
+| docType | 100.0% | 0.0% | 100.0% | 100.0% |
+
+| Gold \ Predicted | nda | msa | dpa | sow | other |
+|---|---:|---:|---:|---:|---:|
+| nda | 18 | 0 | 0 | 0 | 0 |
+| msa | 0 | 9 | 0 | 0 | 0 |
+| dpa | 0 | 0 | 6 | 0 | 0 |
+| sow | 0 | 0 | 0 | 9 | 0 |
+| other | 0 | 0 | 0 | 0 | 12 |
+
+| Ambiguity | Accuracy | Case runs |
+|---|---:|---:|
+| clean | 100.0% | 42 |
+| hybrid | 100.0% | 12 |
+
+**Upgrade trigger: not fired.** Hybrid accuracy equals clean accuracy (both 100.0%). Caveats: only 4 dev hybrids, whose openings state their primary purpose plainly; the answer key awaits its human review (review sheet: 0 disagreements, 8 of 18 agreeing rows sampled); the test split has not been run.
+
 ## Tickets
 #10, #11, #12, #13.

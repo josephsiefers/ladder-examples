@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-17",
+  "split": "dev",
+  "seed": 3119,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "settlement-letter",
+    "parties": [
+      {
+        "name": "Harrow Analytics Ltd",
+        "short": "Harrow"
+      },
+      {
+        "name": "Belgrave Retail Group plc",
+        "short": "Belgrave"
+      }
+    ]
+  },
+  "ingredients": []
+}

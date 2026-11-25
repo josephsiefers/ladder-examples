@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-13\">\n# Contract of Employment\n\n## 1. Parties and Background\n\n[1.1] This Contract of Employment is between Elmstead Packaging Limited (the \"Company\") and Priya Raman (the \"Employee\").\n\n[1.2] The Company employs the Employee as Head of Product from the start date set out below. This contract sets out the terms and conditions of that employment and is the written statement of particulars that employment law requires.\n\n## 2. Pay and Benefits\n\n[2.1] The Employee's salary is GBP 98,000 a year, paid monthly in arrears. The Employee is eligible for the Company's annual bonus scheme and pension scheme, to which the Company contributes six per cent of salary.\n\n## 3. Duties and Place of Work\n\n[3.1] The Employee shall perform the duties the Company reasonably assigns, and shall report to the Chief Executive. The normal place of work is the Company's London office, with up to two days a week of home working.\n\n## 4. Hours and Holiday\n\n[4.1] The Employee works thirty-seven and a half hours a week and is entitled to twenty-five days' holiday plus public holidays. Up to five unused days may be carried forward.\n\n## 5. Notice and Termination\n\n[5.1] After probation, either party may end the employment by giving three months' written notice. The Company may pay salary in lieu of notice.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "docType": "other",
+    "rationale": "The document is an employment contract whose primary purpose is setting out the terms of the Employee's employment (pay, duties, hours, holiday, notice), which falls under the 'other' category rather than any of the commercial agreement types."
+  },
+  "usage": {
+    "inputTokens": 1435,
+    "outputTokens": 87
+  },
+  "latencyMs": 3208.700117999999,
+  "recordedAt": "2026-11-25T14:53:05.992Z"
+}

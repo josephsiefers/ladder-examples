@@ -34,11 +34,15 @@ export interface ReviewSheet {
  * answer key, then a seeded random sample of agreeing rows, each next to its evidence text.
  */
 export async function buildReviewSheet<Input, Value>(
-  definition: Pick<EvalDefinition<Input, Value>, "evidenceText">,
+  definition: Pick<EvalDefinition<Input, Value>, "evidenceText" | "reviewSheet">,
   record: RunRecord,
   cases: readonly EvalCase<Input, Value>[],
-  { sampleSize = DEFAULT_SAMPLE_SIZE, seed = DEFAULT_SAMPLE_SEED }: ReviewSheetOptions = {},
+  {
+    sampleSize = definition.reviewSheet?.sampleSize ?? DEFAULT_SAMPLE_SIZE,
+    seed = DEFAULT_SAMPLE_SEED,
+  }: ReviewSheetOptions = {},
 ): Promise<ReviewSheet> {
+  const { fieldColumn = true, headers = {} } = definition.reviewSheet ?? {};
   const rows = reviewRows(record);
   const disagreements = rows.filter((reviewRow) => reviewRow.runs.some((run) => !run.agrees));
   const agreeing = rows.filter((reviewRow) => reviewRow.runs.every((run) => run.agrees));
@@ -49,14 +53,18 @@ export async function buildReviewSheet<Input, Value>(
 
   const table = async (tableRows: ReviewRow[]) => {
     if (tableRows.length === 0) return ["None."];
-    const header = ["Case", "Field", "Answer key says"];
+    const header = [
+      headers.case ?? "Case",
+      ...(fieldColumn ? ["Field"] : []),
+      headers.expected ?? "Answer key says",
+    ];
     for (let run = 1; run <= record.runs; run++) header.push(`Model said (run ${run})`);
-    header.push("Source sentence");
+    header.push(headers.source ?? "Source sentence");
     const body = await Promise.all(
       tableRows.map(async (reviewRow) =>
         row([
           reviewRow.caseId,
-          reviewRow.field,
+          ...(fieldColumn ? [reviewRow.field] : []),
           reviewRow.expected,
           ...reviewRow.runs.map((run) => (run.agrees ? run.said : `✗ ${run.said}`)),
           await sourceText(definition, casesById.get(reviewRow.caseId), reviewRow.field),

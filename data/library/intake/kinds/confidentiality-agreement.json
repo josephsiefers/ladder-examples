@@ -1,0 +1,37 @@
+{
+  "docType": "nda",
+  "titles": ["Confidentiality Agreement", "Confidentiality Undertaking"],
+  "openings": [
+    [
+      "{{second}} (\"{{secondShort}}\") is considering a possible acquisition of shares in {{first}} (\"{{firstShort}}\") and has asked for information about its business to evaluate it.",
+      "In return for {{firstShort}} making that information available, {{secondShort}} agrees to keep it confidential on the terms below. These terms protect the information {{firstShort}} discloses; they do not oblige either party to proceed with any transaction."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\") will disclose confidential information to {{second}} (\"{{secondShort}}\") so that {{secondShort}} can evaluate a possible commercial partnership.",
+      "{{secondShort}} undertakes to protect that information as set out below, and acknowledges that {{firstShort}} would not disclose it without this undertaking."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Confidential Information",
+      "variants": [
+        ["\"Confidential Information\" means all information about {{firstShort}}'s business, in any form, that {{firstShort}} or its advisers make available to {{secondShort}}, other than information that is public or that {{secondShort}} already lawfully holds."],
+        ["Confidential Information includes financial information, customer lists, pricing, plans and know-how, and any notes or analyses {{secondShort}} prepares that contain or reflect it."]
+      ]
+    },
+    {
+      "heading": "Obligations",
+      "variants": [
+        ["{{secondShort}} shall keep the Confidential Information secret, use it only to evaluate the proposal, and disclose it only to its directors, employees and professional advisers who need to know it and who are told of these obligations."],
+        ["{{secondShort}} shall protect the Confidential Information with at least the care it uses for its own confidential information, and shall not copy it except as the evaluation requires."]
+      ]
+    },
+    {
+      "heading": "Return and Duration",
+      "variants": [
+        ["On request, {{secondShort}} shall promptly return or destroy the Confidential Information. These obligations last for two years from the date of this agreement."],
+        ["If {{secondShort}} decides not to proceed, it shall destroy all Confidential Information and confirm this in writing. The obligations continue for three years."]
+      ]
+    }
+  ]
+}

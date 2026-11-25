@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-13",
+  "split": "dev",
+  "seed": 3091,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "employment",
+    "parties": [
+      {
+        "name": "Elmstead Packaging Limited",
+        "short": "Elmstead"
+      },
+      {
+        "name": "Priya Raman",
+        "short": "Ms Raman"
+      }
+    ]
+  },
+  "ingredients": []
+}

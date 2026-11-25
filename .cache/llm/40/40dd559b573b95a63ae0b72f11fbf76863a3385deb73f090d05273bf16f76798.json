@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-04\">\n# Statement of Work\n\n## 1. Parties and Background\n\n[1.1] This Statement of Work is made under the Master Services Agreement between Quillon Cloud Services Limited (the \"Supplier\") and Ostrava Health Ltd (the \"Customer\"), and incorporates its terms.\n\n[1.2] This Statement of Work orders one project: the migration of the Customer's warehouse inventory system to the Supplier's cloud platform. It sets out that project's scope, deliverables, milestones, acceptance criteria and fees.\n\n## 2. Acceptance\n\n[2.1] The Customer shall test each deliverable within ten working days of delivery and either accept it or list the ways in which it fails the acceptance criteria. A deliverable not rejected within that period is treated as accepted.\n\n## 3. Milestones\n\n[3.1] Milestone 1, migration plan approved: four weeks from the start date. Milestone 2, test environment ready: ten weeks. Milestone 3, production go-live: sixteen weeks.\n\n## 4. Project Confidentiality\n\n[4.1] The Supplier shall treat as confidential all Customer data, inventory records and plans it receives for this project, use them only for this project, and disclose them only to project staff who need to know them.\n\n[4.2] On completion of the project the Supplier shall return or securely destroy all such information. This obligation survives for three years after completion.\n\n## 5. Intellectual Property\n\n[5.1] The Supplier retains all intellectual property in its pre-existing tools, software and methods. Intellectual property in deliverables created specifically for the Customer under this Statement of Work vests in the Customer on payment.\n\n[5.2] The Supplier grants the Customer a perpetual, non-exclusive licence to use any Supplier materials incorporated in the deliverables, for its internal business purposes.\n\n## 6. Scope and Deliverables\n\n[6.1] Deliverables: a design document, a working portal with user login, order tracking and returns, integration with the Customer's order database, and a runbook for the Customer's support team.\n\n## 7. Project Governance\n\n[7.1] A steering group of one senior representative of each party shall meet monthly and resolve any issue the project managers cannot.\n\n## 8. Fees\n\n[8.1] The fixed price for this Statement of Work is GBP 186,000, invoiced as follows: 20% on milestone 1, 30% on milestone 2 and 50% on milestone 3.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "docType": "sow",
+    "rationale": "The document is titled and drafted as a Statement of Work that orders one specific migration project under an existing Master Services Agreement, setting out its scope, deliverables, milestones, acceptance and fixed fee; its confidentiality and IP sections are subsidiary to that project-ordering purpose."
+  },
+  "usage": {
+    "inputTokens": 1794,
+    "outputTokens": 111
+  },
+  "latencyMs": 1320.2025510000003,
+  "recordedAt": "2026-11-25T14:53:08.605Z"
+}

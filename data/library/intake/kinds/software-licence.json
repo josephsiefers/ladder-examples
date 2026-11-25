@@ -1,0 +1,44 @@
+{
+  "docType": "other",
+  "titles": ["Software Licence Agreement", "End User Software Licence"],
+  "openings": [
+    [
+      "This Software Licence Agreement is made between {{first}} (the \"Licensor\") and {{second}} (the \"Licensee\").",
+      "The Licensor grants the Licensee a non-exclusive, non-transferable licence to install and use the RouteWise fleet planning software (the \"Software\") for its internal business purposes, on the terms of this agreement."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\") licenses its LedgerFlow accounting software to {{second}} (\"{{secondShort}}\").",
+      "The licence permits {{secondShort}} to use the software for up to 150 named users at its own sites. The software is licensed, not sold, and {{firstShort}} keeps ownership of it."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Licence Restrictions",
+      "variants": [
+        ["The Licensee shall not copy, modify, decompile or sublicense the Software, except as the law expressly allows, and shall not use it to provide services to third parties."],
+        ["The licence does not permit use by affiliates, outsourcers or contractors unless the Licensor agrees in writing."]
+      ]
+    },
+    {
+      "heading": "Licence Fees",
+      "variants": [
+        ["The Licensee shall pay an annual licence fee of GBP 42,000 in advance. Additional users are charged at GBP 300 per user per year."],
+        ["The licence fee is a one-off payment of USD 95,000, with annual maintenance at eighteen per cent of that fee."]
+      ]
+    },
+    {
+      "heading": "Support and Updates",
+      "variants": [
+        ["While the fees are paid, the Licensor shall provide updates and telephone support during business hours, and shall use reasonable efforts to correct reported errors."],
+        ["Maintenance includes new versions released during the year and access to the online help desk."]
+      ]
+    },
+    {
+      "heading": "Warranty and Term",
+      "variants": [
+        ["The Licensor warrants that the Software will perform substantially in accordance with its documentation for ninety days from installation. The licence continues until terminated for breach or on twelve months' notice."],
+        ["The software is supplied with a limited warranty of sixty days. The licence is perpetual unless terminated for material breach."]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "docType": "sow",
+  "titles": ["Statement of Work", "Statement of Work No. 3", "Project Statement of Work"],
+  "openings": [
+    [
+      "This Statement of Work is made under the Master Services Agreement between {{first}} (the \"Supplier\") and {{second}} (the \"Customer\"), and incorporates its terms.",
+      "This Statement of Work orders one project: the migration of the Customer's warehouse inventory system to the Supplier's cloud platform. It sets out that project's scope, deliverables, milestones, acceptance criteria and fees."
+    ],
+    [
+      "{{second}} (\"{{secondShort}}\") and {{first}} (\"{{firstShort}}\") agree this Statement of Work under their existing master services agreement, which governs it.",
+      "Under this Statement of Work {{firstShort}} will design and deliver a customer self-service portal for {{secondShort}}. Nothing in it changes the master agreement except where it expressly says so."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Scope and Deliverables",
+      "variants": [
+        ["The Supplier shall deliver: (a) a migration plan; (b) the migrated system in a test environment; (c) the migrated system in production; and (d) handover documentation and two training sessions for the Customer's staff.", "Out of scope: changes to the Customer's finance systems and any data cleansing beyond de-duplication."],
+        ["Deliverables: a design document, a working portal with user login, order tracking and returns, integration with the Customer's order database, and a runbook for the Customer's support team."]
+      ]
+    },
+    {
+      "heading": "Milestones",
+      "variants": [
+        ["Milestone 1, migration plan approved: four weeks from the start date. Milestone 2, test environment ready: ten weeks. Milestone 3, production go-live: sixteen weeks."],
+        ["The project starts on the date both parties sign this Statement of Work. Design sign-off is due in week three, user acceptance testing begins in week nine and go-live is planned for week twelve."]
+      ]
+    },
+    {
+      "heading": "Acceptance",
+      "variants": [
+        ["The Customer shall test each deliverable within ten working days of delivery and either accept it or list the ways in which it fails the acceptance criteria. A deliverable not rejected within that period is treated as accepted."],
+        ["Acceptance testing follows the test plan agreed at design sign-off. The Supplier shall fix any severity 1 or 2 defect found in testing before go-live."]
+      ]
+    },
+    {
+      "heading": "Fees",
+      "variants": [
+        ["The fixed price for this Statement of Work is GBP 186,000, invoiced as follows: 20% on milestone 1, 30% on milestone 2 and 50% on milestone 3."],
+        ["Fees are charged on a time and materials basis at the rate card in the master agreement, capped at USD 240,000. The Supplier shall report hours weekly and seek approval before exceeding eighty per cent of the cap."]
+      ]
+    },
+    {
+      "heading": "Project Governance",
+      "variants": [
+        ["Each party appoints a project manager. They shall meet weekly to review progress, risks and change requests."],
+        ["A steering group of one senior representative of each party shall meet monthly and resolve any issue the project managers cannot."]
+      ]
+    }
+  ]
+}

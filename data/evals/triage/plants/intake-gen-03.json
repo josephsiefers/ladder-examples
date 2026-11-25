@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-03",
+  "split": "dev",
+  "seed": 3021,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "lease",
+    "parties": [
+      {
+        "name": "Harrow Analytics Ltd",
+        "short": "Harrow"
+      },
+      {
+        "name": "Belgrave Retail Group plc",
+        "short": "Belgrave"
+      }
+    ]
+  },
+  "ingredients": []
+}

@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-27",
+  "split": "test",
+  "seed": 3189,
+  "docType": "msa",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Elmstead Packaging Limited",
+        "short": "Elmstead"
+      },
+      {
+        "name": "Orrin Biotech Limited",
+        "short": "Orrin"
+      }
+    ]
+  },
+  "ingredients": []
+}

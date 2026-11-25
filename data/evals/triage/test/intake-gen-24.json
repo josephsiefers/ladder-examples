@@ -1,0 +1,16 @@
+{
+  "input": {
+    "documentId": "intake-gen-24"
+  },
+  "gold": {
+    "docType": "sow",
+    "ambiguity": "clean"
+  },
+  "evidence": {
+    "docType": [
+      "title",
+      "1.1",
+      "1.2"
+    ]
+  }
+}

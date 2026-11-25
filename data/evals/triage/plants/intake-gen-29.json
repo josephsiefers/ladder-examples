@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-29",
+  "split": "test",
+  "seed": 3203,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "lease",
+    "parties": [
+      {
+        "name": "Corvane Systems Limited",
+        "short": "Corvane"
+      },
+      {
+        "name": "Fennick Logistics plc",
+        "short": "Fennick"
+      }
+    ]
+  },
+  "ingredients": []
+}

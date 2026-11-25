@@ -37,6 +37,9 @@ export interface TriageLabel {
 
 const FIELD = "docType";
 
+/** The evidence ID a gold case cites the document's title by; the generator writes the same. */
+const TITLE_EVIDENCE = "title";
+
 /** UC2 sets no fixed target; its upgrade trigger is hybrid accuracy materially below clean. */
 function triageTarget(stats: readonly FieldStats[]): string {
   const mean = stats.find((stat) => stat.field === FIELD)?.mean ?? 0;
@@ -114,12 +117,25 @@ export function createTriageEval({
       return classification;
     },
     score: (output, gold) => ({ [FIELD]: output.docType === gold.docType }),
-    describe: (value) => ({ [FIELD]: value.docType }),
+    // Gold carries its ambiguity, so the answer key reads e.g. `msa (hybrid)`; an output never does.
+    describe: ({ docType, ambiguity }) => ({
+      [FIELD]: ambiguity ? `${docType} (${ambiguity})` : docType,
+    }),
     target: triageTarget,
     async evidenceText({ documentId }, paragraphId) {
       const document = await documents.readIntake(documentId);
+      if (paragraphId === TITLE_EVIDENCE) return document.title;
       return document.paragraphs.find((paragraph) => paragraph.id === paragraphId)?.text;
     },
     analysis: triageAnalysis,
+    reviewSheet: {
+      sampleSize: 8,
+      fieldColumn: false,
+      headers: {
+        case: "Document",
+        expected: "Answer key (type, clean/hybrid)",
+        source: "Title + evidence excerpt",
+      },
+    },
   };
 }

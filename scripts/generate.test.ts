@@ -91,7 +91,7 @@ describe("npm run generate -- ndas", () => {
     "rejects arguments %j with usage",
     async (argv) => {
       expect(await generate(argv)).toBe(2);
-      expect(output).toEqual(["usage: npm run generate -- ndas"]);
+      expect(output).toEqual(["usage: npm run generate -- ndas | intake"]);
     },
   );
 });

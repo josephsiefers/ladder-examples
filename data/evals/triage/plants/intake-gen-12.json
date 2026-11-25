@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-12",
+  "split": "dev",
+  "seed": 3084,
+  "docType": "dpa",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "library",
+    "name": "dpa",
+    "parties": [
+      {
+        "name": "Saltmarsh Media Limited",
+        "short": "Saltmarsh"
+      },
+      {
+        "name": "Kittering Freight Ltd",
+        "short": "Kittering"
+      }
+    ]
+  },
+  "ingredients": [
+    "data-sharing-title"
+  ]
+}

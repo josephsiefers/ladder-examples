@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-10",
+  "split": "dev",
+  "seed": 3070,
+  "docType": "sow",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "sow",
+    "parties": [
+      {
+        "name": "Ashby Wholesale Limited",
+        "short": "Ashby"
+      },
+      {
+        "name": "Veridian Payments Ltd",
+        "short": "Veridian"
+      }
+    ]
+  },
+  "ingredients": []
+}

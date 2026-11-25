@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-10\">\n# Statement of Work\n\n## 1. Parties and Background\n\n[1.1] Veridian Payments Ltd (\"Veridian\") and Ashby Wholesale Limited (\"Ashby\") agree this Statement of Work under their existing master services agreement, which governs it.\n\n[1.2] Under this Statement of Work Ashby will design and deliver a customer self-service portal for Veridian. Nothing in it changes the master agreement except where it expressly says so.\n\n## 2. Milestones\n\n[2.1] The project starts on the date both parties sign this Statement of Work. Design sign-off is due in week three, user acceptance testing begins in week nine and go-live is planned for week twelve.\n\n## 3. Project Governance\n\n[3.1] A steering group of one senior representative of each party shall meet monthly and resolve any issue the project managers cannot.\n\n## 4. Fees\n\n[4.1] Fees are charged on a time and materials basis at the rate card in the master agreement, capped at USD 240,000. The Supplier shall report hours weekly and seek approval before exceeding eighty per cent of the cap.\n\n## 5. Scope and Deliverables\n\n[5.1] The Supplier shall deliver: (a) a migration plan; (b) the migrated system in a test environment; (c) the migrated system in production; and (d) handover documentation and two training sessions for the Customer's staff.\n\n[5.2] Out of scope: changes to the Customer's finance systems and any data cleansing beyond de-duplication.\n\n## 6. Acceptance\n\n[6.1] The Customer shall test each deliverable within ten working days of delivery and either accept it or list the ways in which it fails the acceptance criteria. A deliverable not rejected within that period is treated as accepted.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "docType": "sow",
+    "rationale": "The document orders one specific project (a customer self-service portal) under an existing master services agreement, setting out its scope, deliverables, milestones, acceptance and capped fees for that project, which is the primary purpose of a statement of work."
+  },
+  "usage": {
+    "inputTokens": 1569,
+    "outputTokens": 89
+  },
+  "latencyMs": 1266.6560120000013,
+  "recordedAt": "2026-11-25T14:53:10.094Z"
+}

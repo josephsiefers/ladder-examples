@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-07",
+  "split": "dev",
+  "seed": 3049,
+  "docType": "msa",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Marchmont Properties Limited",
+        "short": "Marchmont"
+      },
+      {
+        "name": "Linden Print Ltd",
+        "short": "Linden"
+      }
+    ]
+  },
+  "ingredients": [
+    "confidentiality-section"
+  ]
+}
