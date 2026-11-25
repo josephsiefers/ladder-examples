@@ -35,16 +35,18 @@ Future use cases record their discovery card, justification sentence, and **open
 - **Tests** (`npm test`, vitest) verify *our code* against a fake LLM injected at the `core/llm` seam. They are offline, fast and deterministic. Stryker depends on this.
 - **Evals** (`npm run eval -- <usecase>`) measure *model behaviour* with real calls, which are cached. Evals never run in `npm test`.
 - Each eval is run N times (default 3) and reports mean ± stdev, because one run hides inconsistency.
-- Datasets are split into **dev** (iterate here), **test** (runs only when `--split test` is passed explicitly; never tune prompts against it), and **smoke** (hand-written cases for demos and quick checks).
+- Datasets are split into **dev** (iterate here), **test** (runs only when `--split test` is passed explicitly; never tune prompts against it), and **smoke** (hand-written cases for demos and quick checks). The default split is dev.
 
 ### LLM cache (record/replay)
 - Each call is cached on disk, keyed by a hash of model, prompt, schema, params, and **sample index**. Without the sample index, runs 2..N would replay run 1 and variance would always be zero.
 - Modes: default read-through; `--live` calls the API and overwrites the cache; `--replay-only` turns a miss into an error, so it works without an API key.
 - `.cache/llm/` is **committed**, so anyone can replay every eval for free.
+- A replayed call reports the original call's token usage and latency. A corrupt entry is an error naming the file, never a silent miss.
+- Future work: nothing prunes entries that no current prompt produces; after a prompt change they stay until deleted by hand.
 
 ### Synthetic data
 - Hybrid generation: a **clause-variant library** written once, with placeholders for planted values, plus a deterministic **assembler** that builds each document from a **plant spec** using a seeded shuffle of order, headings and numbering. Gold labels are correct by construction and record the evidence paragraph for each field.
-- After a generated dataset's first eval, a human reviews a **review sheet**: each gold label shown next to its source sentence, with model/answer-key disagreements sorted first. This is a reading check, not a legal one.
+- After a generated dataset's first eval, a human reviews a **review sheet**: each gold label shown next to its source sentence, with model/answer-key disagreements sorted first, then a fixed-seed sample of 10 agreeing rows. This is a reading check, not a legal one.
 
 ### Firm systems (translation layer)
 - `data/firm/` is the fake firm: contracts and intake documents. It is reached **only** through `core/documents`, which exposes intent-level operations (`readContract`, `listIntake`, `routeToQueue`, …).
