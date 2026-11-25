@@ -60,6 +60,10 @@ _Avoid_: Policy, rulebook, guidelines
 A category of contractual substance (e.g. indemnity, limitation of liability) that the playbook takes a position on, identified by what a passage does rather than its heading.
 _Avoid_: Section, heading
 
+**Paragraph ID**:
+The number a document gives one of its paragraphs, written at the paragraph's start: a clause number such as `4.2`, or a list number such as `6.`, whose ID is `6`. Contracts number every paragraph `N.M`; an intake document may use either style, or none. A prompt or a citation marks it as `[4.2]` or `[6]`. A numbered heading (`## 5. Confidentiality`) has no paragraph ID.
+_Avoid_: Clause number, section number
+
 **Standard position**:
 The playbook's preferred wording or outcome for a clause type.
 
