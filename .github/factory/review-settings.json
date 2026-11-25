@@ -2,12 +2,8 @@
   "permissions": {
     "allow": [
       "Read",
-      "Glob",
-      "Grep",
       "Skill",
       "Agent",
-      "Write",
-      "TodoWrite",
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git show *)",
@@ -17,6 +13,27 @@
       "Bash(ls)",
       "Bash(ls *)"
     ],
-    "deny": ["Edit", "Bash(git push *)", "Bash(gh *)"]
+    "deny": ["Edit", "Bash(git push *)", "Bash(gh *)", "Bash(git *--output*)"]
+  },
+  "skillOverrides": {
+    "deep-research": "off",
+    "design": "off",
+    "design-sync": "off",
+    "dataviz": "off",
+    "update-config": "off",
+    "verify": "off",
+    "debug": "off",
+    "code-review": "off",
+    "simplify": "off",
+    "batch": "off",
+    "fewer-permission-prompts": "off",
+    "doctor": "off",
+    "loop": "off",
+    "schedule": "off",
+    "claude-api": "off",
+    "workflow-authoring": "off",
+    "run": "off",
+    "run-skill-generator": "off",
+    "plugin-authoring": "off"
   }
 }

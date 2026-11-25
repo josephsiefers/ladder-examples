@@ -5,11 +5,7 @@
       "Read",
       "Edit",
       "Write",
-      "Glob",
-      "Grep",
       "Skill",
-      "Agent",
-      "TodoWrite",
       "Bash(npm test)",
       "Bash(npm test *)",
       "Bash(npm run *)",
@@ -38,5 +34,26 @@
       "Bash(git push *)",
       "Bash(gh *)"
     ]
+  },
+  "skillOverrides": {
+    "deep-research": "off",
+    "design": "off",
+    "design-sync": "off",
+    "dataviz": "off",
+    "update-config": "off",
+    "verify": "off",
+    "debug": "off",
+    "code-review": "off",
+    "simplify": "off",
+    "batch": "off",
+    "fewer-permission-prompts": "off",
+    "doctor": "off",
+    "loop": "off",
+    "schedule": "off",
+    "claude-api": "off",
+    "workflow-authoring": "off",
+    "run": "off",
+    "run-skill-generator": "off",
+    "plugin-authoring": "off"
   }
 }
