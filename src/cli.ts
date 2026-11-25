@@ -1,7 +1,7 @@
 import { relative, resolve } from "node:path";
 import { Argument, Command, CommanderError, InvalidArgumentError, Option } from "commander";
 import packageJson from "../package.json" with { type: "json" };
-import { createFirmDocuments, type FirmDocuments } from "./core/documents";
+import { createFirmDocuments } from "./core/documents";
 import {
   buildReviewSheet,
   createEvalStore,
@@ -21,28 +21,32 @@ import {
   createCachedLlm,
   createFileCacheStore,
   formatCallSummary,
-  type Llm,
 } from "./core/llm";
-import { createSnapshotEval, snapshotContract } from "./usecases/01-contract-snapshot";
+import {
+  createSnapshotEval,
+  type SnapshotDeps,
+  snapshotContract,
+} from "./usecases/01-contract-snapshot";
 import {
   createTriageEval,
+  type TriageDeps,
   type TriageResult,
   triageAll,
   triageDocument,
 } from "./usecases/02-intake-triage";
 
 /**
- * Everything a command touches outside its own code, so tests can run the CLI offline. `llm` is
- * the live LLM; commands call it through the LLM cache in `llmCache`.
+ * Everything a command touches outside its own code, so tests can run the CLI offline: each use
+ * case's deps, plus the CLI's own. `llm` is the live LLM; commands call it through the LLM cache
+ * in `llmCache`.
  */
-export interface CliDeps {
-  llm: Llm;
-  documents: FirmDocuments;
-  llmCache: CacheStore;
-  evalStore: EvalStore;
-  stdout: (text: string) => void;
-  stderr: (text: string) => void;
-}
+export type CliDeps = SnapshotDeps &
+  TriageDeps & {
+    llmCache: CacheStore;
+    evalStore: EvalStore;
+    stdout: (text: string) => void;
+    stderr: (text: string) => void;
+  };
 
 interface CacheOptions {
   live?: boolean;
@@ -112,10 +116,22 @@ async function reviewSheetCommand<Input, Value>(
   deps.stdout(`Review sheet: ${relative(process.cwd(), sheetPath)} · ${sheet.summary}`);
 }
 
+/**
+ * Whether a triaged document was routed: briefly, e.g. `routed (position 1)` or `not routed`, or
+ * in full, naming its queue and when it was routed.
+ */
+function routingStatus({ queue, receipt }: TriageResult, { full }: { full: boolean }): string {
+  const notRouted = "not routed";
+  if (!receipt) return full ? `queue ${queue} (${notRouted}; pass --route to file it)` : notRouted;
+  const to = full ? ` to ${queue}` : "";
+  const at = full ? `, ${receipt.routedAt}` : "";
+  return `routed${to} (position ${receipt.position}${at})`;
+}
+
 /** One triaged document on one line, e.g. `intake-hand-02 · msa → commercial · routed (position 1)`. */
-function triageLine({ documentId, classification, queue, receipt }: TriageResult): string {
-  const routed = receipt ? `routed (position ${receipt.position})` : "not routed";
-  return `${documentId} · ${classification.docType} → ${queue} · ${routed}`;
+function triageLine(result: TriageResult): string {
+  const { documentId, classification, queue } = result;
+  return `${documentId} · ${classification.docType} → ${queue} · ${routingStatus(result, { full: false })}`;
 }
 
 export function buildProgram(deps: CliDeps): Command {
@@ -176,28 +192,24 @@ export function buildProgram(deps: CliDeps): Command {
         }
         const result = await triageDocument(documentId ?? "", cachedDeps(), options);
         deps.stdout(JSON.stringify(result.classification, null, 2));
-        deps.stdout(
-          result.receipt
-            ? `routed to ${result.queue} (position ${result.receipt.position}, ${result.receipt.routedAt})`
-            : `queue ${result.queue} (not routed; pass --route to file it)`,
-        );
+        deps.stdout(routingStatus(result, { full: true }));
         deps.stdout(formatCallSummary(result));
       },
     );
 
+  /** An eval's command: run it, or with `--review-sheet` build the review sheet instead. */
+  const evalCommand =
+    <Input, Value>(create: (deps: CliDeps) => EvalDefinition<Input, Value>) =>
+    (options: EvalOptions) =>
+      (options.reviewSheet ? reviewSheetCommand : runEvalCommand)(
+        create(deps),
+        options,
+        cachedDeps(),
+      );
+
   const evals: Record<string, (options: EvalOptions) => Promise<void>> = {
-    snapshot: (options) =>
-      (options.reviewSheet ? reviewSheetCommand : runEvalCommand)(
-        createSnapshotEval(deps),
-        options,
-        cachedDeps(),
-      ),
-    triage: (options) =>
-      (options.reviewSheet ? reviewSheetCommand : runEvalCommand)(
-        createTriageEval(deps),
-        options,
-        cachedDeps(),
-      ),
+    snapshot: evalCommand(createSnapshotEval),
+    triage: evalCommand(createTriageEval),
   };
   program
     .command("eval")

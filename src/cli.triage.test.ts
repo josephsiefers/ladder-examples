@@ -1,22 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { type CliDeps, run } from "./cli";
-import { createFirmDocuments, type FirmDocuments, type RoutingRecord } from "./core/documents";
+import { createFirmDocuments, withMemoryQueues } from "./core/documents";
 import { createEvalStore, type EvalStore } from "./core/eval";
 import { createFakeLlm, createMemoryCacheStore, type StructuredRequest } from "./core/llm";
-
-/** The real firm's documents, with routed records kept in memory instead of written out. */
-function firmWithMemoryQueues(): { documents: FirmDocuments; routed: RoutingRecord[] } {
-  const routed: RoutingRecord[] = [];
-  const documents: FirmDocuments = {
-    ...createFirmDocuments(),
-    async routeToQueue({ documentId, queue, rationale }) {
-      const record = { id: documentId, queue, rationale, routedAt: "2026-11-24T09:30:00.000Z" };
-      routed.push(record);
-      return { ...record, position: routed.filter((each) => each.queue === queue).length };
-    },
-  };
-  return { documents, routed };
-}
 
 /** The real eval cases; run records are kept in memory. */
 function memoryRecordStore(): EvalStore {
@@ -37,7 +23,8 @@ const answer = ({ prompt }: StructuredRequest<unknown>) => {
 function fakeDeps() {
   const out: string[] = [];
   const err: string[] = [];
-  const { documents, routed } = firmWithMemoryQueues();
+  // The real firm's documents, with routed records kept in memory instead of written out.
+  const documents = withMemoryQueues(createFirmDocuments());
   const deps: CliDeps = {
     llm: createFakeLlm(answer, { usage: { inputTokens: 1200, outputTokens: 50 }, latencyMs: 900 }),
     llmCache: createMemoryCacheStore(),
@@ -46,7 +33,7 @@ function fakeDeps() {
     stdout: (text) => out.push(text),
     stderr: (text) => err.push(text),
   };
-  return { deps, out, err, routed };
+  return { deps, out, err, routed: documents.routed };
 }
 
 const argv = (...args: string[]) => ["node", "ladder", ...args];

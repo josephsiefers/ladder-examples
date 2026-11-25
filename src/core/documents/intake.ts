@@ -1,3 +1,5 @@
+import { CLAUSE_NUMBER } from "./paragraph-id";
+
 /** The firm's team queues an intake document can be routed to. */
 export const QUEUES = ["nda-review", "commercial", "privacy", "senior-associate"] as const;
 
@@ -14,6 +16,13 @@ export interface IntakeDocument {
   id: string;
   title: string;
   paragraphs: IntakeParagraph[];
+}
+
+/** A request to file one intake document in a queue, with the reason it belongs there. */
+export interface RoutingRequest {
+  documentId: string;
+  queue: Queue;
+  rationale: string;
 }
 
 /** What routing one intake document records in its queue. */
@@ -34,11 +43,7 @@ export interface RoutingReceipt extends RoutingRecord {
 export interface IntakeDesk {
   listIntake(): Promise<string[]>;
   readIntake(id: string): Promise<IntakeDocument>;
-  routeToQueue(request: {
-    documentId: string;
-    queue: Queue;
-    rationale: string;
-  }): Promise<RoutingReceipt>;
+  routeToQueue(request: RoutingRequest): Promise<RoutingReceipt>;
 }
 
 /** No intake document with this ID exists in the firm. */
@@ -54,6 +59,11 @@ export class IntakeNotFoundError extends Error {
   }
 }
 
+/** Throws `IntakeNotFoundError` unless `id` is one of the `known` intake document IDs. */
+export function checkKnownIntake(id: string, known: readonly string[]): void {
+  if (!known.includes(id)) throw new IntakeNotFoundError(id, known);
+}
+
 /** The intake file has no `# Title` first line. */
 export class MalformedIntakeError extends Error {
   override name = "MalformedIntakeError";
@@ -65,7 +75,7 @@ export class MalformedIntakeError extends Error {
 
 const TITLE = /^# (\S.*)/;
 /** A paragraph ID (see GLOSSARY.md): a clause number such as `4.2`, or a list number such as `6.`. */
-const PARAGRAPH_ID = /^(?:(\d+\.\d+)|(\d+)\.) (\S.*)/;
+const PARAGRAPH_ID = new RegExp(String.raw`^(?:(${CLAUSE_NUMBER})|(\d+)\.) (\S.*)`);
 
 /**
  * Parses an intake document: a `# Title` first line, then blank-line-separated paragraphs. A

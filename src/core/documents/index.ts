@@ -16,6 +16,8 @@ export {
   type Queue,
   type RoutingReceipt,
   type RoutingRecord,
+  type RoutingRequest,
   renderIntakeForPrompt,
 } from "./intake";
+export { withMemoryQueues } from "./memory-queues";
 export { renderContractForPrompt } from "./render";

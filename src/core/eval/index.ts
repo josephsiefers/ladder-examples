@@ -7,9 +7,11 @@ export {
   classMetrics,
   confusionMatrix,
   formatRate,
+  NO_ANSWER,
   type Prediction,
   renderConfusionMatrix,
 } from "./classification";
+export { plural, row, tableHead } from "./markdown";
 export { formatPercent, renderReport } from "./report";
 export { buildReviewSheet, type ReviewSheet } from "./review-sheet";
 export { DEFAULT_CONCURRENCY, DEFAULT_RUNS, runEval } from "./runner";

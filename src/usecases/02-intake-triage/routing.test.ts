@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { queueFor, ROUTING_TABLE } from "./routing";
+import { ROUTING_TABLE } from "./routing";
 import { DOC_TYPES } from "./schema";
 
 describe("routing table", () => {
@@ -15,15 +15,5 @@ describe("routing table", () => {
 
   it("covers the whole document type union and nothing else", () => {
     expect(Object.keys(ROUTING_TABLE).toSorted()).toEqual([...DOC_TYPES].toSorted());
-  });
-
-  it("looks up a document type's queue", () => {
-    expect(DOC_TYPES.map(queueFor)).toEqual([
-      "nda-review",
-      "commercial",
-      "privacy",
-      "commercial",
-      "senior-associate",
-    ]);
   });
 });
