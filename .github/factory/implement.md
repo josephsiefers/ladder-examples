@@ -22,7 +22,7 @@ Build the ticket test-first with the tdd skill. Meet every item of the Definitio
 When the ticket is built, write two files in `${OUT_DIR}`:
 
 - `pr-title.txt`: one line, in the imperative, in the style of `git log --oneline -10`.
-- `pr-body.md`: for the human who reviews and merges the PR. Say what changed and why. Give evidence for each Definition-of-done item: the test count, the mutation score, and for use-case tickets the eval table. Name anything skipped, and why. Say what deserves a close look. Leave out any `Closes` line: the workflow adds it.
+- `pr-body.md`: for the human who reviews and merges the PR. Say what changed and why. Give evidence for each Definition-of-done item: the test count, the mutation score, what each demo command printed, and for use-case tickets the eval table. Leave out whether the ticket fits one session, and any `Closes` line: the workflow adds both. Name anything skipped, and why. Say what deserves a close look.
 
 ## Or hand it back
 

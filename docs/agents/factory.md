@@ -4,8 +4,8 @@ GitHub Actions runs two tasks on this repo. The owner merges every PR by hand.
 
 | Task | Trigger | What a run does | Next |
 | --- | --- | --- | --- |
-| Implementer (`.github/workflows/implement.yml`) | The owner adds `ready-for-agent` to a ticket | If a run already has the ticket, a PR is already open, or a blocker isn't closed, comments and stops. Otherwise builds the ticket on `agent/issue-<n>` to the Definition of done and opens a draft PR with `Closes #<n>`. If it can't, it comments on the ticket and labels it `ready-for-human`. | The PR starts the checks and a review |
-| Automated review (`.github/workflows/review.yml`) | A PR opens, or the owner adds `agent-review` | Runs the code-review skill against the tickets the PR closes, posts a comment-only review, and labels the PR `review-passed` or `review-failed`. A pass marks a draft PR ready. | Nothing: the owner merges, or pushes fixes and adds `agent-review` |
+| Implementer (`.github/workflows/implement.yml`) | The owner adds `ready-for-agent` to a ticket | If a run already has the ticket, a PR is already open, or a blocker isn't closed, comments and stops. Otherwise builds the ticket on `agent/issue-<n>` to the Definition of done and opens a draft PR, adding the run's peak context and `Closes #<n>` to its body. If it can't, it comments on the ticket and labels it `ready-for-human`. | The PR starts the checks and a review |
+| Automated review (`.github/workflows/review.yml`) | A PR opens, or the owner adds `agent-review` | Runs the code-review skill against the tickets the PR closes, checking the PR body's claims against the diff. Posts a comment-only review and labels the PR `review-passed` or `review-failed`. A pass marks a draft PR ready. | Nothing: the owner merges, or pushes fixes and adds `agent-review` |
 
 The automated checks (`.github/workflows/checks.yml`) run on every PR, and branch protection requires them on `master`.
 
