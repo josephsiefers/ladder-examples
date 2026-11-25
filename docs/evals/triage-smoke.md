@@ -1,7 +1,5 @@
 # UC2 triage eval: smoke split
 
-Linked from the README's [UC2 section](../../README.md#uc2-intake-triage).
-
 ## The cases
 
 Five hand-written intake documents in [data/firm/intake/](../../data/firm/intake/), 570–640 words each, one per document type. Each opens with a client's cover note. Gold labels are in [data/evals/triage/smoke/](../../data/evals/triage/smoke/).
@@ -64,3 +62,5 @@ Totals: 15 calls · live 3 · cached 12 · 33,939 input tokens · 1,756 output t
 ```
 
 Replaying from the committed cache gives the same report, except the totals line counts all 15 calls as cached.
+
+Five hand-written documents, one per type, show the pipeline works end to end. They cannot show whether the upgrade trigger (hybrid accuracy materially below clean) fires: that needs the generated dev split with more hybrids (#11).
