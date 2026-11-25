@@ -38,7 +38,7 @@
 
 ## Metadata plants (difficulty without clause deviations)
 
-Clause bodies always use standard wording; clause-deviation plants belong to UC3. The difficulty comes from how metadata is expressed:
+Clause bodies always use standard wording; clause-deviation plants belong to UC3. Standard wording never states a jurisdiction, duration, date or party role, so it can't contradict a planted value. The difficulty comes from how metadata is expressed:
 
 - an effective date in numerals, in words ("the 3rd day of March 2025"), as the date of last signature, or not stated;
 - a term in months or in years ("two (2) years"), or until terminated on N days' notice;
@@ -54,20 +54,7 @@ Clause bodies always use standard wording; clause-deviation plants belong to UC3
 
 ## Results
 
-Dev split: 12 generated NDAs (#7), Haiku, 3 runs, recorded 2026-11-22. The prompt was not tuned against this corpus.
-
-| Field | Mean | Stdev | Min | Max |
-|---|---:|---:|---:|---:|
-| parties | 100.0% | 0.0% | 100.0% | 100.0% |
-| effectiveDate | 100.0% | 0.0% | 100.0% | 100.0% |
-| term | 100.0% | 0.0% | 100.0% | 100.0% |
-| survivalPeriod | 100.0% | 0.0% | 100.0% | 100.0% |
-| governingLaw | 100.0% | 0.0% | 100.0% | 100.0% |
-| mutuality | 100.0% | 0.0% | 100.0% | 100.0% |
-
-`effectiveDate 100.0% · term 100.0% → target 98%: MET`
-
-No failures and no failed case runs (36 calls). **The effective-date/term target is met.** The deferred decision below is not triggered, but this stands only until the answer key has been reviewed (#9). The test split has not been run.
+Reports: [smoke](../../evals/snapshot-smoke.md), [dev](../../evals/snapshot-dev.md).
 
 ## Deferred decision
 
