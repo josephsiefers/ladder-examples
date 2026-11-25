@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-25",
+  "split": "test",
+  "seed": 3175,
+  "docType": "other",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "library",
+    "name": "employment",
+    "parties": [
+      {
+        "name": "Saltmarsh Media Limited",
+        "short": "Saltmarsh"
+      },
+      {
+        "name": "Daniel Okafor",
+        "short": "Mr Okafor"
+      }
+    ]
+  },
+  "ingredients": [
+    "confidentiality-section"
+  ]
+}

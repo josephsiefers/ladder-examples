@@ -1,0 +1,25 @@
+{
+  "id": "intake-gen-04",
+  "split": "dev",
+  "seed": 3028,
+  "docType": "sow",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "library",
+    "name": "sow",
+    "parties": [
+      {
+        "name": "Quillon Cloud Services Limited",
+        "short": "Quillon"
+      },
+      {
+        "name": "Ostrava Health Ltd",
+        "short": "Ostrava"
+      }
+    ]
+  },
+  "ingredients": [
+    "sow-confidentiality",
+    "sow-intellectual-property"
+  ]
+}

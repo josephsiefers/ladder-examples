@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-19",
+  "split": "test",
+  "seed": 3133,
+  "docType": "msa",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Quillon Cloud Services Limited",
+        "short": "Quillon"
+      },
+      {
+        "name": "Ostrava Health Ltd",
+        "short": "Ostrava"
+      }
+    ]
+  },
+  "ingredients": [
+    "dpa-schedule"
+  ]
+}

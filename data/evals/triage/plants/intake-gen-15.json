@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-15",
+  "split": "dev",
+  "seed": 3105,
+  "docType": "msa",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Haldane Capital Partners LLP",
+        "short": "Haldane"
+      },
+      {
+        "name": "Brightwell Clinics Ltd",
+        "short": "Brightwell"
+      }
+    ]
+  },
+  "ingredients": []
+}

@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-22",
+  "split": "test",
+  "seed": 3154,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "software-licence",
+    "parties": [
+      {
+        "name": "Marchmont Properties Limited",
+        "short": "Marchmont"
+      },
+      {
+        "name": "Linden Print Ltd",
+        "short": "Linden"
+      }
+    ]
+  },
+  "ingredients": []
+}

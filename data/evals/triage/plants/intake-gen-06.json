@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-06",
+  "split": "dev",
+  "seed": 3042,
+  "docType": "dpa",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "dpa",
+    "parties": [
+      {
+        "name": "Tamsin Software Inc.",
+        "short": "Tamsin"
+      },
+      {
+        "name": "Redwater Foods Limited",
+        "short": "Redwater"
+      }
+    ]
+  },
+  "ingredients": []
+}

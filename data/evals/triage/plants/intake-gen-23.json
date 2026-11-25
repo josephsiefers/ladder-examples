@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-23",
+  "split": "test",
+  "seed": 3161,
+  "docType": "nda",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "library",
+    "name": "confidentiality-agreement",
+    "parties": [
+      {
+        "name": "Northcote Engineering Limited",
+        "short": "Northcote"
+      },
+      {
+        "name": "Calder & Finch LLP",
+        "short": "Calder & Finch"
+      }
+    ]
+  },
+  "ingredients": [
+    "letter-form"
+  ]
+}

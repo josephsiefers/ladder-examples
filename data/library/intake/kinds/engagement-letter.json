@@ -1,0 +1,41 @@
+{
+  "docType": "other",
+  "titles": ["Engagement Letter", "Letter of Engagement"],
+  "openings": [
+    [
+      "Thank you for instructing {{first}} to act for {{second}} in connection with its proposed refinancing.",
+      "This letter confirms the terms of our engagement: the scope of the work we will do for you, who will do it, and how our fees will be charged."
+    ],
+    [
+      "We are pleased to confirm that {{first}} will audit the financial statements of {{second}} for the year ending 31 March 2027.",
+      "This letter sets out the basis on which we will carry out that engagement and the respective responsibilities of {{secondShort}} and of us."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Scope",
+      "variants": [
+        ["Our work covers reviewing and negotiating the facility agreement and security documents, and advising on conditions precedent. It does not include tax or regulatory advice."],
+        ["We will carry out the work in accordance with applicable auditing standards and report to the members of the company."]
+      ]
+    },
+    {
+      "heading": "Fees",
+      "variants": [
+        ["We estimate our fees at GBP 45,000 to GBP 55,000 plus VAT and disbursements, and will tell you promptly if we expect to exceed that estimate."],
+        ["Our fees are charged at hourly rates between GBP 180 and GBP 520 and are billed monthly."]
+      ]
+    },
+    {
+      "heading": "Terms of Business",
+      "variants": [
+        ["Our standard terms of business are enclosed and apply to this engagement. Either of us may end the engagement by written notice."],
+        ["Our liability to you for this engagement is limited to GBP 5 million. Please sign and return a copy of this letter to confirm your agreement."]
+      ]
+    }
+  ],
+  "letter": {
+    "salutation": "Dear {{secondShort}},",
+    "signoff": "Yours sincerely, {{first}}"
+  }
+}

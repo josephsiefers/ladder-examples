@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-16",
+  "split": "dev",
+  "seed": 3112,
+  "docType": "sow",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "sow",
+    "parties": [
+      {
+        "name": "Corvane Systems Limited",
+        "short": "Corvane"
+      },
+      {
+        "name": "Fennick Logistics plc",
+        "short": "Fennick"
+      }
+    ]
+  },
+  "ingredients": []
+}

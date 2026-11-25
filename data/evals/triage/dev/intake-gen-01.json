@@ -1,0 +1,16 @@
+{
+  "input": {
+    "documentId": "intake-gen-01"
+  },
+  "gold": {
+    "docType": "nda",
+    "ambiguity": "clean"
+  },
+  "evidence": {
+    "docType": [
+      "title",
+      "1.3",
+      "2.1"
+    ]
+  }
+}

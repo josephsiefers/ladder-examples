@@ -86,8 +86,11 @@ describe("ladder triage", () => {
 
     expect(await run(argv("triage", "--all", "--route"), deps)).toBe(0);
 
-    expect(out).toEqual([
-      "intake-hand-01 · nda → nda-review · routed (position 1)",
+    // The 30 generated documents come first, and this fake model calls each of them an NDA.
+    expect(out).toHaveLength(35);
+    expect(out[0]).toBe("intake-gen-01 · nda → nda-review · routed (position 1)");
+    expect(out.slice(30)).toEqual([
+      "intake-hand-01 · nda → nda-review · routed (position 31)",
       "intake-hand-02 · msa → commercial · routed (position 1)",
       "intake-hand-03 · dpa → privacy · routed (position 1)",
       "intake-hand-04 · sow → commercial · routed (position 2)",
@@ -100,7 +103,8 @@ describe("ladder triage", () => {
 
     expect(await run(argv("triage", "--all"), deps)).toBe(0);
 
-    expect(out[0]).toBe("intake-hand-01 · nda → nda-review · not routed");
+    expect(out).toHaveLength(35);
+    expect(out[30]).toBe("intake-hand-01 · nda → nda-review · not routed");
   });
 
   it("needs exactly one of a document ID and --all", async () => {

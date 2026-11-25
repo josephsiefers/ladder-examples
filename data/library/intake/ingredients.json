@@ -1,0 +1,68 @@
+{
+  "confidentiality-section": {
+    "docType": "nda",
+    "kind": "section",
+    "placement": "body",
+    "heading": "Confidentiality",
+    "paragraphs": [
+      "Each party may disclose confidential information to the other under this agreement. \"Confidential Information\" means all information of a confidential nature disclosed by a party, including its business plans, pricing, software, data and know-how.",
+      "Each party shall keep the other's Confidential Information confidential, use it only to perform this agreement, and disclose it only to its employees, contractors and advisers who need to know it and are bound by equivalent obligations.",
+      "These obligations do not apply to information that is public, already known to the receiving party, independently developed, or required to be disclosed by law. They survive termination of this agreement for five years."
+    ]
+  },
+  "dpa-schedule": {
+    "docType": "dpa",
+    "kind": "section",
+    "placement": "end",
+    "heading": "Schedule 1: Data Processing Terms",
+    "paragraphs": [
+      "To the extent the Supplier processes personal data on behalf of the Customer in performing the services, the Customer is the controller and the Supplier is the processor, and this Schedule applies.",
+      "The Supplier shall process that personal data only on the Customer's documented instructions, ensure its personnel are bound by confidentiality, and implement appropriate technical and organisational security measures.",
+      "The Supplier shall not engage a sub-processor without the Customer's prior written authorisation, and shall notify the Customer of any personal data breach without undue delay and within forty-eight hours.",
+      "At the end of the services the Supplier shall delete or return all personal data, and shall make available the information needed to demonstrate compliance with Article 28 of the UK GDPR."
+    ]
+  },
+  "non-solicitation-covenants": {
+    "docType": "other",
+    "kind": "section",
+    "placement": "body",
+    "heading": "Non-Solicitation of Employees and Customers",
+    "paragraphs": [
+      "For twelve months after the date of this Agreement, neither party shall, directly or indirectly, solicit, employ or engage any employee of the other party with whom it had contact in connection with the Purpose.",
+      "For the same period, the Receiving Party shall not solicit or accept business from any customer of the Disclosing Party identified in the Confidential Information, nor encourage any such customer to reduce its business with the Disclosing Party.",
+      "Each restriction is separate and reasonable. If any of them is held unenforceable, it shall apply with the smallest modification needed to make it enforceable."
+    ]
+  },
+  "sow-confidentiality": {
+    "docType": "nda",
+    "kind": "section",
+    "placement": "body",
+    "heading": "Project Confidentiality",
+    "paragraphs": [
+      "The Supplier shall treat as confidential all Customer data, inventory records and plans it receives for this project, use them only for this project, and disclose them only to project staff who need to know them.",
+      "On completion of the project the Supplier shall return or securely destroy all such information. This obligation survives for three years after completion."
+    ]
+  },
+  "sow-intellectual-property": {
+    "docType": "msa",
+    "kind": "section",
+    "placement": "body",
+    "heading": "Intellectual Property",
+    "paragraphs": [
+      "The Supplier retains all intellectual property in its pre-existing tools, software and methods. Intellectual property in deliverables created specifically for the Customer under this Statement of Work vests in the Customer on payment.",
+      "The Supplier grants the Customer a perpetual, non-exclusive licence to use any Supplier materials incorporated in the deliverables, for its internal business purposes."
+    ]
+  },
+  "data-sharing-title": {
+    "docType": "other",
+    "kind": "title",
+    "titles": ["Data Sharing Agreement"]
+  },
+  "letter-form": {
+    "docType": "other",
+    "kind": "letter",
+    "titles": ["Re: Project Lantern: Confidentiality"],
+    "salutation": "Dear {{secondShort}},",
+    "signoff": "Please confirm your agreement by signing and returning a copy of this letter. Yours sincerely, {{first}}"
+  }
+}

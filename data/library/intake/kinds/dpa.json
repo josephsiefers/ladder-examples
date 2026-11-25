@@ -1,0 +1,51 @@
+{
+  "docType": "dpa",
+  "titles": ["Data Processing Agreement", "Data Processing Addendum"],
+  "openings": [
+    [
+      "This Data Processing Agreement is made between {{second}} (the \"Controller\") and {{first}} (the \"Processor\").",
+      "The Processor provides services to the Controller under a separate services agreement, and in doing so processes personal data on the Controller's behalf. This agreement sets out the terms on which the Processor processes that personal data, as Article 28 of the UK GDPR and the EU GDPR require."
+    ],
+    [
+      "This addendum is entered into by {{first}} (\"{{firstShort}}\") and its customer {{second}} (\"{{secondShort}}\").",
+      "{{firstShort}} processes personal data as a processor for {{secondShort}}, which is the controller of that data. This addendum governs that processing: the subject matter, duration, nature and purpose of the processing, the types of personal data and the categories of data subjects are described in Annex 1."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Processing on Instructions",
+      "variants": [
+        ["The Processor shall process personal data only on the documented instructions of the Controller, including with regard to transfers to a third country, unless required to do so by law, in which case it shall inform the Controller of that requirement first."],
+        ["The Processor shall not process the personal data for any purpose of its own. It shall immediately inform the Controller if, in its opinion, an instruction infringes data protection law."]
+      ]
+    },
+    {
+      "heading": "Security and Personnel",
+      "variants": [
+        ["The Processor shall implement appropriate technical and organisational measures to protect the personal data, including encryption in transit and at rest, access controls and regular testing.", "The Processor shall ensure that persons authorised to process the personal data are bound by a duty of confidentiality."],
+        ["The Processor shall maintain the security measures described in Annex 2 and shall not materially reduce their overall level of protection during the term."]
+      ]
+    },
+    {
+      "heading": "Sub-processors",
+      "variants": [
+        ["The Processor shall not engage another processor without the Controller's prior general written authorisation. The Processor shall give thirty days' notice of any new sub-processor, and the Controller may object on reasonable grounds."],
+        ["The Controller authorises the sub-processors listed in Annex 3. The Processor shall impose on each sub-processor data protection obligations no less protective than those in this agreement, and remains liable for their performance."]
+      ]
+    },
+    {
+      "heading": "Personal Data Breaches",
+      "variants": [
+        ["The Processor shall notify the Controller without undue delay, and in any event within forty-eight hours, after becoming aware of a personal data breach, and shall give the Controller the information it needs to meet its own reporting obligations."],
+        ["On becoming aware of a personal data breach, the Processor shall notify the Controller within twenty-four hours, take reasonable steps to contain it, and cooperate with the Controller's investigation."]
+      ]
+    },
+    {
+      "heading": "Data Subject Rights and Deletion",
+      "variants": [
+        ["The Processor shall assist the Controller in responding to requests from data subjects to exercise their rights.", "At the end of the services the Processor shall, at the Controller's choice, delete or return all personal data, unless the law requires it to be kept."],
+        ["The Processor shall promptly pass to the Controller any request it receives from a data subject and shall not respond to it except on the Controller's instructions. Within sixty days after the services end, the Processor shall delete all personal data and certify that it has done so."]
+      ]
+    }
+  ]
+}

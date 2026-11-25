@@ -1,0 +1,16 @@
+{
+  "input": {
+    "documentId": "intake-gen-07"
+  },
+  "gold": {
+    "docType": "msa",
+    "ambiguity": "hybrid"
+  },
+  "evidence": {
+    "docType": [
+      "title",
+      "1.1",
+      "1.2"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "docType": "other",
+  "titles": ["Lease of Commercial Premises", "Lease"],
+  "openings": [
+    [
+      "This Lease is made between {{first}} (the \"Landlord\") and {{second}} (the \"Tenant\").",
+      "The Landlord lets to the Tenant the second floor of Unit 4, Harbour Business Park (the \"Premises\") for a term of ten years from the start date, at the rent and on the terms set out below."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\") grants {{second}} (\"{{secondShort}}\") a lease of the warehouse and yard at 18 Mill Lane (the \"Property\").",
+      "The lease is for a term of five years for use as a storage and distribution warehouse, and is granted on the terms of this document."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Rent",
+      "variants": [
+        ["The Tenant shall pay a yearly rent of GBP 84,000, exclusive of VAT, by equal quarterly payments in advance on the usual quarter days."],
+        ["The rent is GBP 6,250 per month, payable monthly in advance by standing order. The rent is reviewed upwards only on the third anniversary of the start date."]
+      ]
+    },
+    {
+      "heading": "Use and Alterations",
+      "variants": [
+        ["The Tenant shall use the Premises only as offices. The Tenant shall not make structural alterations, and shall not make other alterations without the Landlord's consent, which is not to be unreasonably withheld."],
+        ["The Property may be used only for storage and distribution. No goods may be stored in the yard above three metres in height."]
+      ]
+    },
+    {
+      "heading": "Repair and Service Charge",
+      "variants": [
+        ["The Tenant shall keep the interior of the Premises in good repair and decorate it in the last year of the term. The Tenant shall pay a fair proportion of the cost of maintaining the common parts as a service charge."],
+        ["The Tenant is responsible for repairs to the Property other than the roof and structure, which the Landlord shall maintain."]
+      ]
+    },
+    {
+      "heading": "Break and Assignment",
+      "variants": [
+        ["The Tenant may end this Lease on the fifth anniversary of the start date by giving at least six months' written notice, provided there are no arrears of rent.", "The Tenant shall not assign or underlet the whole of the Premises without the Landlord's consent, and shall not underlet part."],
+        ["The Tenant may not assign this lease without the Landlord's prior written consent. Either party may end the lease at the end of year three on six months' notice."]
+      ]
+    }
+  ]
+}

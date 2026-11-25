@@ -1,0 +1,14 @@
+{
+  "id": "intake-gen-08",
+  "split": "dev",
+  "seed": 3056,
+  "docType": "nda",
+  "ambiguity": "hybrid",
+  "base": {
+    "kind": "nda-copy",
+    "contractId": "nda-gen-06"
+  },
+  "ingredients": [
+    "non-solicitation-covenants"
+  ]
+}

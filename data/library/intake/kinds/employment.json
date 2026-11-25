@@ -1,0 +1,44 @@
+{
+  "docType": "other",
+  "titles": ["Contract of Employment", "Employment Agreement"],
+  "openings": [
+    [
+      "This Contract of Employment is between {{first}} (the \"Company\") and {{second}} (the \"Employee\").",
+      "The Company employs the Employee as Head of Product from the start date set out below. This contract sets out the terms and conditions of that employment and is the written statement of particulars that employment law requires."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\") offers, and {{second}} accepts, employment as Senior Data Engineer on the terms of this agreement.",
+      "The employment begins on 6 January 2027. The first six months are a probationary period, during which either party may end the employment on two weeks' notice."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Duties and Place of Work",
+      "variants": [
+        ["The Employee shall perform the duties the Company reasonably assigns, and shall report to the Chief Executive. The normal place of work is the Company's London office, with up to two days a week of home working."],
+        ["The Employee shall devote their full working time to the business and shall not take other paid work without written consent. The Employee works from the Bristol office."]
+      ]
+    },
+    {
+      "heading": "Pay and Benefits",
+      "variants": [
+        ["The Employee's salary is GBP 98,000 a year, paid monthly in arrears. The Employee is eligible for the Company's annual bonus scheme and pension scheme, to which the Company contributes six per cent of salary."],
+        ["The salary is GBP 76,500 a year, reviewed each April. The Employee is entitled to private medical insurance and life cover at four times salary."]
+      ]
+    },
+    {
+      "heading": "Hours and Holiday",
+      "variants": [
+        ["Normal hours are 9.00 to 17.30, Monday to Friday. The Employee is entitled to twenty-seven days' paid holiday a year in addition to public holidays."],
+        ["The Employee works thirty-seven and a half hours a week and is entitled to twenty-five days' holiday plus public holidays. Up to five unused days may be carried forward."]
+      ]
+    },
+    {
+      "heading": "Notice and Termination",
+      "variants": [
+        ["After probation, either party may end the employment by giving three months' written notice. The Company may pay salary in lieu of notice."],
+        ["Either party may terminate the employment on one month's notice. The Company may terminate it without notice for gross misconduct."]
+      ]
+    }
+  ]
+}
