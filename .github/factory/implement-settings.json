@@ -35,6 +35,30 @@
       "Bash(gh *)"
     ]
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-context.ts\""
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-context.ts\""
+          }
+        ]
+      }
+    ]
+  },
   "skillOverrides": {
     "deep-research": "off",
     "design": "off",

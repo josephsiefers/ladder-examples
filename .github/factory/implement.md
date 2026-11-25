@@ -29,7 +29,9 @@ When the ticket is built, write two files in `${OUT_DIR}`:
 Write only `${OUT_DIR}/blocked.md`, and stop, when:
 
 - the ticket is ambiguous in a way that changes what you would build;
-- it won't fit one run (the Definition of done's ~150k-token limit). Propose a split as ticket titles with a one-line scope each;
+- a context notice says you are near or over the Definition of done's ~150k-token limit, and the rest of the ticket won't fit (act on the notice: it tells you when to stop);
 - a check fails and fixing it is outside the ticket's scope.
 
 `blocked.md` becomes a comment on the ticket, addressed to its owner. Say what you did, what is blocking, and the decision you need. Your commits are not pushed.
+
+When you stop for the context budget, keep `blocked.md` short: what you built, and what of the ticket remains. Don't propose a split; the owner splits the remainder in a fresh session.

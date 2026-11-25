@@ -18,6 +18,17 @@ The automated checks (`.github/workflows/checks.yml`) run on every PR, and branc
 - **Prompts and tool permissions** live in `.github/factory/` and in the `claude` flags of each workflow. A prompt or permission change is a factory change, and gets human review like any other.
 - **The implementer runs in auto mode; the review runs on its allow list alone.** In the implementer, a call the settings' allow and deny rules don't decide goes to a classifier model, which runs it or blocks it; it is never left waiting for approval. `WebSearch` and `WebFetch` are there for current docs. They are in the implementer's `--tools` but not on the allow list in `implement-settings.json`, so the classifier judges every call. The review runs in `dontAsk` mode: a call off its allow list is refused, so the allow list is what keeps it from running the PR's code. That list is the `git` reads and `ls` in `review-settings.json`, plus the shell commands Claude Code itself treats as read-only (`cat`, `head`, `grep`, `wc`, `sed -n`). A deny list can't do that job, since `bash -c`, `sh`, `env` and other runners each get around one. The review's Write is allowed only into its out directory, its `git` calls are denied `--output` (which writes a file), and it has no web tools. Each workflow passes `--tools` with only the tools its task uses, and the settings turn off the bundled skills the prompts don't use, to keep the starting context small.
 
+## Context notice
+
+The Definition of done caps a ticket at one session (~150k tokens of context), but an agent can't see its own context size. So the implementer's settings run `scripts/check-context.ts` as a hook after every tool call (`PostToolUse` and `PostToolUseFailure`). It reads the session transcript and takes the main thread's current context: input + cache-read + cache-creation tokens on the latest main-thread assistant message, with subagent messages (`isSidechain: true`) left out. That is the measure the workflow's peak-context line uses. Below 100k it adds nothing. Past each threshold it adds one notice to the agent's context, at most once per session:
+
+- **~100k:** "Context is at Nk of ~150k. If the rest of the ticket won't fit, stop now and write `blocked.md`."
+- **150k:** "Context is at Nk, over the ~150k budget. Stop now and write `blocked.md`."
+
+A run that stops for the budget writes a short `blocked.md`: what it built, and what of the ticket remains. It spends no tokens proposing a split; the owner splits the remainder with `/to-tickets` in a fresh session. The run's commits are not pushed.
+
+The check never breaks a run: a transcript or input it can't read means no notice, and it always exits 0. It records the notices given in `$TMPDIR/ladder-context-check/<session id>.json`, and stays silent for tool calls inside a subagent. Its fixtures (`scripts/fixtures/context/`) follow the session file Claude Code writes, which differs from the workflow's `stream-json` output: there, subagent messages are marked by `parent_tool_use_id` instead.
+
 ## Secrets
 
 | Secret | Used for |
