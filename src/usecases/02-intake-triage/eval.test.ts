@@ -147,6 +147,33 @@ describe("the triage eval", () => {
     expect(await definition.evidenceText(input, "9.9")).toBeUndefined();
   });
 
+  it("cites the document's title by the evidence ID `title`", async () => {
+    expect(await definition.evidenceText({ documentId: "intake-msa" }, "title")).toBe(
+      "Master Services Agreement",
+    );
+  });
+
+  it("shows the answer key as type and ambiguity, and the model's answer as its type", () => {
+    expect(definition.describe({ docType: "msa", ambiguity: "hybrid" })).toEqual({
+      docType: "msa (hybrid)",
+    });
+    expect(definition.describe({ docType: "nda", rationale: "Secrets." })).toEqual({
+      docType: "nda",
+    });
+  });
+
+  it("lays out its review sheet by document, with 8 agreeing rows sampled", () => {
+    expect(definition.reviewSheet).toEqual({
+      sampleSize: 8,
+      fieldColumn: false,
+      headers: {
+        case: "Document",
+        expected: "Answer key (type, clean/hybrid)",
+        source: "Title + evidence excerpt",
+      },
+    });
+  });
+
   it("reads gold as document type and ambiguity only", () => {
     expect(definition.goldSchema.safeParse({ docType: "msa", ambiguity: "hybrid" }).success).toBe(
       true,

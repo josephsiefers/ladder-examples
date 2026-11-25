@@ -42,6 +42,8 @@ export interface EvalDefinition<Input, Value> {
   target(stats: readonly FieldStats[]): string;
   /** The text of one of a case's evidence paragraphs, for the review sheet; undefined if it has none by that ID. */
   evidenceText(input: Input, paragraphId: string): Promise<string | undefined>;
+  /** Optional: how this eval's review sheet is laid out; the general layout otherwise. */
+  reviewSheet?: ReviewSheetLayout;
   /** Optional: an extra report section in Markdown (e.g. a confusion matrix), from the run and its cases. */
   analysis?(record: RunRecord, cases: readonly EvalCase<Input, Value>[]): string;
 }
@@ -81,4 +83,14 @@ export interface FieldStats {
   stdev: number;
   min: number;
   max: number;
+}
+
+/** How an eval's review sheet is laid out. */
+export interface ReviewSheetLayout {
+  /** Agreeing rows in the random sample. */
+  sampleSize?: number;
+  /** Whether to show the field column; an eval scoring one field can leave it out. */
+  fieldColumn?: boolean;
+  /** Column names in place of `Case`, `Answer key says` and `Source sentence`. */
+  headers?: { case?: string; expected?: string; source?: string };
 }

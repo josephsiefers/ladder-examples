@@ -23,6 +23,7 @@ export {
   type EvalCase,
   type EvalDefinition,
   type FieldStats,
+  type ReviewSheetLayout,
   type RunRecord,
   SPLITS,
   type Split,
