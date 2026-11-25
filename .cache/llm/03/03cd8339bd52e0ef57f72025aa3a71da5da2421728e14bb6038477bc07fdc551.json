@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-02\">\n# Framework Services Agreement\n\n## 1. Parties and Background\n\n[1.1] This agreement is entered into by Fennick Logistics plc (\"Fennick\" or the \"Customer\") and Corvane Systems Limited (\"Corvane\" or the \"Supplier\").\n\n[1.2] Fennick wishes to appoint Corvane as a non-exclusive provider of professional services over the term of this agreement. No services are ordered by this agreement itself: the Customer orders specific work by signing a statement of work, which states its scope, deliverables, timetable and fees, and these master terms govern every statement of work.\n\n## 2. Term and Termination\n\n[2.1] Either party may terminate this agreement or any statement of work immediately by notice if the other commits a material breach that is not remedied within thirty days of being notified of it.\n\n## 3. Liability\n\n[3.1] Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each contract year is limited to the fees paid or payable in that year under all statements of work.\n\n## 4. Services\n\n[4.1] The Supplier shall provide the services in accordance with each statement of work and any service levels it sets out. If the Supplier expects to miss a milestone it shall notify the Customer promptly and propose a recovery plan.\n\n## 5. Change Control\n\n[5.1] Either party may request a change to a statement of work. No change is binding until both parties sign a written change note stating its effect on scope, timetable and fees.\n\n## 6. Fees and Payment\n\n[6.1] Fees are charged on a time and materials basis at the rates in the relevant statement of work, unless it states a fixed price.\n\n[6.2] The Supplier may increase its rates once in each contract year by no more than the increase in the Consumer Prices Index, on sixty days' written notice.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "docType": "msa",
+    "rationale": "The document sets framework terms (liability, termination, services standards, change control, fees) under which the supplier provides professional services over time, with specific work ordered later via statements of work, which is the primary purpose of a master services agreement."
+  },
+  "usage": {
+    "inputTokens": 1595,
+    "outputTokens": 86
+  },
+  "latencyMs": 1168.9766099999997,
+  "recordedAt": "2026-11-25T14:53:07.651Z"
+}

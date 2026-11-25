@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-12\">\n# Data Sharing Agreement\n\n## 1. Parties and Background\n\n[1.1] This Data Processing Agreement is made between Kittering Freight Ltd (the \"Controller\") and Saltmarsh Media Limited (the \"Processor\").\n\n[1.2] The Processor provides services to the Controller under a separate services agreement, and in doing so processes personal data on the Controller's behalf. This agreement sets out the terms on which the Processor processes that personal data, as Article 28 of the UK GDPR and the EU GDPR require.\n\n## 2. Data Subject Rights and Deletion\n\n[2.1] The Processor shall assist the Controller in responding to requests from data subjects to exercise their rights.\n\n[2.2] At the end of the services the Processor shall, at the Controller's choice, delete or return all personal data, unless the law requires it to be kept.\n\n## 3. Processing on Instructions\n\n[3.1] The Processor shall not process the personal data for any purpose of its own. It shall immediately inform the Controller if, in its opinion, an instruction infringes data protection law.\n\n## 4. Security and Personnel\n\n[4.1] The Processor shall maintain the security measures described in Annex 2 and shall not materially reduce their overall level of protection during the term.\n\n## 5. Personal Data Breaches\n\n[5.1] The Processor shall notify the Controller without undue delay, and in any event within forty-eight hours, after becoming aware of a personal data breach, and shall give the Controller the information it needs to meet its own reporting obligations.\n\n## 6. Sub-processors\n\n[6.1] The Processor shall not engage another processor without the Controller's prior general written authorisation. The Processor shall give thirty days' notice of any new sub-processor, and the Controller may object on reasonable grounds.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "docType": "dpa",
+    "rationale": "Although titled a 'Data Sharing Agreement', the document states it is a Data Processing Agreement and its primary purpose is governing how the Processor handles personal data on the Controller's behalf, covering instructions, security, breach notification, sub-processors, deletion and data subject rights as Article 28 requires."
+  },
+  "usage": {
+    "inputTokens": 1585,
+    "outputTokens": 118
+  },
+  "latencyMs": 4057.7974829999994,
+  "recordedAt": "2026-11-25T14:53:06.078Z"
+}

@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-03\">\n# Lease of Commercial Premises\n\n## 1. Parties and Background\n\n[1.1] Harrow Analytics Ltd (\"Harrow\") grants Belgrave Retail Group plc (\"Belgrave\") a lease of the warehouse and yard at 18 Mill Lane (the \"Property\").\n\n[1.2] The lease is for a term of five years for use as a storage and distribution warehouse, and is granted on the terms of this document.\n\n## 2. Rent\n\n[2.1] The Tenant shall pay a yearly rent of GBP 84,000, exclusive of VAT, by equal quarterly payments in advance on the usual quarter days.\n\n## 3. Break and Assignment\n\n[3.1] The Tenant may not assign this lease without the Landlord's prior written consent. Either party may end the lease at the end of year three on six months' notice.\n\n## 4. Repair and Service Charge\n\n[4.1] The Tenant is responsible for repairs to the Property other than the roof and structure, which the Landlord shall maintain.\n\n## 5. Use and Alterations\n\n[5.1] The Tenant shall use the Premises only as offices. The Tenant shall not make structural alterations, and shall not make other alterations without the Landlord's consent, which is not to be unreasonably withheld.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 2
+  },
+  "value": {
+    "docType": "other",
+    "rationale": "The document's primary purpose is a commercial property lease granting Belgrave use of the warehouse at 18 Mill Lane for rent, covering rent, repair, break, and use terms; it is none of the listed agreement types (NDA, MSA, DPA, SOW)."
+  },
+  "usage": {
+    "inputTokens": 1418,
+    "outputTokens": 104
+  },
+  "latencyMs": 1651.3207600000005,
+  "recordedAt": "2026-11-25T14:53:14.044Z"
+}

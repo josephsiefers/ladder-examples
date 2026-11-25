@@ -85,7 +85,7 @@ No model is called. The sheet is saved as Markdown beside its run record (`repor
 | Use case | Rung | Status |
 |---|---|---|
 | [UC1 Contract snapshot](#uc1-contract-snapshot) | Single call (rung-locked) | Built; dev eval run: target met |
-| [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Routing by type built; smoke eval run |
+| [UC2 Intake triage](#uc2-intake-triage) | Routing (by type, then easy/hard cascade) | Routing by type built; smoke and dev evals run |
 | [UC3 NDA review](#uc3-nda-review-future) | Prompt chaining + sectioning, then voting | Future |
 | [UC4 Minimal edit](#uc4-minimal-edit-future) | Evaluator-optimizer | Future |
 | [UC5 Diligence question](#uc5-diligence-question-future) | Orchestrator-workers | Future |
@@ -247,24 +247,26 @@ npm run eval -- triage --split smoke --runs 3   # 5 hand-written intake document
 
 The eval never routes. It scores the document type against gold and reports overall accuracy, per-type precision and recall, a 5×5 confusion matrix, and accuracy on clean vs hybrid documents (pooled over all runs). The **upgrade trigger** is hybrid accuracy materially below clean accuracy.
 
-The smoke split is five hand-written documents, one per type; the MSA (with a confidentiality section) and a letter of intent (with a binding confidentiality paragraph) are the hybrids. [docs/evals/triage-smoke.md](docs/evals/triage-smoke.md) describes each and holds the full report.
+The smoke split is five hand-written documents, one per type, two of them hybrids ([docs/evals/triage-smoke.md](docs/evals/triage-smoke.md)). Smoke results (Haiku, 3 runs, recorded live 2026-11-24): docType 100.0% in every run, clean and hybrid alike; 15 calls.
 
-Smoke results (Haiku, 3 runs, recorded live 2026-11-24; replay them with `--replay-only`). docType accuracy is 100.0% in every run (stdev 0.0%), and precision and recall are 100.0% for every type:
+**The generated corpus**
 
-| Gold \ Predicted | nda | msa | dpa | sow | other |
-|---|---:|---:|---:|---:|---:|
-| nda | 3 | 0 | 0 | 0 | 0 |
-| msa | 0 | 3 | 0 | 0 | 0 |
-| dpa | 0 | 0 | 3 | 0 | 0 |
-| sow | 0 | 0 | 0 | 3 | 0 |
-| other | 0 | 0 | 0 | 0 | 3 |
+The dev and test splits are 30 generated intake documents (`intake-gen-01` to `-30`: 18 dev, 12 test; 10 NDAs, 5 MSAs, 4 DPAs, 4 SOWs, 7 others), 7 of them hybrids (4 dev, 3 test). How they are built, and the full dev report: [docs/evals/triage-dev.md](docs/evals/triage-dev.md).
+
+```sh
+npm run generate -- intake && git status --short   # no diff
+npm run eval -- triage --runs 3 --replay-only
+npm run eval -- triage --review-sheet --replay-only
+```
+
+Dev results (Haiku, 3 runs, live 2026-11-25): docType 100.0% in every run, 54 calls.
 
 | Ambiguity | Accuracy | Case runs |
 |---|---:|---:|
-| clean | 100.0% | 9 |
-| hybrid | 100.0% | 6 |
+| clean | 100.0% | 42 |
+| hybrid | 100.0% | 12 |
 
-No failures. Totals: 15 calls (all recorded live), 33,939 input tokens, 1,756 output tokens. Five hand-written documents, one per type, show the pipeline works end to end. They cannot show whether the upgrade trigger fires: that needs the generated dev split with more hybrids (#11).
+**Upgrade trigger: not fired.** Hybrid accuracy is not below clean. Caveats: only 4 dev hybrids, and the answer key awaits human review.
 
 ### UC3 NDA review (future)
 
