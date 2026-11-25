@@ -105,8 +105,20 @@ A document arriving at the firm that has not yet been classified or routed.
 The category an intake document belongs to by its primary purpose: NDA, MSA, DPA, SOW, or other. A hybrid document still has exactly one document type.
 _Avoid_: Contract type, category
 
+**Clean document**:
+An intake document whose substance is all of one document type. The counterpart of a hybrid document.
+_Avoid_: Pure document, simple document, single-type document
+
 **Hybrid document**:
-An intake document whose substance spans more than one document type, such as an MSA with built-in confidentiality terms.
+An intake document whose substance spans more than one document type, such as an MSA with built-in confidentiality terms. The counterpart of a clean document.
+
+**Ambiguity**:
+Whether an intake document is a clean document or a hybrid document. The triage gold labels carry it, and the eval reports accuracy by it. Not how hard a document is to classify.
+_Avoid_: Difficulty, complexity
+
+**Intake desk**:
+The firm's intake function, which lists intake documents, reads one, and routes one to its queue. Part of the translation layer. The code calls it `IntakeDesk`.
+_Avoid_: Intake system, intake API, the firm's intake
 
 **Queue**:
 The team destination an intake document is routed to for handling.

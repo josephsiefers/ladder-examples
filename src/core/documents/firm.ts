@@ -28,7 +28,7 @@ export interface ContractReader {
   readContract(id: string): Promise<Contract>;
 }
 
-/** The whole translation layer: contracts and intake. */
+/** The whole translation layer: contracts and the intake desk. */
 export type FirmDocuments = ContractReader & IntakeDesk;
 
 const DOCUMENT_FILE = /\.md$/;
