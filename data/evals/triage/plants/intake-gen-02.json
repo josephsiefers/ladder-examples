@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-02",
+  "split": "dev",
+  "seed": 2014,
+  "docType": "msa",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Corvane Systems Limited",
+        "short": "Corvane"
+      },
+      {
+        "name": "Fennick Logistics plc",
+        "short": "Fennick"
+      }
+    ]
+  },
+  "ingredients": []
+}

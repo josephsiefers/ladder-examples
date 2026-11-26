@@ -198,7 +198,7 @@ describe("intake documents", () => {
 
   it("reads the firm's own hand-written intake documents from the default root", async () => {
     const documents = createFirmDocuments({ outRoot });
-    const ids = await documents.listIntake();
+    const ids = (await documents.listIntake()).filter((id) => id.startsWith("intake-hand-"));
 
     expect(ids).toEqual([
       "intake-hand-01",

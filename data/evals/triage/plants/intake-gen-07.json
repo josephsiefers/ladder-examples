@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-07",
+  "split": "test",
+  "seed": 2049,
+  "docType": "msa",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Pellam Software Limited",
+        "short": "Pellam"
+      },
+      {
+        "name": "Gartside Distribution Ltd",
+        "short": "Gartside"
+      }
+    ]
+  },
+  "ingredients": []
+}

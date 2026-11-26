@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-10",
+  "split": "dev",
+  "seed": 2070,
+  "docType": "msa",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "msa",
+    "parties": [
+      {
+        "name": "Tarnwick Technology Services Ltd",
+        "short": "Tarnwick"
+      },
+      {
+        "name": "Mossgate Pharmacy Holdings plc",
+        "short": "Mossgate"
+      }
+    ]
+  },
+  "ingredients": []
+}

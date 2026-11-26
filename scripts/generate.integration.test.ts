@@ -12,7 +12,7 @@ describe("scripts/generate.ts, run as a command", () => {
     expect({ status, stdout, stderr }).toEqual({
       status: 2,
       stdout: "",
-      stderr: "usage: npm run generate -- ndas\n",
+      stderr: "usage: npm run generate -- ndas | intake\n",
     });
   });
 });

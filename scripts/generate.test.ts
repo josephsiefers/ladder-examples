@@ -1,10 +1,11 @@
-import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { runGenerate, type Subcommand } from "./generate";
 import { WORKED_SPEC } from "./generate/generate.fixtures";
+import { tree } from "./generate/tree.fixtures";
 
 const REPO = fileURLToPath(new URL("../", import.meta.url));
 
@@ -20,20 +21,6 @@ async function generate(argv: string[], options: { plantsDir?: string } = {}) {
     stderr: (text) => output.push(text),
   });
   return status;
-}
-
-/** Every file under `dir`, relative to it, with its content. */
-async function tree(dir: string): Promise<Record<string, string>> {
-  const files = await readdir(dir, { recursive: true, withFileTypes: true });
-  const entries = await Promise.all(
-    files
-      .filter((file) => file.isFile())
-      .map(async (file) => {
-        const path = join(file.parentPath, file.name);
-        return [path.slice(dir.length + 1), await readFile(path, "utf8")] as const;
-      }),
-  );
-  return Object.fromEntries(entries.toSorted(([a], [b]) => a.localeCompare(b)));
 }
 
 describe("npm run generate -- ndas", () => {
@@ -91,7 +78,7 @@ describe("npm run generate -- ndas", () => {
     "rejects arguments %j with usage",
     async (argv) => {
       expect(await generate(argv)).toBe(2);
-      expect(output).toEqual(["usage: npm run generate -- ndas"]);
+      expect(output).toEqual(["usage: npm run generate -- ndas | intake"]);
     },
   );
 });

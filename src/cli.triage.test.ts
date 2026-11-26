@@ -73,12 +73,15 @@ describe("ladder triage", () => {
 
     expect(await run(argv("triage", "--all", "--route"), deps)).toBe(0);
 
-    expect(out).toEqual([
-      "intake-hand-01 · nda → nda-review · routed (position 1)",
-      "intake-hand-02 · msa → commercial · routed (position 1)",
-      "intake-hand-03 · dpa → privacy · routed (position 1)",
-      "intake-hand-04 · sow → commercial · routed (position 2)",
-      "intake-hand-05 · other → senior-associate · routed (position 1)",
+    const ids = await deps.documents.listIntake();
+    expect(out.map((line) => line.split(" · ")[0])).toEqual(ids);
+    expect(out.every((line) => / · routed \(position \d+\)$/.test(line))).toBe(true);
+    expect(out.filter((line) => line.startsWith("intake-hand-"))).toEqual([
+      expect.stringMatching(/^intake-hand-01 · nda → nda-review · routed/),
+      expect.stringMatching(/^intake-hand-02 · msa → commercial · routed/),
+      expect.stringMatching(/^intake-hand-03 · dpa → privacy · routed/),
+      expect.stringMatching(/^intake-hand-04 · sow → commercial · routed/),
+      expect.stringMatching(/^intake-hand-05 · other → senior-associate · routed/),
     ]);
   });
 
@@ -87,7 +90,7 @@ describe("ladder triage", () => {
 
     expect(await run(argv("triage", "--all"), deps)).toBe(0);
 
-    expect(out[0]).toBe("intake-hand-01 · nda → nda-review · not routed");
+    expect(out).toContain("intake-hand-01 · nda → nda-review · not routed");
   });
 
   it("needs exactly one of a document ID and --all", async () => {

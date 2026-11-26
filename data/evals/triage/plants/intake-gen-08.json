@@ -1,0 +1,12 @@
+{
+  "id": "intake-gen-08",
+  "split": "dev",
+  "seed": 2056,
+  "docType": "nda",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "nda-copy",
+    "contractId": "nda-gen-17"
+  },
+  "ingredients": []
+}

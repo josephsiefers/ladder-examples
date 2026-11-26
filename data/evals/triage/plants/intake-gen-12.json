@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-12",
+  "split": "dev",
+  "seed": 2084,
+  "docType": "sow",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "sow",
+    "parties": [
+      {
+        "name": "Quarrelle Systems Limited",
+        "short": "Quarrelle"
+      },
+      {
+        "name": "Ashby Cold Chain Ltd",
+        "short": "Ashby"
+      }
+    ]
+  },
+  "ingredients": []
+}

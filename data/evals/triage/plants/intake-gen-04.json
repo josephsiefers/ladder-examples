@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-04",
+  "split": "dev",
+  "seed": 2028,
+  "docType": "sow",
+  "ambiguity": "clean",
+  "base": {
+    "kind": "library",
+    "name": "sow",
+    "parties": [
+      {
+        "name": "Brightmoor Digital Ltd",
+        "short": "Brightmoor"
+      },
+      {
+        "name": "Halloway Retail Group plc",
+        "short": "Halloway"
+      }
+    ]
+  },
+  "ingredients": []
+}
