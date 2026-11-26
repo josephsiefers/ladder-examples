@@ -163,8 +163,10 @@ function parseArguments(argv: readonly string[]): { staged: boolean; paths: stri
   }
 }
 
+// Stryker disable all: entry block, unreachable in-process
 if (import.meta.main) {
   const { status, stderr } = runCheck(process.argv.slice(2), process.cwd());
   process.stderr.write(stderr);
   process.exitCode = status;
 }
+// Stryker restore all

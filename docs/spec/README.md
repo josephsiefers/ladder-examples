@@ -63,7 +63,7 @@ Future use cases record their discovery card, justification sentence, and **open
 | Formatting | Biome | Formatter + import sorting only; Biome's linter is off |
 | Linting | Oxlint | All lint rules live here |
 | Boundaries | dependency-cruiser | Rules below |
-| Mutation | StrykerJS | Vitest runner + TypeScript checker; break threshold 70%; `prompts.ts`, the CLI entry, tests and fixtures excluded |
+| Mutation | StrykerJS | Vitest runner + TypeScript checker; break threshold 70%; `prompts.ts`, the CLI entry, script entry blocks (disabled by comment), tests and fixtures excluded |
 | Hooks | Husky + lint-staged | Pre-commit runs no tests |
 
 ### Pre-commit hook
@@ -103,7 +103,7 @@ out/  reports/                  gitignored: firm writes, eval run records, revie
 ## Definition of done (every ticket)
 - `npm test` passes.
 - The pre-commit hook passes on the commit. `--no-verify` is never used.
-- `npm run mutate` scores ≥ 70% on the modules the ticket touched (deterministic code only).
+- `npm run mutate`, scoped to the modules the ticket touched, passes its break threshold (70% for the run, not per file; deterministic code only).
 - Use-case tickets run their eval live with `--runs 3`, save the report as `docs/evals/<eval>-<split>.md`, and paste its table into the PR body. The README's use-case table gets one line: the verdict, linked to that report.
 - One PR per ticket, with `Closes #<n>` in its body. A human squash-merges it into `master`, which closes the issue.
 - The ticket fits one agent session (≤ ~150k tokens of context). If it turns out bigger, stop and comment on the issue with what remains, instead of pushing through.

@@ -123,6 +123,7 @@ export function checkContext(input: string, stateDir?: string): string {
 }
 
 // The hook passes `--once-per-session`; the demo leaves it off, so it gives its notice every time.
+// Stryker disable all: entry block, unreachable in-process
 if (import.meta.main) {
   const stateDir = process.argv.includes("--once-per-session")
     ? join(tmpdir(), "ladder-context-check")
@@ -130,3 +131,4 @@ if (import.meta.main) {
   const output = checkContext(readFileSync(0, "utf8"), stateDir);
   if (output) process.stdout.write(`${output}\n`);
 }
+// Stryker restore all

@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { NDA_CORPUS } from "./generate/ndas";
 import { type RunCorpusOptions, runCorpus } from "./generate/run-corpus";
 
+// Stryker disable next-line all: the real repo root; a test using it would write into the repo
 const REPO_ROOT = fileURLToPath(new URL("../", import.meta.url));
 
 /** Builds one corpus and returns the exit code. */
@@ -45,9 +46,11 @@ export async function runGenerate(
   return subcommand({ outRoot, plantsDir, stdout, stderr });
 }
 
+// Stryker disable all: entry block, unreachable in-process
 if (import.meta.main) {
   process.exitCode = await runGenerate(process.argv.slice(2), {
     stdout: (text) => console.log(text),
     stderr: (text) => console.error(text),
   });
 }
+// Stryker restore all
