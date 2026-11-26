@@ -1,0 +1,17 @@
+{
+  "session_id": "f1x7u4e0-0000-4000-8000-000000000028",
+  "transcript_path": "scripts/fixtures/context/transcript-160k.jsonl",
+  "cwd": "/repo",
+  "permission_mode": "auto",
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "ls"
+  },
+  "tool_response": {
+    "stdout": "",
+    "stderr": "",
+    "interrupted": false
+  },
+  "tool_use_id": "toolu_fixture"
+}

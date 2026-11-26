@@ -91,7 +91,7 @@ src/core/documents/             translation layer over data/firm
 src/core/eval/                  datasets, runner, stats, reports, review sheets
 src/usecases/01-contract-snapshot/
 src/usecases/02-intake-triage/  each: index.ts, schema.ts, prompts.ts, eval.ts
-scripts/                        check-tokens, generate (assembler)
+scripts/                        check-tokens, check-context, generate (assembler)
 data/firm/                      fake firm systems: contracts/, intake/
 data/library/                   clause-variant library (generator input)
 data/evals/<eval>/<split>/      gold cases, one JSON per case
@@ -106,5 +106,5 @@ out/  reports/                  gitignored: firm writes, eval run records, revie
 - `npm run mutate` scores ≥ 70% on the modules the ticket touched (deterministic code only).
 - Use-case tickets run their eval live with `--runs 3`, save the report as `docs/evals/<eval>-<split>.md`, and paste its table into the PR body. The README's use-case table gets one line: the verdict, linked to that report.
 - One PR per ticket, with `Closes #<n>` in its body. A human squash-merges it into `master`, which closes the issue.
-- The ticket fits one agent session (≤ ~150k tokens of context). If it turns out bigger, stop, split it, and comment on the issue instead of pushing through.
+- The ticket fits one agent session (≤ ~150k tokens of context). If it turns out bigger, stop and comment on the issue with what remains, instead of pushing through.
 - Each ticket's **Demo** commands work exactly as written.
