@@ -91,7 +91,7 @@ src/core/documents/             translation layer over data/firm
 src/core/eval/                  datasets, runner, stats, reports, review sheets
 src/usecases/01-contract-snapshot/
 src/usecases/02-intake-triage/  each: index.ts, schema.ts, prompts.ts, eval.ts
-scripts/                        check-tokens, generate (assembler)
+scripts/                        check-tokens, check-context, generate (assembler)
 data/firm/                      fake firm systems: contracts/, intake/
 data/library/                   clause-variant library (generator input)
 data/evals/<eval>/<split>/      gold cases, one JSON per case

@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 /**
  * The implementer's context check: a PostToolUse hook (`.github/factory/implement-settings.json`)
@@ -73,7 +73,7 @@ function noticeText(notice: Notice, context: number): string {
     : `Context is at ${k}k of ~150k. If the rest of the ticket won't fit, stop now and write \`blocked.md\`.`;
 }
 
-/** The notices a session has had, kept in `stateDir` so each is given at most once. */
+/** The notices a session has had, read from its state file. */
 function givenNotices(stateFile: string): Notice[] {
   try {
     return JSON.parse(readFileSync(stateFile, "utf8"));
@@ -82,11 +82,24 @@ function givenNotices(stateFile: string): Notice[] {
   }
 }
 
+/** Records `notice` as given to the session, unless it already was: true if this is its first time. */
+function claimNotice(notice: Notice, stateFile: string): boolean {
+  const given = givenNotices(stateFile);
+  if (given.includes(notice)) return false;
+  // The 150k notice supersedes the 100k one, so a session never gets the 100k one after it.
+  const nowGiven: Notice[] = notice === "over" ? ["warn", "over"] : [...given, notice];
+  mkdirSync(dirname(stateFile), { recursive: true });
+  writeFileSync(stateFile, JSON.stringify(nowGiven));
+  return true;
+}
+
 /**
  * Given a hook's JSON input, the hook's JSON output when a notice is due, or "" when not.
- * Anything it can't read means no notice: the check never breaks a run.
+ * With a `stateDir`, each notice is given at most once per session; without one (the demo),
+ * every call past a threshold gives its notice. Anything it can't read means no notice: the
+ * check never breaks a run.
  */
-export function checkContext(input: string, stateDir: string): string {
+export function checkContext(input: string, stateDir?: string): string {
   try {
     const hook: HookInput = JSON.parse(input);
     if (hook.agent_id !== undefined) return "";
@@ -94,14 +107,9 @@ export function checkContext(input: string, stateDir: string): string {
     const context = mainThreadContext(readFileSync(hook.transcript_path as string, "utf8"));
     const notice = context === undefined ? undefined : noticeDue(context);
     if (notice === undefined || context === undefined) return "";
-
-    const stateFile = join(stateDir, `${hook.session_id}.json`);
-    const given = givenNotices(stateFile);
-    if (given.includes(notice)) return "";
-    // The 150k notice supersedes the 100k one, so a session never gets the 100k one after it.
-    const nowGiven: Notice[] = notice === "over" ? ["warn", "over"] : [...given, notice];
-    mkdirSync(stateDir, { recursive: true });
-    writeFileSync(stateFile, JSON.stringify(nowGiven));
+    if (stateDir !== undefined && !claimNotice(notice, join(stateDir, `${hook.session_id}.json`))) {
+      return "";
+    }
 
     return JSON.stringify({
       hookSpecificOutput: {
@@ -114,7 +122,11 @@ export function checkContext(input: string, stateDir: string): string {
   }
 }
 
+// The hook passes `--once-per-session`; the demo leaves it off, so it gives its notice every time.
 if (import.meta.main) {
-  const output = checkContext(readFileSync(0, "utf8"), join(tmpdir(), "ladder-context-check"));
+  const stateDir = process.argv.includes("--once-per-session")
+    ? join(tmpdir(), "ladder-context-check")
+    : undefined;
+  const output = checkContext(readFileSync(0, "utf8"), stateDir);
   if (output) process.stdout.write(`${output}\n`);
 }

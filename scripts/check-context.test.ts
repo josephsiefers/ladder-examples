@@ -46,6 +46,15 @@ function transcriptAt(tokens: number): string {
   return path;
 }
 
+/** A transcript line: an assistant message using `tokens` of context. */
+function assistantEntry(isSidechain: boolean, tokens: number): string {
+  return JSON.stringify({
+    type: "assistant",
+    isSidechain,
+    message: { usage: { input_tokens: tokens } },
+  });
+}
+
 function at(tokens: number): string {
   return checkContext(hookInput(transcriptAt(tokens)), stateDir);
 }
@@ -81,8 +90,28 @@ describe("check-context", () => {
     );
   });
 
-  it("ignores subagent messages, even larger ones written after the main thread's", () => {
-    expect(checkContext(hookInput("transcript-subagent.jsonl"), stateDir)).toBe("");
+  describe("leaves subagents out", () => {
+    // As Claude Code writes them: the main thread at 60k in the session file, and the subagent
+    // it started at 120k, then 170k, in its own `subagents/agent-<id>.jsonl`.
+    it("from the main thread, ignores the subagent's larger context", () => {
+      expect(checkContext(hookInput("transcript-subagent.jsonl"), stateDir)).toBe("");
+    });
+
+    it("from within the subagent, which gets the session file as its transcript too", () => {
+      const input = hookInput("transcript-subagent.jsonl", { agent_id: "a1b2c3d4e5f6a7b8c" });
+
+      expect(checkContext(input, stateDir)).toBe("");
+    });
+
+    it("skips subagent entries found in the session file itself", () => {
+      const path = join(stateDir, "inline-sidechain.jsonl");
+      writeFileSync(
+        path,
+        [assistantEntry(false, 60_000), assistantEntry(true, 170_000)].join("\n"),
+      );
+
+      expect(checkContext(hookInput(path), stateDir)).toBe("");
+    });
   });
 
   describe("never breaks a run", () => {
@@ -112,6 +141,13 @@ describe("check-context", () => {
       check("transcript-160k.jsonl");
 
       expect(check("transcript-120k.jsonl")).toBe("");
+    });
+
+    it("unless there's nowhere to record them: then every call gives its notice", () => {
+      const input = hookInput("transcript-160k.jsonl");
+      checkContext(input);
+
+      expect(notice(checkContext(input))).toContain("over the ~150k budget");
     });
 
     it("counts each session on its own", () => {

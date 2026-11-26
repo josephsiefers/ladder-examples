@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-context.ts\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-context.ts\" --once-per-session"
           }
         ]
       }
@@ -53,7 +53,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-context.ts\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/check-context.ts\" --once-per-session"
           }
         ]
       }

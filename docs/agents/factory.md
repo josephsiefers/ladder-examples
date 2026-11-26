@@ -27,7 +27,7 @@ The Definition of done caps a ticket at one session (~150k tokens of context), b
 
 A run that stops for the budget writes a short `blocked.md`: what it built, and what of the ticket remains. It spends no tokens proposing a split; the owner splits the remainder with `/to-tickets` in a fresh session. The run's commits are not pushed.
 
-The check never breaks a run: a transcript or input it can't read means no notice, and it always exits 0. It records the notices given in `$TMPDIR/ladder-context-check/<session id>.json`, and stays silent for tool calls inside a subagent. Its fixtures (`scripts/fixtures/context/`) follow the session file Claude Code writes, which differs from the workflow's `stream-json` output: there, subagent messages are marked by `parent_tool_use_id` instead.
+The check never breaks a run: a transcript or input it can't read means no notice, and it always exits 0. The hook runs it with `--once-per-session`, which records the notices given in `$TMPDIR/ladder-context-check/<session id>.json`. Run without the flag, as in the demo, it gives a due notice every time. It stays silent for tool calls inside a subagent (the hook input has `agent_id`). Claude Code writes a subagent's messages to their own file, `<session id>/subagents/agent-<id>.jsonl`, so the session file the hook reads holds only the main thread. Its fixtures (`scripts/fixtures/context/`) follow that session file, checked against live sessions. The session file differs from the workflow's `stream-json` output, where subagent messages are marked by `parent_tool_use_id` instead.
 
 ## Secrets
 
