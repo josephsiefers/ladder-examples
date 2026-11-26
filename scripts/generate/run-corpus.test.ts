@@ -41,7 +41,7 @@ async function run(corpus: Corpus<ToySpec>, plantsDir?: string) {
   stderr = [];
   return runCorpus(corpus, {
     outRoot,
-    ...(plantsDir && { plantsDir }),
+    plantsDir,
     stdout: (text) => stdout.push(text),
     stderr: (text) => stderr.push(text),
   });

@@ -48,7 +48,7 @@ export async function runCorpus<Spec extends { split: Split }>(
   corpus: Corpus<Spec>,
   { outRoot, plantsDir, stdout, stderr }: RunCorpusOptions,
 ): Promise<number> {
-  const { specs, filesOf } = await corpus.load(plantsDir === undefined ? {} : { plantsDir });
+  const { specs, filesOf } = await corpus.load({ plantsDir });
   const rows = coverage(specs, corpus.coverage);
   stdout(renderCoverageTable(rows, corpus.coverage.minimums));
   const error = shortfall(rows, corpus.coverage.minimums);

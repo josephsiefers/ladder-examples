@@ -42,7 +42,7 @@ export async function runGenerate(
     stderr(`usage: npm run generate -- ${Object.keys(corpora).join(" | ")}`);
     return 2;
   }
-  return subcommand({ outRoot, stdout, stderr, ...(plantsDir && { plantsDir }) });
+  return subcommand({ outRoot, plantsDir, stdout, stderr });
 }
 
 if (import.meta.main) {
