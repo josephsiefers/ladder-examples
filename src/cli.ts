@@ -156,7 +156,7 @@ export function buildProgram(deps: CliDeps): Command {
     .description(
       "UC2: classify an intake document's type and name its queue; --route files it there",
     )
-    .argument("[documentId]", "intake document ID in the firm's intake, e.g. intake-hand-03")
+    .argument("[documentId]", "intake document ID at the intake desk, e.g. intake-hand-03")
     .option("--all", "triage every intake document, printing one line each")
     .option("--route", "route each document to its queue (from the routing table, not the model)")
     .action(

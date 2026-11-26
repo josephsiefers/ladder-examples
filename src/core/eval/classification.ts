@@ -6,7 +6,7 @@ export interface Prediction {
   gold: string;
   /** May be outside the classes, e.g. an error: it then counts as wrong and as unclassified. */
   predicted: string;
-  /** A case tag to group accuracy by, e.g. `clean` or `hybrid`. */
+  /** A case tag to group accuracy by, e.g. an ambiguity: `clean` or `hybrid`. */
   group?: string;
 }
 

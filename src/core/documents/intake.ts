@@ -30,7 +30,7 @@ export interface RoutingReceipt extends RoutingRecord {
   position: number;
 }
 
-/** Intent-level access to the firm's intake: list, read, and route to a queue. */
+/** The intake desk: intent-level access to intake documents. List, read, and route one to a queue. */
 export interface IntakeDesk {
   listIntake(): Promise<string[]>;
   readIntake(id: string): Promise<IntakeDocument>;

@@ -21,6 +21,7 @@ export interface TriageEvalInput {
   documentId: string;
 }
 
+/** An intake document's ambiguity: a clean document or a hybrid document (see GLOSSARY.md). */
 export const AMBIGUITIES = ["clean", "hybrid"] as const;
 
 export type Ambiguity = (typeof AMBIGUITIES)[number];
