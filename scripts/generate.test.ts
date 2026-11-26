@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { runGenerate } from "./generate";
+import { runGenerate, type Subcommand } from "./generate";
 import { WORKED_SPEC } from "./generate/generate.fixtures";
 
 const REPO = fileURLToPath(new URL("../", import.meta.url));
@@ -92,6 +92,47 @@ describe("npm run generate -- ndas", () => {
     async (argv) => {
       expect(await generate(argv)).toBe(2);
       expect(output).toEqual(["usage: npm run generate -- ndas"]);
+    },
+  );
+});
+
+describe("npm run generate -- <corpus>", () => {
+  const ran: string[] = [];
+  const corpora: Record<string, Subcommand> = {
+    async ndas() {
+      ran.push("ndas");
+      return 0;
+    },
+    async toys(options) {
+      ran.push(`toys ${options.outRoot} ${options.plantsDir}`);
+      return 3;
+    },
+  };
+
+  async function dispatch(argv: string[]) {
+    output = [];
+    ran.length = 0;
+    return runGenerate(argv, {
+      corpora,
+      outRoot: "/out",
+      plantsDir: "/plants",
+      stdout: (text) => output.push(text),
+      stderr: (text) => output.push(text),
+    });
+  }
+
+  it("runs the named subcommand with the output root and plant spec directory", async () => {
+    expect(await dispatch(["toys"])).toBe(3);
+    expect(ran).toEqual(["toys /out /plants"]);
+    expect(output).toEqual([]);
+  });
+
+  it.each([[[]], [["nope"]], [["toString"]], [["toys", "extra"]]])(
+    "names every subcommand in its usage for arguments %j",
+    async (argv) => {
+      expect(await dispatch(argv)).toBe(2);
+      expect(output).toEqual(["usage: npm run generate -- ndas | toys"]);
+      expect(ran).toEqual([]);
     },
   );
 });

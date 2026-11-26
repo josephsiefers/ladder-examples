@@ -1,67 +1,48 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { assembleNda } from "./generate/assemble";
-import { COVERAGE_MINIMUMS, coverage, renderCoverageTable } from "./generate/coverage";
-import { loadLibrary } from "./generate/library";
-import { loadPlantSpecs } from "./generate/plants";
+import { NDA_CORPUS } from "./generate/ndas";
+import { type RunCorpusOptions, runCorpus } from "./generate/run-corpus";
 
 const REPO_ROOT = fileURLToPath(new URL("../", import.meta.url));
 
-const USAGE = "usage: npm run generate -- ndas";
+/** Builds one corpus and returns the exit code. */
+export type Subcommand = (options: RunCorpusOptions) => Promise<number>;
+
+/** Every corpus the generator builds, by subcommand. */
+const CORPORA: Record<string, Subcommand> = {
+  ndas: (options) => runCorpus(NDA_CORPUS, options),
+};
 
 export interface GenerateOptions {
-  /** Where `data/firm/contracts/` and `data/evals/snapshot/<split>/` are written. */
+  /** Where the generated files are written, e.g. `data/firm/contracts/`. Defaults to the repo root. */
   outRoot?: string;
+  /** Replaces the corpus's plant spec directory. */
   plantsDir?: string;
+  /** The subcommands; defaults to every corpus. */
+  corpora?: Record<string, Subcommand>;
   stdout: (text: string) => void;
   stderr: (text: string) => void;
 }
 
 /**
- * `generate ndas`: builds every plant spec's NDA into the fake firm and its gold case into the
- * snapshot eval, after checking the coverage minimums. Returns the exit code.
+ * `generate <corpus>`: builds the named corpus (see `CORPORA`), after checking its coverage
+ * minimums. `generate ndas` builds every plant spec's NDA into the fake firm and its gold case into
+ * the snapshot eval. Returns the exit code.
  */
 export async function runGenerate(
   argv: readonly string[],
   options: GenerateOptions,
 ): Promise<number> {
-  const { outRoot = REPO_ROOT, stdout, stderr } = options;
-  if (argv.length !== 1 || argv[0] !== "ndas") {
-    stderr(USAGE);
+  const { outRoot = REPO_ROOT, corpora = CORPORA, plantsDir, stdout, stderr } = options;
+  const [name] = argv;
+  const subcommand =
+    argv.length === 1 && name !== undefined && Object.hasOwn(corpora, name)
+      ? corpora[name]
+      : undefined;
+  if (subcommand === undefined) {
+    stderr(`usage: npm run generate -- ${Object.keys(corpora).join(" | ")}`);
     return 2;
   }
-  const [library, specs] = await Promise.all([loadLibrary(), loadPlantSpecs(options.plantsDir)]);
-  const rows = coverage(specs);
-  stdout(renderCoverageTable(rows));
-  const short = rows.filter(({ met }) => !met);
-  if (short.length > 0) {
-    stderr(
-      `error: coverage minimums not met (${COVERAGE_MINIMUMS.dev} in dev, ${COVERAGE_MINIMUMS.test} in test) for ${short.length} plant(s); add or change plant specs.`,
-    );
-    return 1;
-  }
-
-  const files = specs.flatMap((spec) => {
-    const nda = assembleNda(spec, library);
-    return [
-      { path: join("data/firm/contracts", `${nda.contractId}.md`), content: nda.markdown },
-      {
-        path: join("data/evals/snapshot", nda.split, `${nda.contractId}.json`),
-        content: `${JSON.stringify(nda.goldCase, null, 2)}\n`,
-      },
-    ];
-  });
-  for (const { path, content } of files) {
-    const target = join(outRoot, path);
-    await mkdir(dirname(target), { recursive: true });
-    await writeFile(target, content);
-  }
-  const count = (split: string) => specs.filter((spec) => spec.split === split).length;
-  stdout(
-    `\nWrote ${specs.length} NDAs (${count("dev")} dev, ${count("test")} test) and their gold cases.`,
-  );
-  return 0;
+  return subcommand({ outRoot, stdout, stderr, ...(plantsDir && { plantsDir }) });
 }
 
 if (import.meta.main) {

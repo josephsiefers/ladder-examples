@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import type { Contract } from "../../src/core/documents";
 import { assembleNda } from "./assemble";
 import { jurisdictionsNamed, TIME_WORDS } from "./corpus.fixtures";
-import { coverage, PLANTS } from "./coverage";
+import { coverage } from "./coverage";
 import { readAsFirmContract } from "./generate.fixtures";
 import { loadLibrary } from "./library";
+import { NDA_COVERAGE, PLANTS } from "./nda-plants";
 import { loadPlantSpecs } from "./plants";
 
 const library = await loadLibrary();
@@ -48,7 +49,7 @@ describe("the generated NDA corpus", () => {
   });
 
   it("meets every plant's coverage minimum: 2 in dev, 1 in test", () => {
-    const rows = coverage(specs);
+    const rows = coverage(specs, NDA_COVERAGE);
     expect(rows.map(({ plant }) => plant)).toEqual([...PLANTS]);
     expect(rows.filter(({ dev, test }) => dev < 2 || test < 1)).toEqual([]);
   });
