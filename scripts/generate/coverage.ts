@@ -9,6 +9,8 @@ export interface CoverageMinimums {
 
 /** What a corpus must cover: its plants, the plants one spec carries, and the minimums. */
 export interface CoveragePlan<Spec extends { split: Split }> {
+  /** The coverage table's first column heading, e.g. "Plant". */
+  label: string;
   plants: readonly string[];
   plantsOf(spec: Spec): readonly string[];
   minimums: CoverageMinimums;
@@ -36,13 +38,13 @@ export function coverage<Spec extends { split: Split }>(
   });
 }
 
-/** The coverage table as Markdown, with the minimums in the header. */
+/** The coverage table as Markdown, under the plan's label, with its minimums in the header. */
 export function renderCoverageTable(
   rows: readonly CoverageRow[],
-  minimums: CoverageMinimums,
+  { minimums, label }: Pick<CoveragePlan<never>, "minimums" | "label">,
 ): string {
   return [
-    `| Plant | Dev (min ${minimums.dev}) | Test (min ${minimums.test}) | |`,
+    `| ${label} | Dev (min ${minimums.dev}) | Test (min ${minimums.test}) | |`,
     "|---|---:|---:|---|",
     ...rows.map(
       ({ plant, dev, test, met }) => `| ${plant} | ${dev} | ${test} | ${met ? "ok" : "SHORT"} |`,

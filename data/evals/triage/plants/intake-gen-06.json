@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-06",
+  "split": "test",
+  "seed": 2042,
+  "docType": "sow",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "sow",
+    "parties": [
+      {
+        "name": "Ostler Consulting LLP",
+        "short": "Ostler"
+      },
+      {
+        "name": "Wrenfield Foods Limited",
+        "short": "Wrenfield"
+      }
+    ]
+  },
+  "ingredients": []
+}

@@ -41,8 +41,9 @@ export interface RunCorpusOptions {
 }
 
 /**
- * Builds a corpus: prints its coverage table, and unless a plant falls short of its minimums,
- * writes every file under the output root and prints what it wrote. Returns the exit code.
+ * Builds a corpus: prints its coverage table, and unless a plant falls short of its minimums or a
+ * spec cannot be built, writes every file under the output root and prints what it wrote. Nothing
+ * is written unless every spec builds. Returns the exit code.
  */
 export async function runCorpus<Spec extends { split: Split }>(
   corpus: Corpus<Spec>,
@@ -50,14 +51,21 @@ export async function runCorpus<Spec extends { split: Split }>(
 ): Promise<number> {
   const { specs, filesOf } = await corpus.load({ plantsDir });
   const rows = coverage(specs, corpus.coverage);
-  stdout(renderCoverageTable(rows, corpus.coverage.minimums));
+  stdout(renderCoverageTable(rows, corpus.coverage));
   const error = shortfall(rows, corpus.coverage.minimums);
   if (error !== undefined) {
     stderr(error);
     return 1;
   }
 
-  for (const { path, content } of specs.flatMap(filesOf)) {
+  let files: GeneratedFile[];
+  try {
+    files = specs.flatMap(filesOf);
+  } catch (failure) {
+    stderr(`error: ${failure instanceof Error ? failure.message : String(failure)}`);
+    return 1;
+  }
+  for (const { path, content } of files) {
     const target = join(outRoot, path);
     await mkdir(dirname(target), { recursive: true });
     await writeFile(target, content);

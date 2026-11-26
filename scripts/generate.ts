@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { INTAKE_CORPUS } from "./generate/intake/corpus";
 import { NDA_CORPUS } from "./generate/ndas";
 import { type RunCorpusOptions, runCorpus } from "./generate/run-corpus";
 
@@ -11,6 +12,7 @@ export type Subcommand = (options: RunCorpusOptions) => Promise<number>;
 /** Every corpus the generator builds, by subcommand. */
 const CORPORA: Record<string, Subcommand> = {
   ndas: (options) => runCorpus(NDA_CORPUS, options),
+  intake: (options) => runCorpus(INTAKE_CORPUS, options),
 };
 
 export interface GenerateOptions {
@@ -27,7 +29,8 @@ export interface GenerateOptions {
 /**
  * `generate <corpus>`: builds the named corpus (see `CORPORA`), after checking its coverage
  * minimums. `generate ndas` builds every plant spec's NDA into the fake firm and its gold case into
- * the snapshot eval. Returns the exit code.
+ * the snapshot eval; `generate intake` builds every intake document into the firm's intake desk and
+ * its gold case into the triage eval. Returns the exit code.
  */
 export async function runGenerate(
   argv: readonly string[],
