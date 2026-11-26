@@ -2,13 +2,13 @@
 
 ## 1. Background
 
-1.1 Ashby (the "Customer") engages Quarrelle (the "Supplier") to carry out the project described below, on the terms of the master services agreement already in force between Ashby Cold Chain Ltd and Quarrelle Systems Limited.
+1.1 Ashby Cold Chain Ltd (the "Customer") engages Quarrelle Systems Limited (the "Supplier") to carry out the project described below, on the terms of the master services agreement already in force between them.
 
 1.2 This document is a statement of work under that agreement. It orders the implementation of the Supplier's warehouse management system at the Customer's distribution centre, and records the work, deliverables, milestones and fees for that project.
 
 ## 2. Scope of Work
 
-2.1 The Supplier shall configure its warehouse management system for the Customer's distribution centre, integrate it with the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.
+2.1 The Supplier shall configure its warehouse management system for the Customer's distribution centre, build an interface between it and the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.
 
 2.2 Hardware, network changes at the distribution centre, and changes to the Customer's order management system are outside the scope of this Statement of Work.
 
@@ -22,7 +22,7 @@
 
 ## 5. Acceptance
 
-5.1 The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is achieved when the Customer accepts its deliverable.
+5.1 The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is accepted when the Customer accepts every deliverable due at it.
 
 ## 6. Fees and Payment
 
@@ -32,11 +32,11 @@
 
 ## 7. Customer Responsibilities
 
-7.1 The Customer shall name a project lead with authority to make decisions, provide an extract of its current stock records in the agreed format by the end of week six, and make the scanners and printers available at the distribution centre before testing starts.
+7.1 The Customer shall take any decision the Supplier needs within five working days of being asked, provide an extract of its current stock records in a format the Supplier specifies by the end of week six, and install at the distribution centre the scanners, label printers and other hardware the system needs before testing starts.
 
 ## 8. Project Governance
 
-8.1 The Supplier's project manager shall send the Customer's project lead a progress report every two weeks, covering work done, the status of each milestone, open risks and the days used. Either side may call a meeting on two days' notice to deal with a problem.
+8.1 Each party shall name a project manager. The Supplier's project manager shall send the Customer's project manager a progress report every two weeks, covering work done, the status of each milestone and open risks. Either side may call a meeting on two days' notice to deal with a problem.
 
 ## 9. Changes and Term
 

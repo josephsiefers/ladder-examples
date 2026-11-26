@@ -77,11 +77,32 @@ describe("assembleIntake refuses", () => {
 
   it("a library kind or contract that does not exist", () => {
     expect(() =>
-      assemble({ ...MSA_SPEC, base: { ...MSA_SPEC.base, name: "lease" } } as IntakePlantSpec),
+      assemble({ ...MSA_SPEC, base: { ...MSA_SPEC.base, kind: "lease" } } as IntakePlantSpec),
     ).toThrow("intake-x1: no kind lease in the intake library.");
     expect(() =>
-      assemble({ ...NDA_SPEC, base: { kind: "nda-copy", contractId: "nda-x" } }),
+      assemble({ ...NDA_SPEC, base: { source: "nda-copy", contractId: "nda-x" } }),
     ).toThrow("intake-x2: no contract nda-x to copy.");
+  });
+
+  it("a contract with no section 2, where UC1 defines confidential information", () => {
+    const opening = NDA_SOURCE.slice(0, NDA_SOURCE.indexOf("## 2."));
+    const contracts = new Map([["nda-src", opening]]);
+    expect(() => assembleIntake(NDA_SPEC, LIBRARY, contracts)).toThrow(
+      "intake-x2: contract nda-src has no section 2 to cite.",
+    );
+  });
+
+  it("a library variant with an unknown placeholder, naming its kind", () => {
+    const msa = LIBRARY.kinds.msa;
+    if (msa === undefined) throw new Error("the fixture library has an MSA");
+    const sections = msa.sections.map((section) => ({
+      ...section,
+      variants: section.variants.map(() => ["Payable by {{payer}}."]),
+    }));
+    const library = { kinds: { msa: { ...msa, sections } } };
+    expect(() => assembleIntake(MSA_SPEC, library, CONTRACTS)).toThrow(
+      "Template 'intake/msa': unknown placeholder {{payer}}.",
+    );
   });
 
   it("ingredients, which the intake library has none of yet", () => {

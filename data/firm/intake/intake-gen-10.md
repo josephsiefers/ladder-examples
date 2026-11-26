@@ -20,7 +20,7 @@
 
 ## 4. Personnel
 
-4.1 The Supplier shall name a delivery manager for each statement of work, who shall be the Customer's day-to-day contact. The Supplier shall not replace a named key person without the Customer's prior consent, which shall not be unreasonably withheld.
+4.1 The Supplier shall name a delivery manager for each statement of work, who shall be the Customer's day-to-day contact. The Supplier shall not replace the delivery manager, or any other key person named in a statement of work, without the Customer's prior consent, which shall not be unreasonably withheld.
 
 ## 5. Fees and Payment
 
@@ -34,7 +34,7 @@
 
 ## 7. Liability
 
-7.1 Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each contract year is limited to the fees paid or payable in that year under all statements of work, and neither party is liable for indirect or consequential loss.
+7.1 Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each twelve-month period from the date this agreement starts is limited to the fees paid or payable in that period under all statements of work, and neither party is liable for indirect or consequential loss.
 
 ## 8. Term and Termination
 

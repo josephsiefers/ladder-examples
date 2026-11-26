@@ -4,8 +4,8 @@
   "openingHeading": "Parties and Background",
   "openings": [
     [
-      "This Master Services Agreement is made between {{first}} (the \"Supplier\") and {{second}} (the \"Customer\").",
-      "The Supplier provides technology consulting, implementation and support services. This agreement sets out the general terms on which the Supplier will provide services to the Customer from time to time. Each engagement will be described in a statement of work signed by both parties, and each statement of work forms a separate contract incorporating these terms."
+      "This agreement is made between {{first}} (the \"Supplier\") and {{second}} (the \"Customer\").",
+      "The Supplier provides technology consulting, implementation and support services. This agreement sets out the master terms on which the Supplier will provide services to the Customer from time to time. Each engagement will be described in a statement of work signed by both parties, and each statement of work forms a separate contract incorporating these terms."
     ],
     [
       "This agreement is entered into by {{second}} (\"{{secondShort}}\" or the \"Customer\") and {{first}} (\"{{firstShort}}\" or the \"Supplier\").",
@@ -43,7 +43,7 @@
       "heading": "Personnel",
       "variants": [
         [
-          "The Supplier shall name a delivery manager for each statement of work, who shall be the Customer's day-to-day contact. The Supplier shall not replace a named key person without the Customer's prior consent, which shall not be unreasonably withheld."
+          "The Supplier shall name a delivery manager for each statement of work, who shall be the Customer's day-to-day contact. The Supplier shall not replace the delivery manager, or any other key person named in a statement of work, without the Customer's prior consent, which shall not be unreasonably withheld."
         ],
         [
           "The Supplier remains responsible for the acts and omissions of its personnel and subcontractors. It may subcontract services only with the Customer's prior written consent, and shall remove from the services any individual the Customer reasonably objects to."
@@ -59,7 +59,7 @@
         ],
         [
           "Fees are charged on a time and materials basis at the rates in the relevant statement of work, unless it states a fixed price. Invoices are payable within thirty days of receipt.",
-          "The Supplier may increase its rates once in each contract year by no more than the increase in the Consumer Prices Index, on sixty days' written notice. An increase does not apply to a fixed price already agreed."
+          "The Supplier may increase its rates once in each twelve-month period from the date this agreement starts, by no more than the increase in the Consumer Prices Index, on sixty days' written notice. An increase does not apply to a fixed price already agreed."
         ]
       ]
     },
@@ -78,7 +78,7 @@
       "heading": "Liability",
       "variants": [
         [
-          "Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each contract year is limited to the fees paid or payable in that year under all statements of work, and neither party is liable for indirect or consequential loss."
+          "Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each twelve-month period from the date this agreement starts is limited to the fees paid or payable in that period under all statements of work, and neither party is liable for indirect or consequential loss."
         ],
         [
           "Neither party is liable for any indirect or consequential loss, or for loss of profit. Each party's aggregate liability under this agreement is capped at one hundred and twenty-five per cent of the fees paid in the twelve months before the claim, save for liability that cannot be limited by law."
@@ -105,7 +105,7 @@
           "This agreement, together with each statement of work, is the entire agreement between the parties about its subject matter. Any variation must be in writing and signed by both parties. This agreement is governed by the laws of England and Wales."
         ],
         [
-          "Neither party may assign this agreement without the other's written consent. Notices must be in writing and sent to the addresses stated in the relevant statement of work. This agreement is governed by the laws of England and Wales, and its courts have exclusive jurisdiction."
+          "Neither party may assign this agreement without the other's written consent. Notices must be in writing and sent to the receiving party's registered office. This agreement is governed by the laws of England and Wales, and its courts have exclusive jurisdiction."
         ]
       ]
     }

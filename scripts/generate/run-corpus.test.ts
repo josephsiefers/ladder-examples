@@ -19,7 +19,12 @@ const SPECS: ToySpec[] = [
 function toyCorpus(specs: ToySpec[], seen: { plantsDir?: string } = {}): Corpus<ToySpec> {
   return {
     noun: "toys",
-    coverage: { plants: ["p"], plantsOf: (spec) => spec.plants, minimums: { dev: 2, test: 1 } },
+    coverage: {
+      label: "Plant",
+      plants: ["p"],
+      plantsOf: (spec) => spec.plants,
+      minimums: { dev: 2, test: 1 },
+    },
     async load({ plantsDir }) {
       seen.plantsDir = plantsDir;
       return {

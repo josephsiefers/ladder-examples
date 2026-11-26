@@ -20,7 +20,7 @@
 
 ## 4. Personnel
 
-4.1 The Supplier shall name a delivery manager for each statement of work, who shall be the Customer's day-to-day contact. The Supplier shall not replace a named key person without the Customer's prior consent, which shall not be unreasonably withheld.
+4.1 The Supplier shall name a delivery manager for each statement of work, who shall be the Customer's day-to-day contact. The Supplier shall not replace the delivery manager, or any other key person named in a statement of work, without the Customer's prior consent, which shall not be unreasonably withheld.
 
 ## 5. Fees and Payment
 
@@ -44,4 +44,4 @@
 
 ## 9. General
 
-9.1 Neither party may assign this agreement without the other's written consent. Notices must be in writing and sent to the addresses stated in the relevant statement of work. This agreement is governed by the laws of England and Wales, and its courts have exclusive jurisdiction.
+9.1 Neither party may assign this agreement without the other's written consent. Notices must be in writing and sent to the receiving party's registered office. This agreement is governed by the laws of England and Wales, and its courts have exclusive jurisdiction.

@@ -11,8 +11,6 @@ const LIBRARY_ROOT = fileURLToPath(new URL("../../../data/library/intake/", impo
 /** Paragraphs with `{{placeholders}}`: `first`, `firstShort`, `second`, `secondShort`. */
 const template = z.array(z.string().min(1)).min(1);
 
-export type Template = z.infer<typeof template>;
-
 /** At least two of each, so the seed has a real choice. */
 const variants = <T extends z.ZodType>(item: T) => z.array(item).min(2);
 

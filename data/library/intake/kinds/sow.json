@@ -4,11 +4,11 @@
   "openingHeading": "Background",
   "openings": [
     [
-      "This Statement of Work is issued under the Master Services Agreement between {{first}} (the \"Supplier\") and {{second}} (the \"Customer\"), and incorporates its terms.",
+      "This Statement of Work is issued under the master services agreement between {{first}} (the \"Supplier\") and {{second}} (the \"Customer\"), and incorporates its terms.",
       "This Statement of Work describes one project: the Supplier will implement its warehouse management system at the Customer's distribution centre. It sets out the scope, the deliverables, the timetable, the fees and the responsibilities of each party for that project only."
     ],
     [
-      "{{secondShort}} (the \"Customer\") engages {{firstShort}} (the \"Supplier\") to carry out the project described below, on the terms of the master services agreement already in force between {{second}} and {{first}}.",
+      "{{second}} (the \"Customer\") engages {{first}} (the \"Supplier\") to carry out the project described below, on the terms of the master services agreement already in force between them.",
       "This document is a statement of work under that agreement. It orders the implementation of the Supplier's warehouse management system at the Customer's distribution centre, and records the work, deliverables, milestones and fees for that project."
     ]
   ],
@@ -17,7 +17,7 @@
       "heading": "Scope of Work",
       "variants": [
         [
-          "The Supplier shall configure its warehouse management system for the Customer's distribution centre, integrate it with the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.",
+          "The Supplier shall configure its warehouse management system for the Customer's distribution centre, build an interface between it and the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.",
           "Hardware, network changes at the distribution centre, and changes to the Customer's order management system are outside the scope of this Statement of Work."
         ],
         [
@@ -41,8 +41,8 @@
       "heading": "Timetable and Milestones",
       "variants": [
         [
-          "The project has three milestones. Milestone 1 is delivery of the design specification, four weeks after the start date. Milestone 2 is delivery of the configured system for testing, twelve weeks after the start date. Milestone 3 is go-live and delivery of the training and handover pack, sixteen weeks after the start date.",
-          "The start date is the first working day after both parties sign this Statement of Work."
+          "The start date is the first working day after both parties sign this Statement of Work.",
+          "The project has three milestones. Milestone 1 is delivery of the design specification, four weeks after the start date. Milestone 2 is delivery of the configured system for testing, twelve weeks after the start date. Milestone 3 is go-live and delivery of the training and handover pack, sixteen weeks after the start date."
         ],
         [
           "Work starts on the first working day after this Statement of Work is signed. The Supplier shall deliver the design specification by the end of week four (Milestone 1), the configured system for testing by the end of week twelve (Milestone 2), and go-live with the training and handover pack by the end of week sixteen (Milestone 3)."
@@ -53,10 +53,10 @@
       "heading": "Acceptance",
       "variants": [
         [
-          "The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is achieved when the Customer accepts its deliverable."
+          "The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is accepted when the Customer accepts every deliverable due at it."
         ],
         [
-          "Each deliverable is accepted when the Customer signs an acceptance certificate for it, or ten working days after delivery if the Customer has not by then notified any material defect. The Supplier shall fix any notified defect promptly, and the same acceptance process then applies again."
+          "Each deliverable is accepted when the Customer signs an acceptance certificate for it, or ten working days after delivery if the Customer has not by then notified any material defect. The Supplier shall fix any notified defect promptly, and the same acceptance process then applies again. A milestone is accepted when every deliverable due at it is accepted."
         ]
       ]
     },
@@ -80,7 +80,7 @@
           "The Customer shall give the Supplier's consultants access to the distribution centre during working hours, provide test data and a test environment for its order management system, and make its warehouse supervisors available for workshops and training. The Supplier is not responsible for any delay caused by the Customer's failure to do so."
         ],
         [
-          "The Customer shall name a project lead with authority to make decisions, provide an extract of its current stock records in the agreed format by the end of week six, and make the scanners and printers available at the distribution centre before testing starts."
+          "The Customer shall take any decision the Supplier needs within five working days of being asked, provide an extract of its current stock records in a format the Supplier specifies by the end of week six, and install at the distribution centre the scanners, label printers and other hardware the system needs before testing starts."
         ]
       ]
     },
@@ -91,7 +91,7 @@
           "Each party shall appoint a project manager. The project managers shall meet weekly to review progress against the milestones, record risks and agree actions, and the Supplier shall circulate a short written report after each meeting."
         ],
         [
-          "The Supplier's project manager shall send the Customer's project lead a progress report every two weeks, covering work done, the status of each milestone, open risks and the days used. Either side may call a meeting on two days' notice to deal with a problem."
+          "Each party shall name a project manager. The Supplier's project manager shall send the Customer's project manager a progress report every two weeks, covering work done, the status of each milestone and open risks. Either side may call a meeting on two days' notice to deal with a problem."
         ]
       ]
     },
@@ -99,7 +99,7 @@
       "heading": "Changes and Term",
       "variants": [
         [
-          "Any change to the scope, deliverables, timetable or fees of this Statement of Work must be agreed in a written change note signed by both parties. This Statement of Work ends when the Customer accepts Milestone 3, unless it is terminated earlier under the master services agreement."
+          "Any change to the scope, deliverables, timetable or fees of this Statement of Work must be agreed in a written change note signed by both parties. This Statement of Work ends when Milestone 3 is accepted, unless it is terminated earlier under the master services agreement."
         ],
         [
           "Either party may propose a change to this project in writing; the Supplier shall state its effect on the timetable and fees, and no change applies until both parties sign it. This Statement of Work expires on completion of the project, and its terms otherwise follow the master services agreement."

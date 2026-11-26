@@ -33,8 +33,8 @@ export const MSA_SPEC: IntakePlantSpec = {
   docType: "msa",
   ambiguity: "clean",
   base: {
-    kind: "library",
-    name: "msa",
+    source: "library",
+    kind: "msa",
     parties: [
       { name: "Corvane Systems Limited", short: "Corvane" },
       { name: "Fennick Logistics plc", short: "Fennick" },
@@ -50,7 +50,7 @@ export const NDA_SPEC: IntakePlantSpec = {
   seed: 5,
   docType: "nda",
   ambiguity: "clean",
-  base: { kind: "nda-copy", contractId: "nda-src" },
+  base: { source: "nda-copy", contractId: "nda-src" },
   ingredients: [],
 };
 

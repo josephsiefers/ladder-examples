@@ -5,8 +5,8 @@
   "docType": "sow",
   "ambiguity": "clean",
   "base": {
-    "kind": "library",
-    "name": "sow",
+    "source": "library",
+    "kind": "sow",
     "parties": [
       {
         "name": "Quarrelle Systems Limited",

@@ -26,7 +26,7 @@
 
 5.1 Fees are charged on a time and materials basis at the rates in the relevant statement of work, unless it states a fixed price. Invoices are payable within thirty days of receipt.
 
-5.2 The Supplier may increase its rates once in each contract year by no more than the increase in the Consumer Prices Index, on sixty days' written notice. An increase does not apply to a fixed price already agreed.
+5.2 The Supplier may increase its rates once in each twelve-month period from the date this agreement starts, by no more than the increase in the Consumer Prices Index, on sixty days' written notice. An increase does not apply to a fixed price already agreed.
 
 ## 6. Intellectual Property
 
@@ -34,7 +34,7 @@
 
 ## 7. Liability
 
-7.1 Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each contract year is limited to the fees paid or payable in that year under all statements of work, and neither party is liable for indirect or consequential loss.
+7.1 Neither party limits its liability for death or personal injury caused by negligence, or for fraud. Subject to that, each party's total liability in each twelve-month period from the date this agreement starts is limited to the fees paid or payable in that period under all statements of work, and neither party is liable for indirect or consequential loss.
 
 ## 8. Term and Termination
 
@@ -44,4 +44,4 @@
 
 ## 9. General
 
-9.1 Neither party may assign this agreement without the other's written consent. Notices must be in writing and sent to the addresses stated in the relevant statement of work. This agreement is governed by the laws of England and Wales, and its courts have exclusive jurisdiction.
+9.1 Neither party may assign this agreement without the other's written consent. Notices must be in writing and sent to the receiving party's registered office. This agreement is governed by the laws of England and Wales, and its courts have exclusive jurisdiction.

@@ -51,6 +51,7 @@ export function plantsOf(spec: PlantSpec): Plant[] {
 
 /** What the NDA corpus must cover. */
 export const NDA_COVERAGE: CoveragePlan<PlantSpec> = {
+  label: "Plant",
   plants: PLANTS,
   plantsOf,
   minimums: COVERAGE_MINIMUMS,

@@ -1,29 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
-import { DOC_TYPES } from "../../../src/core/documents";
+import { DOC_TYPES, TITLE_EVIDENCE } from "../../../src/core/documents";
 import { coverage } from "../coverage";
 import { assembleIntake } from "./assemble";
-import { INTAKE_CORPUS, INTAKE_COVERAGE } from "./corpus";
+import { INTAKE_CORPUS, INTAKE_COVERAGE, loadCopiedContracts } from "./corpus";
 import { readAsIntake } from "./intake.fixtures";
 import { loadIntakeLibrary } from "./library";
+import type { IntakePlantSpec } from "./spec";
 
 const { specs, filesOf } = await INTAKE_CORPUS.load({});
 const library = await loadIntakeLibrary();
-const contractUrl = (id: string) =>
-  new URL(`../../../data/firm/contracts/${id}.md`, import.meta.url);
-const contracts = new Map(
-  await Promise.all(
-    specs.flatMap(({ base }) =>
-      base.kind === "nda-copy"
-        ? [
-            readFile(contractUrl(base.contractId), "utf8").then(
-              (text) => [base.contractId, text] as const,
-            ),
-          ]
-        : [],
-    ),
-  ),
-);
+const contracts = await loadCopiedContracts(specs);
 const built = await Promise.all(
   specs.map(async (spec) => {
     const intake = assembleIntake(spec, library, contracts);
@@ -44,11 +31,13 @@ describe("the committed intake corpus", () => {
   });
 
   it("copies each NDA byte for byte from UC1's corpus", async () => {
-    const copies = built.filter(({ spec }) => spec.base.kind === "nda-copy");
+    const copies = built.flatMap(({ spec: { base }, intake }) =>
+      base.source === "nda-copy" ? [{ contractId: base.contractId, intake }] : [],
+    );
     expect(copies.length).toBeGreaterThan(0);
-    for (const { spec, intake } of copies) {
-      const contractId = spec.base.kind === "nda-copy" ? spec.base.contractId : "";
-      expect(intake.markdown).toBe(await readFile(contractUrl(contractId), "utf8"));
+    for (const { contractId, intake } of copies) {
+      const source = new URL(`../../../data/firm/contracts/${contractId}.md`, import.meta.url);
+      expect(intake.markdown).toBe(await readFile(source, "utf8"));
     }
   });
 
@@ -56,20 +45,27 @@ describe("the committed intake corpus", () => {
     for (const { intake, document } of built) {
       const [title, ...ids] = intake.goldCase.evidence.docType;
       const known = document.paragraphs.flatMap(({ id }) => (id === undefined ? [] : [id]));
-      expect(title).toBe("title");
+      expect(title).toBe(TITLE_EVIDENCE);
       expect(ids.length).toBeGreaterThan(0);
       expect(known).toEqual(expect.arrayContaining(ids));
     }
   });
 
   it("assembles each library document to 1–2 pages", () => {
-    for (const { spec, document } of built.filter((entry) => entry.spec.base.kind === "library")) {
+    for (const { spec, document } of built.filter(
+      (entry) => entry.spec.base.source === "library",
+    )) {
       const count = words(document.paragraphs);
       expect({ id: spec.id, inRange: count >= 400 && count <= 900 }).toEqual({
         id: spec.id,
         inRange: true,
       });
     }
+  });
+
+  it("leaves out a contract to copy that UC1's corpus does not have", async () => {
+    const missing = { ...specs[0], base: { source: "nda-copy", contractId: "nda-missing" } };
+    expect(await loadCopiedContracts([missing as IntakePlantSpec])).toEqual(new Map());
   });
 
   it("gives no document an ID that names a document type", () => {

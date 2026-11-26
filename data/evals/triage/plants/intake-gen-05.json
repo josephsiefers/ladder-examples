@@ -5,7 +5,7 @@
   "docType": "nda",
   "ambiguity": "clean",
   "base": {
-    "kind": "nda-copy",
+    "source": "nda-copy",
     "contractId": "nda-gen-06"
   },
   "ingredients": []

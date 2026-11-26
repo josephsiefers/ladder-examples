@@ -2,13 +2,13 @@
 
 ## 1. Background
 
-1.1 This Statement of Work is issued under the Master Services Agreement between Ostler Consulting LLP (the "Supplier") and Wrenfield Foods Limited (the "Customer"), and incorporates its terms.
+1.1 This Statement of Work is issued under the master services agreement between Ostler Consulting LLP (the "Supplier") and Wrenfield Foods Limited (the "Customer"), and incorporates its terms.
 
 1.2 This Statement of Work describes one project: the Supplier will implement its warehouse management system at the Customer's distribution centre. It sets out the scope, the deliverables, the timetable, the fees and the responsibilities of each party for that project only.
 
 ## 2. Scope of Work
 
-2.1 The Supplier shall configure its warehouse management system for the Customer's distribution centre, integrate it with the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.
+2.1 The Supplier shall configure its warehouse management system for the Customer's distribution centre, build an interface between it and the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.
 
 2.2 Hardware, network changes at the distribution centre, and changes to the Customer's order management system are outside the scope of this Statement of Work.
 
@@ -22,7 +22,7 @@
 
 ## 5. Acceptance
 
-5.1 The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is achieved when the Customer accepts its deliverable.
+5.1 The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is accepted when the Customer accepts every deliverable due at it.
 
 ## 6. Fees and Payment
 
@@ -40,4 +40,4 @@
 
 ## 9. Changes and Term
 
-9.1 Any change to the scope, deliverables, timetable or fees of this Statement of Work must be agreed in a written change note signed by both parties. This Statement of Work ends when the Customer accepts Milestone 3, unless it is terminated earlier under the master services agreement.
+9.1 Any change to the scope, deliverables, timetable or fees of this Statement of Work must be agreed in a written change note signed by both parties. This Statement of Work ends when Milestone 3 is accepted, unless it is terminated earlier under the master services agreement.

@@ -75,7 +75,14 @@ describe("ladder triage", () => {
 
     const ids = await deps.documents.listIntake();
     expect(out.map((line) => line.split(" · ")[0])).toEqual(ids);
-    expect(out.every((line) => / · routed \(position \d+\)$/.test(line))).toBe(true);
+    // Each queue fills from position 1, one place per document routed to it, in listing order.
+    const filled = new Map<string, number>();
+    for (const line of out) {
+      const [, queue = "", position] = /→ (\S+) · routed \(position (\d+)\)$/.exec(line) ?? [];
+      const next = (filled.get(queue) ?? 0) + 1;
+      expect({ line, position: Number(position) }).toEqual({ line, position: next });
+      filled.set(queue, next);
+    }
     expect(out.filter((line) => line.startsWith("intake-hand-"))).toEqual([
       expect.stringMatching(/^intake-hand-01 · nda → nda-review · routed/),
       expect.stringMatching(/^intake-hand-02 · msa → commercial · routed/),

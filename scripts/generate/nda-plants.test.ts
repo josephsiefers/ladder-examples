@@ -79,7 +79,7 @@ describe("NDA coverage", () => {
   });
 
   it("renders the table with the minimums in the header", () => {
-    const table = renderCoverageTable(coverage([WORKED_SPEC], NDA_COVERAGE), NDA_COVERAGE.minimums);
+    const table = renderCoverageTable(coverage([WORKED_SPEC], NDA_COVERAGE), NDA_COVERAGE);
     expect(table.split("\n").slice(0, 3)).toEqual([
       "| Plant | Dev (min 2) | Test (min 1) | |",
       "|---|---:|---:|---|",

@@ -35,4 +35,18 @@ describe("loadIntakeLibrary", () => {
     expect(kinds.msa?.docType).toBe("msa");
     expect(kinds.sow?.docType).toBe("sow");
   });
+
+  it("names, in the committed openings, only titles that every title of the kind shares", async () => {
+    // The seed picks the title and the opening independently, so an opening may name only what
+    // every title shares: an MSA titled "Framework Services Agreement" must not open "This Master
+    // Services Agreement".
+    const { kinds } = await loadIntakeLibrary();
+    for (const [name, { titles, openings }] of Object.entries(kinds)) {
+      const named = openings
+        .flat()
+        .flatMap((text) => titles.filter((title) => text.includes(title)));
+      const unshared = named.filter((title) => !titles.every((other) => other.includes(title)));
+      expect({ name, unshared }).toEqual({ name, unshared: [] });
+    }
+  });
 });

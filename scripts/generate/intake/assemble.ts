@@ -1,4 +1,4 @@
-import { type DocType, TITLE_EVIDENCE } from "../../../src/core/documents";
+import { parseContract, TITLE_EVIDENCE } from "../../../src/core/documents";
 import { createRng } from "../rng";
 import { fillTemplate } from "../template";
 import type { IntakeLibrary, Kind } from "./library";
@@ -12,7 +12,7 @@ export interface GeneratedIntake {
   goldCase: IntakeGoldCase;
 }
 
-type LibraryBase = Extract<IntakePlantSpec["base"], { kind: "library" }>;
+type LibraryBase = Extract<IntakePlantSpec["base"], { source: "library" }>;
 
 /**
  * Builds one intake document from its plant spec, and its gold case with it. A library base is
@@ -29,26 +29,22 @@ export function assembleIntake(
     throw new Error(`${spec.id}: ${message}`);
   };
   const { base } = spec;
-  const built =
-    base.kind === "library"
-      ? fromKind(
-          library.kinds[base.name] ?? fail(`no kind ${base.name} in the intake library.`),
-          base,
-          spec.seed,
-        )
-      : {
-          docType: "nda" as const,
-          assemble: () =>
-            copyNda(
-              contracts.get(base.contractId) ?? fail(`no contract ${base.contractId} to copy.`),
-            ),
-        };
-  if (built.docType !== spec.docType) {
-    fail(`its document type is ${spec.docType}, but its base document is a ${built.docType}.`);
+  const kindOf = (name: string) =>
+    library.kinds[name] ?? fail(`no kind ${name} in the intake library.`);
+  const baseType = base.source === "library" ? kindOf(base.kind).docType : "nda";
+  if (baseType !== spec.docType) {
+    fail(`its document type is ${spec.docType}, but its base document is a ${baseType}.`);
   }
   for (const name of spec.ingredients) fail(`no ingredient ${name} in the intake library.`);
 
-  const { markdown, evidence } = built.assemble();
+  const { markdown, evidence } =
+    base.source === "library"
+      ? assembleFromKind(base, kindOf(base.kind), spec.seed)
+      : copyNda(
+          base.contractId,
+          contracts.get(base.contractId) ?? fail(`no contract ${base.contractId} to copy.`),
+          fail,
+        );
   return {
     documentId: spec.id,
     split: spec.split,
@@ -65,16 +61,6 @@ interface Assembled {
   markdown: string;
   /** The paragraph IDs that establish primary purpose. */
   evidence: string[];
-}
-
-/** A base document's type, and how to build it once the spec is known to be sound. */
-interface Base {
-  docType: DocType;
-  assemble(): Assembled;
-}
-
-function fromKind(kind: Kind, base: LibraryBase, seed: number): Base {
-  return { docType: kind.docType, assemble: () => assembleFromKind(base, kind, seed) };
 }
 
 /** Section 1 is the opening, then every section in library order, each from a seeded variant. */
@@ -98,7 +84,7 @@ function assembleFromKind(base: LibraryBase, kind: Kind, seed: number): Assemble
     const number = index + 1;
     lines.push("", `## ${number}. ${section.heading}`);
     for (const [at, text] of section.paragraphs.entries()) {
-      lines.push("", `${number}.${at + 1} ${fillTemplate(text, values, `intake/${base.name}`)}`);
+      lines.push("", `${number}.${at + 1} ${fillTemplate(text, values, `intake/${base.kind}`)}`);
     }
   }
   return {
@@ -109,11 +95,15 @@ function assembleFromKind(base: LibraryBase, kind: Kind, seed: number): Assemble
 
 /**
  * A UC1 NDA, unchanged. Gold cites the last paragraph of section 1, where UC1 states who
- * discloses to whom, and 2.1, the definition of confidential information, which UC1 always puts
- * first.
+ * discloses to whom, and the first of section 2, the definition of confidential information,
+ * which UC1 always puts there.
  */
-function copyNda(source: string): Assembled {
-  const opening = source.split("\n").filter((line) => /^1\.\d+ /.test(line));
-  const last = opening.at(-1)?.split(" ")[0] ?? "1.1";
-  return { markdown: source, evidence: [last, "2.1"] };
+function copyNda(contractId: string, source: string, fail: (message: string) => never): Assembled {
+  const [opening, definitions] = parseContract(contractId, source).sections;
+  const last = opening?.paragraphs.at(-1)?.id;
+  const definition = definitions?.paragraphs[0]?.id;
+  if (last === undefined || definition === undefined) {
+    return fail(`contract ${contractId} has no section 2 to cite.`);
+  }
+  return { markdown: source, evidence: [last, definition] };
 }

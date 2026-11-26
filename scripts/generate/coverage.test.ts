@@ -7,6 +7,7 @@ interface ToySpec {
 }
 
 const PLAN: CoveragePlan<ToySpec> = {
+  label: "Toy plant",
   plants: ["a", "b"],
   plantsOf: (spec) => spec.plants,
   minimums: { dev: 2, test: 1 },
@@ -36,10 +37,10 @@ describe("coverage", () => {
     });
   });
 
-  it("renders the table with the minimums in the header", () => {
-    expect(renderCoverageTable(coverage(SPECS, PLAN), PLAN.minimums)).toBe(
+  it("renders the table under the plan's label, with the minimums in the header", () => {
+    expect(renderCoverageTable(coverage(SPECS, PLAN), PLAN)).toBe(
       [
-        "| Plant | Dev (min 2) | Test (min 1) | |",
+        "| Toy plant | Dev (min 2) | Test (min 1) | |",
         "|---|---:|---:|---|",
         "| a | 2 | 1 | ok |",
         "| b | 1 | 1 | SHORT |",

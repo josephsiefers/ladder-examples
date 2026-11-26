@@ -2,13 +2,13 @@
 
 ## 1. Background
 
-1.1 Halloway (the "Customer") engages Brightmoor (the "Supplier") to carry out the project described below, on the terms of the master services agreement already in force between Halloway Retail Group plc and Brightmoor Digital Ltd.
+1.1 Halloway Retail Group plc (the "Customer") engages Brightmoor Digital Ltd (the "Supplier") to carry out the project described below, on the terms of the master services agreement already in force between them.
 
 1.2 This document is a statement of work under that agreement. It orders the implementation of the Supplier's warehouse management system at the Customer's distribution centre, and records the work, deliverables, milestones and fees for that project.
 
 ## 2. Scope of Work
 
-2.1 The Supplier shall configure its warehouse management system for the Customer's distribution centre, integrate it with the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.
+2.1 The Supplier shall configure its warehouse management system for the Customer's distribution centre, build an interface between it and the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.
 
 2.2 Hardware, network changes at the distribution centre, and changes to the Customer's order management system are outside the scope of this Statement of Work.
 
@@ -18,13 +18,13 @@
 
 ## 4. Timetable and Milestones
 
-4.1 The project has three milestones. Milestone 1 is delivery of the design specification, four weeks after the start date. Milestone 2 is delivery of the configured system for testing, twelve weeks after the start date. Milestone 3 is go-live and delivery of the training and handover pack, sixteen weeks after the start date.
+4.1 The start date is the first working day after both parties sign this Statement of Work.
 
-4.2 The start date is the first working day after both parties sign this Statement of Work.
+4.2 The project has three milestones. Milestone 1 is delivery of the design specification, four weeks after the start date. Milestone 2 is delivery of the configured system for testing, twelve weeks after the start date. Milestone 3 is go-live and delivery of the training and handover pack, sixteen weeks after the start date.
 
 ## 5. Acceptance
 
-5.1 Each deliverable is accepted when the Customer signs an acceptance certificate for it, or ten working days after delivery if the Customer has not by then notified any material defect. The Supplier shall fix any notified defect promptly, and the same acceptance process then applies again.
+5.1 Each deliverable is accepted when the Customer signs an acceptance certificate for it, or ten working days after delivery if the Customer has not by then notified any material defect. The Supplier shall fix any notified defect promptly, and the same acceptance process then applies again. A milestone is accepted when every deliverable due at it is accepted.
 
 ## 6. Fees and Payment
 
@@ -38,8 +38,8 @@
 
 ## 8. Project Governance
 
-8.1 The Supplier's project manager shall send the Customer's project lead a progress report every two weeks, covering work done, the status of each milestone, open risks and the days used. Either side may call a meeting on two days' notice to deal with a problem.
+8.1 Each party shall name a project manager. The Supplier's project manager shall send the Customer's project manager a progress report every two weeks, covering work done, the status of each milestone and open risks. Either side may call a meeting on two days' notice to deal with a problem.
 
 ## 9. Changes and Term
 
-9.1 Any change to the scope, deliverables, timetable or fees of this Statement of Work must be agreed in a written change note signed by both parties. This Statement of Work ends when the Customer accepts Milestone 3, unless it is terminated earlier under the master services agreement.
+9.1 Any change to the scope, deliverables, timetable or fees of this Statement of Work must be agreed in a written change note signed by both parties. This Statement of Work ends when Milestone 3 is accepted, unless it is terminated earlier under the master services agreement.

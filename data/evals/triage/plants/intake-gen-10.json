@@ -5,8 +5,8 @@
   "docType": "msa",
   "ambiguity": "clean",
   "base": {
-    "kind": "library",
-    "name": "msa",
+    "source": "library",
+    "kind": "msa",
     "parties": [
       {
         "name": "Tarnwick Technology Services Ltd",

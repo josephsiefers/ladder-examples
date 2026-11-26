@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { AMBIGUITIES, type Ambiguity, DOC_TYPES, type DocType } from "../../../src/core/documents";
+import {
+  AMBIGUITIES,
+  type Ambiguity,
+  DOC_TYPES,
+  type DocType,
+  type TITLE_EVIDENCE,
+} from "../../../src/core/documents";
 
 const party = z.object({
   /** The legal entity. */
@@ -21,13 +27,14 @@ export const intakePlantSpecSchema = z
     seed: z.number().int().nonnegative(),
     docType: z.enum(DOC_TYPES),
     ambiguity: z.enum(AMBIGUITIES),
-    base: z.discriminatedUnion("kind", [
+    /** Where the base document comes from. */
+    base: z.discriminatedUnion("source", [
       /** A UC1 NDA from the firm's contracts, copied byte for byte. */
-      z.object({ kind: z.literal("nda-copy"), contractId: z.string().min(1) }),
+      z.object({ source: z.literal("nda-copy"), contractId: z.string().min(1) }),
       /** A short document assembled from one kind in the intake library, e.g. `msa`. */
       z.object({
-        kind: z.literal("library"),
-        name: z.string().min(1),
+        source: z.literal("library"),
+        kind: z.string().min(1),
         parties: z.tuple([party, party]),
       }),
     ]),
@@ -51,5 +58,5 @@ export interface IntakeGoldCase {
   input: { documentId: string };
   gold: { docType: DocType; ambiguity: Ambiguity };
   /** The title marker, then the paragraph IDs that establish primary purpose. */
-  evidence: { docType: string[] };
+  evidence: { docType: [typeof TITLE_EVIDENCE, ...string[]] };
 }
