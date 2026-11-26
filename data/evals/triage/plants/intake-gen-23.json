@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-23",
+  "split": "test",
+  "seed": 2161,
+  "docType": "nda",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "confidentiality-letter",
+    "parties": [
+      {
+        "name": "Orrin Data Systems plc",
+        "short": "Orrin"
+      },
+      {
+        "name": "Vantage Ridge Equity LLP",
+        "short": "Vantage Ridge"
+      }
+    ]
+  },
+  "ingredients": []
+}

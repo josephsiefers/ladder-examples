@@ -30,6 +30,13 @@ describe("the committed intake corpus", () => {
     expect(coverage(specs, INTAKE_COVERAGE).every(({ met }) => met)).toBe(true);
   });
 
+  it("builds at least one document from every library kind", () => {
+    const used = new Set(
+      specs.flatMap(({ base }) => (base.source === "library" ? [base.kind] : [])),
+    );
+    expect([...used].toSorted()).toEqual(Object.keys(library.kinds).toSorted());
+  });
+
   it("copies each NDA byte for byte from UC1's corpus", async () => {
     const copies = built.flatMap(({ spec: { base }, intake }) =>
       base.source === "nda-copy" ? [{ contractId: base.contractId, intake }] : [],

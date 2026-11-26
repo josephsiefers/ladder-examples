@@ -1,0 +1,104 @@
+{
+  "docType": "other",
+  "titles": [
+    "Engagement Letter",
+    "Letter of Engagement",
+    "Engagement Letter: Annual Audit"
+  ],
+  "openingHeading": "Introduction",
+  "openings": [
+    [
+      "This letter is sent by {{first}} (\"we\" or \"us\") to the board of directors of {{second}} (the \"Company\").",
+      "Thank you for appointing us as auditors of the Company. This letter confirms the terms of our engagement to audit the Company's financial statements for the year ending 31 March 2027, explains the responsibilities that the directors and we each have, and sets out our fees. It applies to each later year's audit until it is replaced."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\", \"we\" or \"us\") writes to the board of directors of {{second}} (the \"Company\") following our appointment as the Company's auditors.",
+      "The purpose of this letter is to set out the basis on which we will audit the Company's annual financial statements, starting with the year ending 31 March 2027, and to record the responsibilities that the directors and we each have, and our fees. Once signed, it forms the contract between the Company and us."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Scope of the Audit",
+      "variants": [
+        [
+          "We will audit the Company's financial statements in accordance with International Standards on Auditing (UK) and report to the Company's members whether, in our opinion, they give a true and fair view and have been properly prepared under the Companies Act 2006.",
+          "An audit gives reasonable, not absolute, assurance. It is not designed to discover every error or fraud, and should not be relied on to do so."
+        ],
+        [
+          "Our work will consist of an examination, on a test basis, of evidence for the amounts and disclosures in the financial statements, sufficient for us to form an opinion on whether they are free from material misstatement. We will report that opinion to the members as the Companies Act 2006 requires."
+        ]
+      ]
+    },
+    {
+      "heading": "Responsibilities of the Directors",
+      "variants": [
+        [
+          "The directors are responsible for keeping adequate accounting records, preparing financial statements that give a true and fair view, and putting in place the internal controls they consider necessary to prevent and detect fraud and error.",
+          "The directors shall give us all the records, information and explanations we need for the audit, and shall confirm certain matters to us in a letter of representation before we sign our report."
+        ],
+        [
+          "Preparing the financial statements is the responsibility of the directors, not us. The directors must also safeguard the Company's assets, keep proper accounting records, and give us unrestricted access to the records, staff and information we ask for. Before we sign our report, the directors will be asked to confirm in writing the representations made to us during the audit."
+        ]
+      ]
+    },
+    {
+      "heading": "Our Responsibilities",
+      "variants": [
+        [
+          "We will plan and perform the audit to obtain reasonable assurance that the financial statements are free from material misstatement, whether caused by fraud or error. We will report to the directors any significant weaknesses in internal control that come to our attention."
+        ],
+        [
+          "We are responsible for forming and expressing an independent opinion on the financial statements. We shall tell the directors in writing of any material weaknesses we find in the Company's accounting systems and internal controls, though we will not test those controls except so far as the audit requires."
+        ]
+      ]
+    },
+    {
+      "heading": "Timetable and Staffing",
+      "variants": [
+        [
+          "We will begin our planning visit in April 2027 and our main fieldwork in June 2027, and aim to sign our report by 31 July 2027, provided the draft financial statements and supporting schedules are ready by 31 May 2027.",
+          "Helen Marsh will be the partner responsible for the audit, supported by a manager and a team of three."
+        ],
+        [
+          "The audit partner will be Helen Marsh, who is responsible for the conduct of the audit and for signing our report. Fieldwork will take place in June 2027, and we expect to issue our report by the end of July 2027, so long as the Company provides its draft financial statements by the end of May."
+        ]
+      ]
+    },
+    {
+      "heading": "Fees",
+      "variants": [
+        [
+          "Our fee for the audit for the year ending 31 March 2027 is £42,500, excluding VAT and expenses, based on the time we expect to spend. If the Company's records are not ready on time, or the audit takes longer for reasons outside our control, we will discuss an additional fee with the directors before incurring it.",
+          "We will invoice half the fee at the start of fieldwork and the balance when we sign our report, each invoice payable within thirty days."
+        ],
+        [
+          "We have agreed a fee of £42,500, plus VAT and out-of-pocket expenses, for the first year's audit, payable in two instalments: on the start of fieldwork and on the signing of our report. Each invoice is due within thirty days. We will agree each later year's fee with the directors before that year's work begins."
+        ]
+      ]
+    },
+    {
+      "heading": "Liability and Complaints",
+      "variants": [
+        [
+          "Subject to the approval of the Company's members, our total liability to the Company for any loss arising from the audit is limited to £1,000,000, to the extent the Companies Act 2006 allows.",
+          "If the directors are unhappy with our service, they may contact our managing partner. We aim to resolve any complaint promptly, and the directors may also refer it to our professional body."
+        ],
+        [
+          "Subject to approval by the Company's members, our liability for any loss caused by our negligence in the audit is limited to £1,000,000 in total. Nothing in this letter limits our liability for fraud or dishonesty.",
+          "If the directors wish to complain about our service, they should write to our managing partner, who will investigate and reply within twenty-eight days."
+        ]
+      ]
+    },
+    {
+      "heading": "Agreement of Terms",
+      "variants": [
+        [
+          "This letter, together with our standard terms of business enclosed with it, forms the contract between the Company and us, and is governed by the law of England and Wales. Please confirm the Company's agreement by having a director sign and return the enclosed copy of this letter."
+        ],
+        [
+          "If these terms are acceptable, please sign the enclosed copy of this letter on behalf of the board and return it to us. The engagement is governed by English law. It continues for later years unless either the Company or we give notice in writing to end it, or the Company appoints other auditors."
+        ]
+      ]
+    }
+  ]
+}

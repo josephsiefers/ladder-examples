@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-22",
+  "split": "dev",
+  "seed": 2154,
+  "docType": "dpa",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "dpa",
+    "parties": [
+      {
+        "name": "Ridgeway People Systems Limited",
+        "short": "Ridgeway"
+      },
+      {
+        "name": "Coldharbour Hotels Limited",
+        "short": "Coldharbour"
+      }
+    ]
+  },
+  "ingredients": []
+}

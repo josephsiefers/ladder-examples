@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-19",
+  "split": "test",
+  "seed": 2133,
+  "docType": "dpa",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "dpa",
+    "parties": [
+      {
+        "name": "Kestrel Cloud Payroll Limited",
+        "short": "Kestrel"
+      },
+      {
+        "name": "Ambleford Housing Association",
+        "short": "Ambleford"
+      }
+    ]
+  },
+  "ingredients": []
+}

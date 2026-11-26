@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { DOC_TYPES } from "../../../src/core/documents";
 import type { CoveragePlan } from "../coverage";
 import { loadSpecs } from "../plants";
 import type { Corpus } from "../run-corpus";
@@ -20,12 +21,8 @@ type Answer = Pick<IntakePlantSpec, "docType" | "ambiguity">;
 /** One row of the intake coverage table, named for its answer: e.g. "nda · clean". */
 const cell = ({ docType, ambiguity }: Answer) => `${docType} · ${ambiguity}`;
 
-/** The answers the intake corpus must cover, so far. */
-const COVERED: readonly Answer[] = [
-  { docType: "nda", ambiguity: "clean" },
-  { docType: "msa", ambiguity: "clean" },
-  { docType: "sow", ambiguity: "clean" },
-];
+/** The answers the intake corpus must cover, so far: every document type, clean. */
+const COVERED: readonly Answer[] = DOC_TYPES.map((docType) => ({ docType, ambiguity: "clean" }));
 
 /** What the intake corpus must cover in each split: one row per covered type and ambiguity. */
 export const INTAKE_COVERAGE: CoveragePlan<IntakePlantSpec> = {

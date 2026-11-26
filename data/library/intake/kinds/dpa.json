@@ -1,0 +1,113 @@
+{
+  "docType": "dpa",
+  "titles": [
+    "Data Processing Agreement",
+    "Data Processing Addendum",
+    "Data Protection Agreement"
+  ],
+  "openingHeading": "Parties and Purpose",
+  "openings": [
+    [
+      "This agreement is made between {{second}} (the \"Controller\") and {{first}} (the \"Processor\").",
+      "The Processor provides hosted payroll services to the Controller under a separate services agreement, and in doing so processes the personal data of the Controller's employees on the Controller's behalf. This agreement sets out the terms on which the Processor processes that personal data, as Article 28 of the UK GDPR requires, and it applies for as long as the Processor holds any of it."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\" or the \"Processor\") and {{second}} (\"{{secondShort}}\" or the \"Controller\") enter into this agreement.",
+      "{{secondShort}} is the controller, and {{firstShort}} a processor, of the personal data of {{secondShort}}'s employees that {{firstShort}} handles while providing hosted payroll services under the parties' services agreement. The purpose of this agreement is to govern that processing and to protect that data in line with data protection law. Where this agreement and the services agreement conflict on the processing of personal data, this agreement prevails."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Details of the Processing",
+      "variants": [
+        [
+          "The Processor processes personal data only to provide the payroll services: calculating pay, deductions and pension contributions, producing payslips and making returns to HM Revenue & Customs. The data subjects are the Controller's current and former employees. The personal data comprises names, contact details, National Insurance numbers, bank details, salary and tax information, and records of absence."
+        ],
+        [
+          "The subject matter of the processing is the operation of the Controller's payroll. The Processor processes the names, addresses, National Insurance numbers, bank account details, pay and tax records of the Controller's employees and former employees, for as long as the services agreement continues and afterwards until the data is returned or deleted under this agreement."
+        ]
+      ]
+    },
+    {
+      "heading": "Processor's Obligations",
+      "variants": [
+        [
+          "The Processor shall process the personal data only on the Controller's documented instructions, including those in this agreement, unless the law requires otherwise, in which case it shall tell the Controller before processing unless the law forbids it. The Processor shall tell the Controller at once if it believes an instruction breaks data protection law.",
+          "The Processor shall ensure that every person it authorises to process the personal data is bound by a duty of confidentiality."
+        ],
+        [
+          "The Processor shall act only on the written instructions of the Controller when processing the personal data, and shall not process it for its own purposes or for anyone else. If the law requires processing the Controller has not instructed, the Processor shall notify the Controller first, where the law permits.",
+          "The Processor's staff with access to the personal data shall be trained in data protection and bound by obligations of confidentiality."
+        ]
+      ]
+    },
+    {
+      "heading": "Security",
+      "variants": [
+        [
+          "The Processor shall implement appropriate technical and organisational measures to protect the personal data against accidental or unlawful destruction, loss, alteration, unauthorised disclosure or access. Those measures shall include encryption of the data in transit and at rest, role-based access controls, and regular testing of their effectiveness."
+        ],
+        [
+          "Taking into account the nature of the processing and the risks to employees, the Processor shall keep the personal data secure. It shall encrypt the data, restrict access to staff who need it for the payroll services, keep logs of that access, and maintain a certified information security management system for the whole of the processing."
+        ]
+      ]
+    },
+    {
+      "heading": "Sub-processors",
+      "variants": [
+        [
+          "The Processor shall not engage a sub-processor without the Controller's prior written authorisation, except the hosting provider named in the services agreement, which the Controller authorises. Before engaging any other sub-processor, the Processor shall give the Controller thirty days' notice, during which the Controller may object on reasonable grounds.",
+          "The Processor shall impose on each sub-processor data protection obligations no less protective than those in this agreement, and remains liable to the Controller for its sub-processors' performance."
+        ],
+        [
+          "The Controller gives the Processor general authorisation to use sub-processors, provided the Processor keeps an up-to-date list of them, tells the Controller of any intended addition or replacement at least thirty days in advance, and binds each one by written contract to the same data protection obligations as this agreement. The Processor is liable for the acts of every sub-processor it uses."
+        ]
+      ]
+    },
+    {
+      "heading": "International Transfers",
+      "variants": [
+        [
+          "The Processor shall not transfer the personal data outside the United Kingdom, or allow a sub-processor to do so, without the Controller's prior written consent. Any transfer the Controller consents to shall be made under the international data transfer agreement issued by the Information Commissioner, or another safeguard that data protection law recognises."
+        ],
+        [
+          "The personal data shall be stored and processed only in the United Kingdom and the European Economic Area. The Processor may transfer it elsewhere only with the Controller's written approval and with an appropriate safeguard, such as the Information Commissioner's international data transfer addendum, in place before the transfer."
+        ]
+      ]
+    },
+    {
+      "heading": "Personal Data Breaches",
+      "variants": [
+        [
+          "The Processor shall notify the Controller without undue delay, and in any event within twenty-four hours, after becoming aware of a personal data breach. The notice shall describe the breach, the categories and approximate number of employees affected, its likely consequences, and the measures taken or proposed to deal with it.",
+          "The Processor shall cooperate with the Controller's investigation and help it meet its obligations to report the breach to the Information Commissioner and to tell affected employees."
+        ],
+        [
+          "If the Processor becomes aware of any breach of security leading to the loss of, or unauthorised access to, the personal data, it shall tell the Controller within twenty-four hours, give it all the information it reasonably needs to report the breach to the Information Commissioner within the statutory deadline, and take reasonable steps to contain the breach and limit its effects."
+        ]
+      ]
+    },
+    {
+      "heading": "Assistance and Audit",
+      "variants": [
+        [
+          "The Processor shall help the Controller respond to requests from employees exercising their rights under data protection law, and with data protection impact assessments relating to the payroll services. It shall make available all the information needed to show compliance with this agreement, and allow audits by the Controller or an auditor it appoints, on reasonable notice."
+        ],
+        [
+          "The Processor shall pass to the Controller, within five working days, any request it receives from an employee to access, correct or erase their personal data, and shall not answer it except on the Controller's instructions. Once a year, or after a personal data breach, the Controller may audit the Processor's compliance with this agreement on fourteen days' notice."
+        ]
+      ]
+    },
+    {
+      "heading": "Return and Deletion",
+      "variants": [
+        [
+          "When the services agreement ends, the Processor shall, at the Controller's choice, return all the personal data to the Controller in a commonly used format or delete it, and shall delete any remaining copies within sixty days, unless the law requires it to keep them. The Processor shall confirm the deletion in writing."
+        ],
+        [
+          "On termination or expiry of the services agreement, the Processor shall stop processing the personal data, return it to the Controller in the format the Controller reasonably asks for, and then securely delete all copies, certifying in writing that it has done so. The Processor may keep only what the law requires it to keep, and shall keep that confidential."
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "docType": "other",
+  "titles": [
+    "Employment Agreement",
+    "Contract of Employment",
+    "Employment Contract"
+  ],
+  "openingHeading": "Parties and Appointment",
+  "openings": [
+    [
+      "This agreement is made between {{first}} (the \"Company\") and {{second}} (the \"Employee\").",
+      "The Company employs the Employee as Head of Finance Operations, reporting to the Chief Financial Officer, on the terms of this agreement. The employment starts on 4 January 2027, and no period of previous employment counts towards the Employee's period of continuous employment. This agreement contains the written statement of particulars of employment that the Employment Rights Act 1996 requires."
+    ],
+    [
+      "{{first}} (the \"Company\") and {{second}} (\"{{secondShort}}\" or the \"Employee\") agree the terms of the Employee's employment set out below.",
+      "The Company appoints the Employee, and the Employee agrees to serve the Company, as Head of Finance Operations from 4 January 2027. The Employee reports to the Chief Financial Officer and shall perform the duties of that role, and any other reasonable duties the Company assigns. This agreement sets out the Employee's terms and conditions of employment and the particulars of employment required by law."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Place of Work and Hours",
+      "variants": [
+        [
+          "The Employee's normal place of work is the Company's office in Leeds, but the Employee may work from home for up to two days a week by agreement with the Chief Financial Officer.",
+          "The Employee's normal working hours are 9.00 am to 5.30 pm, Monday to Friday, with an hour for lunch. The Employee may be required to work additional hours without extra pay where the role reasonably requires."
+        ],
+        [
+          "The Employee shall work 37.5 hours a week, Monday to Friday, and such additional hours as are needed to perform the role properly, for which no overtime is paid. The Employee's place of work is the Company's Leeds office, and the Employee may be asked to travel to the Company's other sites in the United Kingdom."
+        ]
+      ]
+    },
+    {
+      "heading": "Salary and Benefits",
+      "variants": [
+        [
+          "The Company shall pay the Employee a salary of £78,000 a year, paid monthly in arrears by bank transfer on or before the last working day of each month. The salary will be reviewed each April, without any obligation to increase it.",
+          "The Employee may join the Company's private medical insurance scheme, subject to its rules."
+        ],
+        [
+          "The Employee's basic salary is £78,000 a year, which accrues from day to day and is payable in equal monthly instalments. The Company reviews salaries every April. The Employee is also eligible for the Company's annual bonus scheme, up to fifteen per cent of salary, at the Company's discretion and subject to the scheme rules."
+        ]
+      ]
+    },
+    {
+      "heading": "Pension",
+      "variants": [
+        [
+          "The Company shall enrol the Employee in its workplace pension scheme in line with auto-enrolment law. The Company contributes six per cent of the Employee's basic salary, and the Employee contributes four per cent by salary deduction, unless the Employee opts out."
+        ],
+        [
+          "The Employee will be auto-enrolled into the Company's group personal pension plan. The Company shall pay contributions equal to six per cent of basic salary, provided the Employee contributes at least four per cent. Further details are in the scheme booklet, which the Company has given the Employee."
+        ]
+      ]
+    },
+    {
+      "heading": "Holidays and Sickness",
+      "variants": [
+        [
+          "The Employee is entitled to twenty-five working days' paid holiday in each holiday year, which runs from 1 January, in addition to the usual public holidays in England. Holiday must be agreed in advance with the Chief Financial Officer.",
+          "If the Employee is absent through sickness, the Employee shall tell the Company by 10.00 am on the first day. The Company pays full salary for up to ten weeks' sickness absence in any twelve months, and statutory sick pay after that."
+        ],
+        [
+          "The holiday year runs from 1 January to 31 December. The Employee has twenty-five days' paid holiday a year plus public holidays; up to five unused days may be carried into the next year.",
+          "The Employee shall notify any sickness absence on its first day and provide a fit note for absence of more than seven days. The Company pays full salary during sickness absence for up to ten weeks in a rolling year, and statutory sick pay only after that."
+        ]
+      ]
+    },
+    {
+      "heading": "Duties and Conduct",
+      "variants": [
+        [
+          "During the employment the Employee shall devote the whole of their working time to the Company's business, and shall not take up other paid work without the Company's written consent.",
+          "The Employee shall comply with the Company's policies, including its staff handbook, as amended from time to time. Those policies are not contractual."
+        ],
+        [
+          "The Employee shall serve the Company faithfully and diligently, and shall not, without written consent, be engaged in any other business during the employment. The disciplinary and grievance procedures that apply to the Employee are in the staff handbook, which does not form part of this agreement."
+        ]
+      ]
+    },
+    {
+      "heading": "Probation and Notice",
+      "variants": [
+        [
+          "The first six months of the employment are a probationary period, during which either party may end the employment by giving one week's notice.",
+          "After probation, either party may end the employment by giving the other three months' written notice. The Company may instead pay the Employee's basic salary in lieu of all or part of the notice period, and may place the Employee on garden leave during notice."
+        ],
+        [
+          "The employment is subject to a six-month probationary period, which the Company may extend by up to three months, and one week's notice applies on either side during it. Once probation is complete, the Employee shall give three months' notice to resign, and the Company shall give three months' notice, or pay in lieu of notice, to terminate the employment."
+        ]
+      ]
+    },
+    {
+      "heading": "Termination and Company Property",
+      "variants": [
+        [
+          "The Company may end the employment at once, without notice or pay in lieu, if the Employee commits gross misconduct or a serious breach of this agreement.",
+          "When the employment ends, the Employee shall return all Company property, including their laptop, phone and security pass, and the Company may deduct from final pay any sums the Employee owes it."
+        ],
+        [
+          "The Company may terminate the employment with immediate effect if the Employee is guilty of gross misconduct, is convicted of a criminal offence other than a minor road traffic offence, or becomes bankrupt. On termination for any reason, the Employee shall return all property belonging to the Company."
+        ]
+      ]
+    }
+  ]
+}

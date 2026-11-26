@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-21",
+  "split": "test",
+  "seed": 2147,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "software-licence",
+    "parties": [
+      {
+        "name": "Tallyframe Software Limited",
+        "short": "Tallyframe"
+      },
+      {
+        "name": "Brockhurst Wholesale Limited",
+        "short": "Brockhurst"
+      }
+    ]
+  },
+  "ingredients": []
+}

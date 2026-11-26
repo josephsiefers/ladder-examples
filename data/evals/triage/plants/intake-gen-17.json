@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-17",
+  "split": "dev",
+  "seed": 2119,
+  "docType": "nda",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "confidentiality-letter",
+    "parties": [
+      {
+        "name": "Calloway Freight Holdings plc",
+        "short": "Calloway"
+      },
+      {
+        "name": "Dunmore Capital Partners LLP",
+        "short": "Dunmore"
+      }
+    ]
+  },
+  "ingredients": []
+}

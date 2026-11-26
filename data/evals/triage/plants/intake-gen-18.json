@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-18",
+  "split": "dev",
+  "seed": 2126,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "employment",
+    "parties": [
+      {
+        "name": "Norbridge Components Limited",
+        "short": "Norbridge"
+      },
+      {
+        "name": "Mara Ellison",
+        "short": "Ms Ellison"
+      }
+    ]
+  },
+  "ingredients": []
+}

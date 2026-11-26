@@ -1,0 +1,101 @@
+{
+  "docType": "nda",
+  "titles": [
+    "Confidentiality Letter",
+    "Confidentiality Undertaking",
+    "Letter Agreement: Confidentiality"
+  ],
+  "openingHeading": "Purpose of this Letter",
+  "openings": [
+    [
+      "This letter is sent by {{first}} (the \"Discloser\") to {{second}} (the \"Recipient\") and, once countersigned by the Recipient, is a binding agreement between them.",
+      "The Discloser is considering selling its logistics software division, and the Recipient wishes to evaluate a possible purchase of it (the \"Purpose\"). The Discloser is willing to share confidential information about the division with the Recipient for the Purpose only, and only on the condition that the Recipient keeps it confidential as this letter requires."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\" or the \"Discloser\") writes to {{second}} (\"{{secondShort}}\" or the \"Recipient\") to set out the confidentiality terms on which it will share information with the Recipient.",
+      "{{secondShort}} has asked for information about {{firstShort}}'s logistics software division so that it can decide whether to make an offer to buy the division (the \"Purpose\"). In return for receiving that information, the Recipient undertakes to the Discloser to keep it confidential and to use it only for the Purpose, on the terms of this letter."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Confidential Information",
+      "variants": [
+        [
+          "In this letter, \"Confidential Information\" means all information about the division, its customers, contracts, software, finances and staff that the Discloser or its advisers give the Recipient for the Purpose, in any form, together with the fact that a sale is being considered.",
+          "It does not include information that is or becomes public other than through the Recipient's breach, that the Recipient already lawfully held, or that it receives from a third party free to disclose it."
+        ],
+        [
+          "\"Confidential Information\" means any information, whether written, oral or electronic, that the Recipient receives from or on behalf of the Discloser in connection with the Purpose, including the division's accounts, customer lists, source code and employee data, and any analysis the Recipient prepares from it. Information already public, or lawfully known to the Recipient before disclosure, is excluded."
+        ]
+      ]
+    },
+    {
+      "heading": "Undertakings",
+      "variants": [
+        [
+          "The Recipient shall keep the Confidential Information secret, use it only for the Purpose, and protect it with at least the care it uses for its own confidential information. It shall not disclose it to anyone except as this letter allows. It shall keep a record of the people to whom it gives Confidential Information, and show that record to the Discloser on request."
+        ],
+        [
+          "The Recipient undertakes not to use the Confidential Information except for the Purpose, not to disclose it to any person except as permitted below, and to keep it secure against unauthorised access, at least to the standard it applies to its own commercially sensitive information."
+        ]
+      ]
+    },
+    {
+      "heading": "Permitted Disclosure",
+      "variants": [
+        [
+          "The Recipient may disclose Confidential Information to its directors, employees and professional advisers who need it for the Purpose, provided it tells them it is confidential and remains responsible for their compliance with this letter.",
+          "The Recipient may also disclose Confidential Information if required by law or a regulator, after giving the Discloser as much notice as the law allows."
+        ],
+        [
+          "Disclosure is permitted only to those of the Recipient's officers, staff, financiers and advisers who need to know the Confidential Information for the Purpose and are bound by duties of confidentiality, and to the extent required by law, court order or the rules of a stock exchange. The Recipient is liable for any breach by those to whom it discloses."
+        ]
+      ]
+    },
+    {
+      "heading": "No Approach to Staff or Customers",
+      "variants": [
+        [
+          "For twelve months from the date of this letter, the Recipient shall not, without the Discloser's consent, approach any employee of the division to offer employment, or contact any customer of the division about the Purpose."
+        ],
+        [
+          "While the Purpose is pursued, and for twelve months after, the Recipient shall not solicit any of the division's employees whom it met or learned of through the Confidential Information, and shall direct all enquiries about the division to the Discloser's corporate finance adviser rather than its staff or customers."
+        ]
+      ]
+    },
+    {
+      "heading": "Return of Information",
+      "variants": [
+        [
+          "If the Discloser asks, or the Recipient decides not to proceed, the Recipient shall promptly return or destroy all Confidential Information and any copies, and confirm in writing that it has done so, except copies it must keep by law, which remain subject to this letter."
+        ],
+        [
+          "On the Discloser's written request, the Recipient shall within ten days destroy or return every document containing Confidential Information, erase it from its systems so far as reasonably practicable, and have a director confirm in writing that this has been done."
+        ]
+      ]
+    },
+    {
+      "heading": "Duration and Remedies",
+      "variants": [
+        [
+          "The Recipient's obligations under this letter continue for three years from its date, whether or not a sale proceeds.",
+          "The Recipient acknowledges that damages alone may not be an adequate remedy for a breach of this letter, and that the Discloser may seek an injunction to prevent or stop one."
+        ],
+        [
+          "This letter does not oblige either party to proceed with any transaction. The obligations in it last for three years from the date of this letter. As damages may not adequately compensate the Discloser for misuse of Confidential Information, the Discloser is entitled to seek injunctive relief as well."
+        ]
+      ]
+    },
+    {
+      "heading": "Acceptance",
+      "variants": [
+        [
+          "This letter is governed by the law of England and Wales. Please confirm the Recipient's agreement to these terms by signing and returning the enclosed copy of this letter; the Discloser will make no Confidential Information available until it receives it."
+        ],
+        [
+          "Please sign the copy of this letter where indicated and return it to the Discloser to confirm the Recipient's acceptance of its terms. This letter and any dispute arising from it are governed by English law and subject to the exclusive jurisdiction of the English courts."
+        ]
+      ]
+    }
+  ]
+}
