@@ -1,6 +1,7 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readJson } from "./json";
 import { type PlantSpec, plantSpecSchema } from "./spec";
 
 /** One plant spec per generated NDA, named `<id>.json`. */
@@ -11,15 +12,11 @@ export async function loadPlantSpecs(dir: string = PLANTS_DIR): Promise<PlantSpe
   const files = (await readdir(dir)).filter((file) => file.endsWith(".json")).toSorted();
   return Promise.all(
     files.map(async (file) => {
-      const parsed = plantSpecSchema.safeParse(JSON.parse(await readFile(join(dir, file), "utf8")));
-      if (!parsed.success) {
-        const issues = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`);
-        throw new Error(`Invalid plant spec ${file}: ${issues.join("; ")}.`);
+      const spec = await readJson(join(dir, file), plantSpecSchema, `plant spec ${file}`);
+      if (`${spec.id}.json` !== file) {
+        throw new Error(`Invalid plant spec ${file}: its id is '${spec.id}'.`);
       }
-      if (`${parsed.data.id}.json` !== file) {
-        throw new Error(`Invalid plant spec ${file}: its id is '${parsed.data.id}'.`);
-      }
-      return parsed.data;
+      return spec;
     }),
   );
 }

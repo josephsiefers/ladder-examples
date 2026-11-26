@@ -1,7 +1,8 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
+import { readJson } from "./json";
 
 /** The clause-variant library: generator input, kept apart from the fake firm's data. */
 const LIBRARY_ROOT = fileURLToPath(new URL("../../data/library/nda/", import.meta.url));
@@ -91,15 +92,6 @@ export interface Library {
   phrasings: Phrasings;
 }
 
-async function readJson<T>(path: string, schema: z.ZodType<T>, label: string): Promise<T> {
-  const parsed = schema.safeParse(JSON.parse(await readFile(path, "utf8")));
-  if (!parsed.success) {
-    const issues = parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
-    throw new Error(`Invalid library file ${label}: ${issues.join("; ")}.`);
-  }
-  return parsed.data;
-}
-
 /** Reads the library from `root`: `metadata.json` and one `clauses/<clause-type>.json` per clause type. */
 export async function loadLibrary(root: string = LIBRARY_ROOT): Promise<Library> {
   const clauseFiles = new Set(await readdir(join(root, "clauses")));
@@ -116,10 +108,17 @@ export async function loadLibrary(root: string = LIBRARY_ROOT): Promise<Library>
   const entries = await Promise.all(
     CLAUSE_TYPES.map(async (type) => {
       const file = `clauses/${type}.json`;
-      return [type, await readJson(join(root, file), variantsSchema, file)] as const;
+      return [
+        type,
+        await readJson(join(root, file), variantsSchema, `library file ${file}`),
+      ] as const;
     }),
   );
-  const metadata = await readJson(join(root, "metadata.json"), metadataSchema, "metadata.json");
+  const metadata = await readJson(
+    join(root, "metadata.json"),
+    metadataSchema,
+    "library file metadata.json",
+  );
   return {
     clauses: Object.fromEntries(entries) as Library["clauses"],
     ...metadata,
