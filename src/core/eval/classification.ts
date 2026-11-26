@@ -1,11 +1,14 @@
-import { row } from "./markdown";
+import { row, tableHead } from "./markdown";
 import { formatPercent } from "./report";
 
-/** One classification: the gold class, the predicted label, and optionally the case's tag. */
+/** The prediction of a case run that gave no valid answer (e.g. it errored). */
+export const NO_ANSWER = null;
+
+/** One classification: the gold class, the predicted class, and optionally the case's tag. */
 export interface Prediction {
   gold: string;
-  /** May be outside the classes, e.g. an error: it then counts as wrong and as unclassified. */
-  predicted: string;
+  /** One of the classes, or `NO_ANSWER`: wrong, and counted in the `(no valid answer)` column. */
+  predicted: string | typeof NO_ANSWER;
   /** A case tag to group accuracy by, e.g. an ambiguity: `clean` or `hybrid`. */
   group?: string;
 }
@@ -14,7 +17,7 @@ export interface Prediction {
 export interface ConfusionMatrix {
   classes: readonly string[];
   counts: number[][];
-  /** Per gold class: predictions that were none of the classes. */
+  /** Per gold class: predictions that were `NO_ANSWER`. */
   unclassified: number[];
 }
 
@@ -32,6 +35,15 @@ const sum = (values: readonly number[]) => values.reduce((total, value) => total
 /** `part / whole`, or undefined when `whole` is 0. */
 const ratio = (part: number, whole: number) => (whole === 0 ? undefined : part / whole);
 
+/** The index of `label` in `classes`; a label outside them is an error. */
+function classIndex(classes: readonly string[], label: string, kind: string): number {
+  const index = classes.indexOf(label);
+  if (index === -1) {
+    throw new Error(`${kind} label '${label}' is not one of the classes: ${classes.join(", ")}.`);
+  }
+  return index;
+}
+
 export function confusionMatrix(
   classes: readonly string[],
   predictions: readonly Prediction[],
@@ -39,15 +51,14 @@ export function confusionMatrix(
   const counts = classes.map(() => classes.map(() => 0));
   const unclassified = classes.map(() => 0);
   for (const { gold, predicted } of predictions) {
-    const goldIndex = classes.indexOf(gold);
-    const goldRow = counts[goldIndex];
-    if (!goldRow) {
-      throw new Error(`Gold label '${gold}' is not one of the classes: ${classes.join(", ")}.`);
+    const goldIndex = classIndex(classes, gold, "Gold");
+    if (predicted === NO_ANSWER) {
+      unclassified[goldIndex] = (unclassified[goldIndex] ?? 0) + 1;
+      continue;
     }
-    const column = classes.indexOf(predicted);
-    const cells = column === -1 ? unclassified : goldRow;
-    const at = column === -1 ? goldIndex : column;
-    cells[at] = (cells[at] ?? 0) + 1;
+    const goldRow = counts[goldIndex] ?? [];
+    const column = classIndex(classes, predicted, "Predicted");
+    goldRow[column] = (goldRow[column] ?? 0) + 1;
   }
   return { classes, counts, unclassified };
 }
@@ -94,8 +105,7 @@ export function renderConfusionMatrix({ classes, counts, unclassified }: Confusi
   const showUnclassified = unclassified.some((count) => count > 0);
   const columns = [...classes, ...(showUnclassified ? ["(no valid answer)"] : [])];
   return [
-    row(["Gold \\ Predicted", ...columns]),
-    `|---|${columns.map(() => "---:").join("|")}|`,
+    ...tableHead(["Gold \\ Predicted", ...columns]),
     ...classes.map((label, index) =>
       row([
         label,

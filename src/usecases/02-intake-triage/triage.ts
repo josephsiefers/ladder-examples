@@ -6,7 +6,7 @@ import {
 } from "../../core/documents";
 import { type CallStats, DEFAULT_MODEL, type Llm, type ModelId } from "../../core/llm";
 import { TRIAGE_SYSTEM_PROMPT, triageUserPrompt } from "./prompts";
-import { queueFor } from "./routing";
+import { ROUTING_TABLE } from "./routing";
 import { CLASSIFICATION_SCHEMA_NAME, type Classification, classificationSchema } from "./schema";
 
 export interface TriageDeps {
@@ -46,7 +46,7 @@ export async function triageDocument(
     schemaName: CLASSIFICATION_SCHEMA_NAME,
     sampleIndex,
   });
-  const queue = queueFor(classification.docType);
+  const queue = ROUTING_TABLE[classification.docType];
   const receipt = route
     ? await documents.routeToQueue({ documentId, queue, rationale: classification.rationale })
     : undefined;

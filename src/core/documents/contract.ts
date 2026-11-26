@@ -1,3 +1,5 @@
+import { CLAUSE_NUMBER } from "./paragraph-id";
+
 /** One numbered paragraph, e.g. `4.2`. Its ID is how evidence and redlines cite it. */
 export interface Paragraph {
   id: string;
@@ -35,7 +37,7 @@ const FIRST_SECTION_HEADING = "Parties and Background";
 
 const TITLE = /^# \S/;
 const SECTION_HEADING = /^## (\d+)\. (\S.*)/;
-const PARAGRAPH_NUMBER = /^(\d+\.\d+) \S/;
+const PARAGRAPH_NUMBER = new RegExp(String.raw`^(${CLAUSE_NUMBER}) \S`);
 
 /**
  * Parses the firm's contract Markdown: a `# Title`, then `## N. Heading` sections numbered from 1,

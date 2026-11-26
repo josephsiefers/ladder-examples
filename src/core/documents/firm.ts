@@ -2,7 +2,7 @@ import { appendFile, mkdir, readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Contract, parseContract } from "./contract";
-import { type IntakeDesk, IntakeNotFoundError, parseIntake, type RoutingRecord } from "./intake";
+import { checkKnownIntake, type IntakeDesk, parseIntake, type RoutingRecord } from "./intake";
 
 /** The fake firm's systems: `data/firm/` at the repo root. */
 const FIRM_ROOT = fileURLToPath(new URL("../../../data/firm/", import.meta.url));
@@ -60,11 +60,8 @@ export function createFirmDocuments({
   const queuesDir = join(outRoot, "queues");
 
   // Only IDs listed in a directory are read, so a path-like ID can never escape it.
-  async function intakePath(id: string): Promise<string> {
-    const known = await documentIds(intakeDir);
-    if (!known.includes(id)) throw new IntakeNotFoundError(id, known);
-    return join(intakeDir, `${id}.md`);
-  }
+  const checkIntake = async (id: string) => checkKnownIntake(id, await documentIds(intakeDir));
+  const intakePath = (id: string) => join(intakeDir, `${id}.md`);
 
   return {
     async readContract(id) {
@@ -77,11 +74,12 @@ export function createFirmDocuments({
     listIntake: () => documentIds(intakeDir),
 
     async readIntake(id) {
-      return parseIntake(id, await readFile(await intakePath(id), "utf8"));
+      await checkIntake(id);
+      return parseIntake(id, await readFile(intakePath(id), "utf8"));
     },
 
     async routeToQueue({ documentId, queue, rationale }) {
-      await intakePath(documentId);
+      await checkIntake(documentId);
       const record: RoutingRecord = {
         id: documentId,
         queue,

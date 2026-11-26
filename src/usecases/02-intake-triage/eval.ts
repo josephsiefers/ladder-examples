@@ -10,9 +10,13 @@ import {
   type FieldStats,
   formatPercent,
   formatRate,
+  NO_ANSWER,
   type Prediction,
+  plural,
   type RunRecord,
   renderConfusionMatrix,
+  row,
+  tableHead,
 } from "../../core/eval";
 import { DOC_TYPES, type DocType } from "./schema";
 import { triageDocument } from "./triage";
@@ -44,7 +48,7 @@ function triageTarget(stats: readonly FieldStats[]): string {
   return `docType accuracy ${formatPercent(mean)} (mean of runs) · upgrade trigger: hybrid accuracy materially below clean (see below)`;
 }
 
-/** Every case run as a prediction: gold type, predicted type (or the error), and ambiguity. */
+/** Every case run as a prediction: gold type, predicted type (or no answer), and ambiguity. */
 function predictions(
   record: RunRecord,
   cases: readonly EvalCase<TriageEvalInput, TriageLabel>[],
@@ -55,7 +59,7 @@ function predictions(
     return [
       {
         gold: gold.docType,
-        predicted: result.actual[FIELD] ?? "",
+        predicted: result.error === undefined ? (result.actual[FIELD] ?? NO_ANSWER) : NO_ANSWER,
         ...(gold.ambiguity && { group: gold.ambiguity }),
       },
     ];
@@ -70,15 +74,13 @@ function triageAnalysis(
   const all = predictions(record, cases);
   const matrix = confusionMatrix(DOC_TYPES, all);
   return [
-    `Overall accuracy, pooled over ${all.length} case run${all.length === 1 ? "" : "s"}: ${formatRate(accuracy(all))}`,
+    `Overall accuracy, pooled over ${plural(all.length, "case run")}: ${formatRate(accuracy(all))}`,
     "",
     "### Per type (pooled over all runs)",
     "",
-    "| Type | Precision | Recall | Support |",
-    "|---|---:|---:|---:|",
-    ...classMetrics(matrix).map(
-      ({ label, precision, recall, support }) =>
-        `| ${label} | ${formatRate(precision)} | ${formatRate(recall)} | ${support} |`,
+    ...tableHead(["Type", "Precision", "Recall", "Support"]),
+    ...classMetrics(matrix).map(({ label, precision, recall, support }) =>
+      row([label, formatRate(precision), formatRate(recall), String(support)]),
     ),
     "",
     "### Confusion matrix (pooled over all runs)",
@@ -87,10 +89,9 @@ function triageAnalysis(
     "",
     "### Clean vs hybrid",
     "",
-    "| Ambiguity | Accuracy | Case runs |",
-    "|---|---:|---:|",
-    ...accuracyByGroup(all, AMBIGUITIES).map(
-      ({ group, accuracy: rate, count }) => `| ${group} | ${formatRate(rate)} | ${count} |`,
+    ...tableHead(["Ambiguity", "Accuracy", "Case runs"]),
+    ...accuracyByGroup(all, AMBIGUITIES).map(({ group, accuracy: rate, count }) =>
+      row([group, formatRate(rate), String(count)]),
     ),
   ].join("\n");
 }

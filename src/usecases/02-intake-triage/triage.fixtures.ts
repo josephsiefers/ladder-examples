@@ -2,7 +2,7 @@ import {
   type IntakeDesk,
   type IntakeDocument,
   IntakeNotFoundError,
-  type Queue,
+  withMemoryQueues,
 } from "../../core/documents";
 
 /** A hybrid: an MSA with a confidentiality section. */
@@ -21,32 +21,22 @@ const LETTER: IntakeDocument = {
   paragraphs: [{ text: "Dear Sirs, we propose to acquire your business." }],
 };
 
-/** An in-memory intake desk holding two documents; routing requests are kept in `routed`. */
-export function createFakeIntakeDesk(): IntakeDesk & {
-  routed: { documentId: string; queue: Queue; rationale: string }[];
-} {
+/** An in-memory intake desk holding two documents; routing records are kept in `routed`. */
+export function createFakeIntakeDesk() {
   const documents = [LETTER, MSA_WITH_CONFIDENTIALITY];
   const ids = documents.map((document) => document.id);
-  const routed: { documentId: string; queue: Queue; rationale: string }[] = [];
-  const find = (id: string) => {
-    const document = documents.find((each) => each.id === id);
-    if (!document) throw new IntakeNotFoundError(id, ids);
-    return document;
-  };
-  return {
-    routed,
+  const desk: IntakeDesk = {
     async listIntake() {
       return ids;
     },
     async readIntake(id) {
-      return find(id);
+      const document = documents.find((each) => each.id === id);
+      if (!document) throw new IntakeNotFoundError(id, ids);
+      return document;
     },
-    async routeToQueue(request) {
-      find(request.documentId);
-      routed.push(request);
-      const position = routed.filter((each) => each.queue === request.queue).length;
-      const { documentId: id, queue, rationale } = request;
-      return { id, queue, rationale, routedAt: "2026-11-24T09:30:00.000Z", position };
+    routeToQueue() {
+      throw new Error("Replaced by the in-memory queues.");
     },
   };
+  return withMemoryQueues(desk);
 }

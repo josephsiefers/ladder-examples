@@ -5,6 +5,7 @@ import {
   classMetrics,
   confusionMatrix,
   formatRate,
+  NO_ANSWER,
   renderConfusionMatrix,
 } from "./classification";
 
@@ -16,7 +17,7 @@ const PREDICTIONS = [
   { gold: "dog", predicted: "dog", group: "clean" },
   { gold: "dog", predicted: "dog", group: "clean" },
   { gold: "fox", predicted: "cat", group: "hybrid" },
-  { gold: "fox", predicted: "error: timeout", group: "clean" },
+  { gold: "fox", predicted: NO_ANSWER, group: "clean" },
 ];
 
 describe("confusionMatrix", () => {
@@ -30,6 +31,12 @@ describe("confusionMatrix", () => {
       ],
       unclassified: [0, 0, 1],
     });
+  });
+
+  it("rejects a predicted label outside the classes: only no answer is unclassified", () => {
+    expect(() => confusionMatrix(CLASSES, [{ gold: "cat", predicted: "owl" }])).toThrow(
+      "Predicted label 'owl' is not one of the classes: cat, dog, fox.",
+    );
   });
 
   it("rejects a gold label outside the classes", () => {
@@ -56,7 +63,7 @@ describe("classMetrics", () => {
 });
 
 describe("accuracy", () => {
-  it("is the share of predictions matching gold; an unclassified prediction is wrong", () => {
+  it("is the share of predictions matching gold; no answer is wrong", () => {
     expect(accuracy(PREDICTIONS)).toBe(0.5);
   });
 

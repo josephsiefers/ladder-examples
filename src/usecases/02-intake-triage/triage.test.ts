@@ -37,7 +37,12 @@ describe("triageDocument", () => {
     const result = await triageDocument("intake-msa", { llm, documents }, { route: true });
 
     expect(documents.routed).toEqual([
-      { documentId: "intake-msa", queue: "privacy", rationale: "Primary purpose: dpa." },
+      {
+        id: "intake-msa",
+        queue: "privacy",
+        rationale: "Primary purpose: dpa.",
+        routedAt: "2026-11-24T09:30:00.000Z",
+      },
     ]);
     expect(result.receipt).toMatchObject({ id: "intake-msa", queue: "privacy", position: 1 });
   });
@@ -114,9 +119,6 @@ describe("triageAll", () => {
       ["intake-letter", "senior-associate"],
       ["intake-msa", "commercial"],
     ]);
-    expect(documents.routed.map((routed) => routed.documentId)).toEqual([
-      "intake-letter",
-      "intake-msa",
-    ]);
+    expect(documents.routed.map((routed) => routed.id)).toEqual(["intake-letter", "intake-msa"]);
   });
 });

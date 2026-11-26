@@ -1,4 +1,4 @@
-import { plural, row } from "./markdown";
+import { plural, row, tableHead } from "./markdown";
 import { fieldStats } from "./stats";
 import type { FieldStats, RunRecord } from "./types";
 
@@ -23,8 +23,7 @@ export function renderReport(
   return [
     `## Eval ${record.eval} · split ${record.split} · ${plural(record.caseIds.length, "case")} × ${plural(record.runs, "run")}`,
     "",
-    "| Field | Mean | Stdev | Min | Max |",
-    "|---|---:|---:|---:|---:|",
+    ...tableHead(["Field", "Mean", "Stdev", "Min", "Max"]),
     ...stats.map((stat) =>
       row([stat.field, ...[stat.mean, stat.stdev, stat.min, stat.max].map(formatPercent)]),
     ),
