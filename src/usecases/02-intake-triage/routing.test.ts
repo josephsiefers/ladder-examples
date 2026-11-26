@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { DOC_TYPES } from "../../core/documents";
 import { ROUTING_TABLE } from "./routing";
-import { DOC_TYPES } from "./schema";
 
 describe("routing table", () => {
   it("maps every document type to exactly the UC2 spec's queue", () => {

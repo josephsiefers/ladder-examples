@@ -1,5 +1,4 @@
-import type { Queue } from "../../core/documents";
-import type { DocType } from "./schema";
+import type { DocType, Queue } from "../../core/documents";
 
 /**
  * The UC2 routing table, the one place to look up a document type's queue. Code, not the model,
