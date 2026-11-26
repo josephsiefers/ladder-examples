@@ -1,84 +1,61 @@
-import type { PlantSpec } from "./spec";
+/** A split a generated corpus is written to. */
+export type Split = "dev" | "test";
 
-/** The UC1 metadata plants: the ways a snapshot value can be hard to read. */
-export const PLANTS = [
-  "effective date in numerals",
-  "effective date in words",
-  "effective date at last signature",
-  "effective date not stated",
-  "term in months",
-  "term in years",
-  "term until terminated on notice",
-  "survival period that looks like the term",
-  "survival indefinite for trade secrets",
-  "survival indefinite",
-  "one-way with a mutual recital",
-  "governing law ≠ courts",
-  "party and its Affiliates",
-] as const;
+/** How often each plant must appear in each split. */
+export interface CoverageMinimums {
+  dev: number;
+  test: number;
+}
 
-export type Plant = (typeof PLANTS)[number];
-
-/** Each plant must appear at least this often in each split. */
-export const COVERAGE_MINIMUMS = { dev: 2, test: 1 } as const;
-
-/** The plants one NDA carries. */
-export function plantsOf(spec: PlantSpec): Plant[] {
-  const { effectiveDate, term, survivalPeriod, mutuality } = spec;
-  const plants: Plant[] = [];
-  plants.push(
-    effectiveDate.kind === "date"
-      ? `effective date in ${effectiveDate.phrasing}`
-      : effectiveDate.kind === "last-signature"
-        ? "effective date at last signature"
-        : "effective date not stated",
-  );
-  plants.push(term.kind === "fixed" ? `term in ${term.unit}` : "term until terminated on notice");
-  if (survivalPeriod.kind === "indefinite") plants.push("survival indefinite");
-  else if (survivalPeriod.phrasing === "like-term") {
-    plants.push("survival period that looks like the term");
-  } else if (survivalPeriod.phrasing === "trade-secrets-indefinite") {
-    plants.push("survival indefinite for trade secrets");
-  }
-  if (mutuality.kind === "one-way" && mutuality.recital === "mutual-discussions") {
-    plants.push("one-way with a mutual recital");
-  }
-  if (spec.governingLaw !== spec.courts) plants.push("governing law ≠ courts");
-  if (spec.parties.some((party) => party.affiliates)) plants.push("party and its Affiliates");
-  return plants;
+/** What a corpus must cover: its plants, the plants one spec carries, and the minimums. */
+export interface CoveragePlan<Spec extends { split: Split }> {
+  plants: readonly string[];
+  plantsOf(spec: Spec): readonly string[];
+  minimums: CoverageMinimums;
 }
 
 export interface CoverageRow {
-  plant: Plant;
+  plant: string;
   dev: number;
   test: number;
   met: boolean;
 }
 
-/** How many NDAs in each split carry each plant, in `PLANTS` order. */
-export function coverage(specs: readonly PlantSpec[]): CoverageRow[] {
+/** How many specs in each split carry each plant, in the plan's plant order. */
+export function coverage<Spec extends { split: Split }>(
+  specs: readonly Spec[],
+  { plants, plantsOf, minimums }: CoveragePlan<Spec>,
+): CoverageRow[] {
   const counted = specs.map((spec) => ({ split: spec.split, plants: plantsOf(spec) }));
-  return PLANTS.map((plant) => {
-    const count = (split: PlantSpec["split"]) =>
-      counted.filter((nda) => nda.split === split && nda.plants.includes(plant)).length;
+  return plants.map((plant) => {
+    const count = (split: Split) =>
+      counted.filter((carried) => carried.split === split && carried.plants.includes(plant)).length;
     const dev = count("dev");
     const test = count("test");
-    return {
-      plant,
-      dev,
-      test,
-      met: dev >= COVERAGE_MINIMUMS.dev && test >= COVERAGE_MINIMUMS.test,
-    };
+    return { plant, dev, test, met: dev >= minimums.dev && test >= minimums.test };
   });
 }
 
 /** The coverage table as Markdown, with the minimums in the header. */
-export function renderCoverageTable(rows: readonly CoverageRow[]): string {
+export function renderCoverageTable(
+  rows: readonly CoverageRow[],
+  minimums: CoverageMinimums,
+): string {
   return [
-    `| Plant | Dev (min ${COVERAGE_MINIMUMS.dev}) | Test (min ${COVERAGE_MINIMUMS.test}) | |`,
+    `| Plant | Dev (min ${minimums.dev}) | Test (min ${minimums.test}) | |`,
     "|---|---:|---:|---|",
     ...rows.map(
       ({ plant, dev, test, met }) => `| ${plant} | ${dev} | ${test} | ${met ? "ok" : "SHORT"} |`,
     ),
   ].join("\n");
+}
+
+/** The error to print when some plant is short of its minimums; undefined when none is. */
+export function shortfall(
+  rows: readonly CoverageRow[],
+  minimums: CoverageMinimums,
+): string | undefined {
+  const short = rows.filter(({ met }) => !met).length;
+  if (short === 0) return undefined;
+  return `error: coverage minimums not met (${minimums.dev} in dev, ${minimums.test} in test) for ${short} plant(s); add or change plant specs.`;
 }

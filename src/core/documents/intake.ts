@@ -5,6 +5,19 @@ export const QUEUES = ["nda-review", "commercial", "privacy", "senior-associate"
 
 export type Queue = (typeof QUEUES)[number];
 
+/** The document types, by primary purpose (see GLOSSARY.md and the UC2 spec). */
+export const DOC_TYPES = ["nda", "msa", "dpa", "sow", "other"] as const;
+
+export type DocType = (typeof DOC_TYPES)[number];
+
+/** An intake document's ambiguity: a clean document or a hybrid document (see GLOSSARY.md). */
+export const AMBIGUITIES = ["clean", "hybrid"] as const;
+
+export type Ambiguity = (typeof AMBIGUITIES)[number];
+
+/** The gold evidence entry that means "the document's title", not a numbered paragraph. */
+export const TITLE_EVIDENCE = "title";
+
 /** One paragraph of an intake document. Numbered documents keep each paragraph's ID, e.g. `4.2` or `6`. */
 export interface IntakeParagraph {
   id?: string;

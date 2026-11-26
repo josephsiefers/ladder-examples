@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-/** The document types, by primary purpose. See the UC2 spec. */
-export const DOC_TYPES = ["nda", "msa", "dpa", "sow", "other"] as const;
-
-export type DocType = (typeof DOC_TYPES)[number];
+import { DOC_TYPES } from "../../core/documents";
 
 /** UC2's classification: one document type and the reason for it. */
 export const classificationSchema = z.object({

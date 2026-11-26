@@ -1,5 +1,12 @@
 import { z } from "zod";
-import type { IntakeDesk } from "../../core/documents";
+import {
+  AMBIGUITIES,
+  type Ambiguity,
+  DOC_TYPES,
+  type DocType,
+  type IntakeDesk,
+  TITLE_EVIDENCE,
+} from "../../core/documents";
 import {
   accuracy,
   accuracyByGroup,
@@ -18,17 +25,11 @@ import {
   row,
   tableHead,
 } from "../../core/eval";
-import { DOC_TYPES, type DocType } from "./schema";
 import { triageDocument } from "./triage";
 
 export interface TriageEvalInput {
   documentId: string;
 }
-
-/** An intake document's ambiguity: a clean document or a hybrid document (see GLOSSARY.md). */
-export const AMBIGUITIES = ["clean", "hybrid"] as const;
-
-export type Ambiguity = (typeof AMBIGUITIES)[number];
 
 /**
  * What the eval compares: the gold label carries the document type and its ambiguity, the output
@@ -120,6 +121,7 @@ export function createTriageEval({
     target: triageTarget,
     async evidenceText({ documentId }, paragraphId) {
       const document = await documents.readIntake(documentId);
+      if (paragraphId === TITLE_EVIDENCE) return document.title;
       return document.paragraphs.find((paragraph) => paragraph.id === paragraphId)?.text;
     },
     analysis: triageAnalysis,

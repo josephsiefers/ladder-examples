@@ -147,6 +147,12 @@ describe("the triage eval", () => {
     expect(await definition.evidenceText(input, "9.9")).toBeUndefined();
   });
 
+  it("finds the document's title for the title evidence marker", async () => {
+    expect(await definition.evidenceText({ documentId: "intake-msa" }, "title")).toBe(
+      "Master Services Agreement",
+    );
+  });
+
   it("reads gold as document type and ambiguity only", () => {
     expect(definition.goldSchema.safeParse({ docType: "msa", ambiguity: "hybrid" }).success).toBe(
       true,

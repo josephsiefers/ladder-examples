@@ -7,6 +7,10 @@ export {
   type FirmDocuments,
 } from "./firm";
 export {
+  AMBIGUITIES,
+  type Ambiguity,
+  DOC_TYPES,
+  type DocType,
   type IntakeDesk,
   type IntakeDocument,
   IntakeNotFoundError,
@@ -18,6 +22,7 @@ export {
   type RoutingRecord,
   type RoutingRequest,
   renderIntakeForPrompt,
+  TITLE_EVIDENCE,
 } from "./intake";
 export { withMemoryQueues } from "./memory-queues";
 export { renderContractForPrompt } from "./render";

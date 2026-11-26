@@ -1,85 +1,56 @@
 import { describe, expect, it } from "vitest";
-import { coverage, plantsOf, renderCoverageTable } from "./coverage";
-import { MUTUAL_SPEC, WORKED_SPEC } from "./generate.fixtures";
-import type { PlantSpec } from "./spec";
+import { type CoveragePlan, coverage, renderCoverageTable, shortfall } from "./coverage";
 
-describe("plantsOf", () => {
-  it("names every plant an NDA carries", () => {
-    expect(plantsOf(WORKED_SPEC)).toEqual([
-      "effective date in words",
-      "term in years",
-      "survival period that looks like the term",
-      "one-way with a mutual recital",
-      "governing law ≠ courts",
-      "party and its Affiliates",
-    ]);
-    expect(plantsOf(MUTUAL_SPEC)).toEqual([
-      "effective date not stated",
-      "term until terminated on notice",
-      "survival indefinite",
-    ]);
-  });
+interface ToySpec {
+  split: "dev" | "test";
+  plants: string[];
+}
 
-  it.each([
-    [
-      { effectiveDate: { kind: "date", value: "2025-01-01", phrasing: "numerals" } },
-      "effective date in numerals",
-    ],
-    [{ effectiveDate: { kind: "last-signature" } }, "effective date at last signature"],
-    [{ term: { kind: "fixed", months: 18, unit: "months" } }, "term in months"],
-    [
-      {
-        survivalPeriod: {
-          kind: "fixed",
-          months: 24,
-          unit: "months",
-          phrasing: "trade-secrets-indefinite",
-        },
-      },
-      "survival indefinite for trade secrets",
-    ],
-  ] as [Partial<PlantSpec>, string][])("names %j as %s", (change, plant) => {
-    expect(plantsOf({ ...MUTUAL_SPEC, ...change })).toContain(plant);
-  });
+const PLAN: CoveragePlan<ToySpec> = {
+  plants: ["a", "b"],
+  plantsOf: (spec) => spec.plants,
+  minimums: { dev: 2, test: 1 },
+};
 
-  it("carries no extra plant for a plain fixed survival period or a plain one-way recital", () => {
-    const spec: PlantSpec = {
-      ...MUTUAL_SPEC,
-      mutuality: { kind: "one-way", discloser: 1, recital: "plain" },
-      survivalPeriod: { kind: "fixed", months: 24, unit: "months", phrasing: "fixed" },
-    };
-    expect(plantsOf(spec)).toEqual([
-      "effective date not stated",
-      "term until terminated on notice",
-    ]);
-  });
-});
+const SPECS: ToySpec[] = [
+  { split: "dev", plants: ["a"] },
+  { split: "dev", plants: ["a", "b"] },
+  { split: "test", plants: ["a"] },
+  { split: "test", plants: ["b"] },
+];
 
 describe("coverage", () => {
-  it("counts each plant per split and marks it short below 2 in dev or 1 in test", () => {
-    const rows = coverage([WORKED_SPEC, { ...WORKED_SPEC, id: "b" }, MUTUAL_SPEC]);
-    expect(rows.find(({ plant }) => plant === "term in years")).toEqual({
-      plant: "term in years",
+  it("counts each plant per split, in plan order, and marks it met at the minimums", () => {
+    expect(coverage(SPECS, PLAN)).toEqual([
+      { plant: "a", dev: 2, test: 1, met: true },
+      { plant: "b", dev: 1, test: 1, met: false },
+    ]);
+  });
+
+  it("marks a plant short when only the test split falls below its minimum", () => {
+    expect(coverage(SPECS.slice(0, 2), PLAN)[0]).toEqual({
+      plant: "a",
       dev: 2,
       test: 0,
       met: false,
     });
-    expect(rows.find(({ plant }) => plant === "survival indefinite")).toEqual({
-      plant: "survival indefinite",
-      dev: 0,
-      test: 1,
-      met: false,
-    });
-    const met = coverage([WORKED_SPEC, WORKED_SPEC, { ...WORKED_SPEC, split: "test" }]);
-    expect(met.find(({ plant }) => plant === "term in years")?.met).toBe(true);
   });
 
   it("renders the table with the minimums in the header", () => {
-    const table = renderCoverageTable(coverage([WORKED_SPEC]));
-    expect(table.split("\n").slice(0, 3)).toEqual([
-      "| Plant | Dev (min 2) | Test (min 1) | |",
-      "|---|---:|---:|---|",
-      "| effective date in numerals | 0 | 0 | SHORT |",
-    ]);
+    expect(renderCoverageTable(coverage(SPECS, PLAN), PLAN.minimums)).toBe(
+      [
+        "| Plant | Dev (min 2) | Test (min 1) | |",
+        "|---|---:|---:|---|",
+        "| a | 2 | 1 | ok |",
+        "| b | 1 | 1 | SHORT |",
+      ].join("\n"),
+    );
+  });
+
+  it("explains a shortfall, and finds none when every minimum is met", () => {
+    expect(shortfall(coverage(SPECS, PLAN), PLAN.minimums)).toBe(
+      "error: coverage minimums not met (2 in dev, 1 in test) for 1 plant(s); add or change plant specs.",
+    );
+    expect(shortfall(coverage(SPECS, PLAN).slice(0, 1), PLAN.minimums)).toBeUndefined();
   });
 });
