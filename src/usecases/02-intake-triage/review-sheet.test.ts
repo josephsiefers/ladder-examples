@@ -157,4 +157,8 @@ describe("the triage review sheet", () => {
     expect(tableRows(sheet.markdown, "Agreeing rows")).toHaveLength(3);
     expect(sheet.summary).toBe("0 disagreement rows · random sample of 3 of 3 agreeing rows");
   });
+
+  it("labels a document without an ambiguity by its type alone", () => {
+    expect(definition.documentLabel?.({ docType: "nda" })).toBe("nda");
+  });
 });
