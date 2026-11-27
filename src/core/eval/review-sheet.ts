@@ -28,7 +28,8 @@ interface Layout {
   keyHeader: string[];
   sourceHeader: string;
   sampleSize: number;
-  excerptLength?: number;
+  /** Each evidence paragraph is cut to this many characters. */
+  excerptLength: number;
   rows(record: RunRecord): ReviewRow[];
 }
 
@@ -41,6 +42,7 @@ const FIELD_LAYOUT: Layout = {
   keyHeader: ["Case", "Field", "Answer key says"],
   sourceHeader: "Source sentence",
   sampleSize: 10,
+  excerptLength: Number.POSITIVE_INFINITY,
   rows: (record) =>
     record.caseIds.flatMap((caseId) => {
       const results = resultsOf(record, caseId);
@@ -99,13 +101,16 @@ export async function buildReviewSheet<Input, Value>(
   { sampleSize, seed = DEFAULT_SAMPLE_SEED }: ReviewSheetOptions = {},
 ): Promise<ReviewSheet> {
   const casesById = new Map(cases.map((evalCase) => [evalCase.id, evalCase]));
-  const unknown = record.caseIds.find((caseId) => !casesById.has(caseId));
-  if (unknown !== undefined) throw new UnknownCaseError(unknown);
+  const caseOf = (caseId: string) => {
+    const evalCase = casesById.get(caseId);
+    if (!evalCase) throw new UnknownCaseError(caseId);
+    return evalCase;
+  };
+  // Refuse the record up front, even when the missing case would not be shown on the sheet.
+  for (const caseId of record.caseIds) caseOf(caseId);
   const { documentLabel } = definition;
   const layout = documentLabel
-    ? documentLayout((caseId) =>
-        documentLabel((casesById.get(caseId) as EvalCase<Input, Value>).gold),
-      )
+    ? documentLayout((caseId) => documentLabel(caseOf(caseId).gold))
     : FIELD_LAYOUT;
 
   const rows = layout.rows(record);
@@ -123,7 +128,7 @@ export async function buildReviewSheet<Input, Value>(
         row([
           ...reviewRow.key,
           ...reviewRow.runs.map((run) => (run.agrees ? run.said : `✗ ${run.said}`)),
-          await sourceText(definition, casesById.get(reviewRow.caseId), reviewRow.fields, layout),
+          await sourceText(definition, caseOf(reviewRow.caseId), reviewRow.fields, layout),
         ]),
       ),
     );
@@ -169,17 +174,18 @@ export class UnknownCaseError extends Error {
 /** The text of each paragraph the answer key cites for the fields, each marked with its ID. */
 async function sourceText<Input, Value>(
   definition: Pick<EvalDefinition<Input, Value>, "evidenceText">,
-  evalCase: EvalCase<Input, Value> | undefined,
+  evalCase: EvalCase<Input, Value>,
   fields: readonly string[],
   { excerptLength }: Layout,
 ): Promise<string> {
-  if (!evalCase?.evidence) return "(no evidence recorded)";
-  const ids = [...new Set(fields.flatMap((field) => evalCase.evidence?.[field] ?? []))];
+  const { evidence } = evalCase;
+  if (!evidence) return "(no evidence recorded)";
+  const ids = fields.flatMap((field) => evidence[field] ?? []);
   if (ids.length === 0) return "(no sentence: field should be absent)";
   const texts = await Promise.all(
     ids.map(async (id) => {
       const text = (await definition.evidenceText(evalCase.input, id)) ?? "(no such paragraph)";
-      return `[${id}] ${excerptLength === undefined ? text : excerpt(text, excerptLength)}`;
+      return `[${id}] ${excerpt(text, excerptLength)}`;
     }),
   );
   return texts.join(" ");

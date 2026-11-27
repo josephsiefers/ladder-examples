@@ -150,6 +150,17 @@ describe("buildReviewSheet", () => {
     );
   });
 
+  it("refuses a record whose missing case would not even appear on the sheet", async () => {
+    const record = runRecord([
+      caseRun("x", 0, { colour: true }),
+      caseRun("z", 0, { colour: true }),
+    ]);
+
+    await expect(buildReviewSheet(definition, record, CASES, { sampleSize: 0 })).rejects.toThrow(
+      "Run record case 'z' is not in the dataset",
+    );
+  });
+
   describe("the random sample of agreeing rows", () => {
     /** 8 cases × 2 fields, all agreeing: 16 rows. */
     const ids = ["a", "b", "c", "d", "e", "f", "g", "h"];

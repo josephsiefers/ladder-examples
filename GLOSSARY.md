@@ -116,6 +116,9 @@ An intake document whose substance spans more than one document type, such as an
 Whether an intake document is a clean document or a hybrid document. The triage gold labels carry it, and the eval reports accuracy by it. Not how hard a document is to classify.
 _Avoid_: Difficulty, complexity
 
+**Document-level label**:
+An intake document's gold document type and ambiguity read as one label, such as `msa (hybrid)`. The triage review sheet shows it as each row's answer key. An eval's `documentLabel` function gives it.
+
 **Intake desk**:
 The firm's intake function, which lists intake documents, reads one, and routes one to its queue. Part of the translation layer. The code calls it `IntakeDesk`.
 _Avoid_: Intake system, intake API, the firm's intake
