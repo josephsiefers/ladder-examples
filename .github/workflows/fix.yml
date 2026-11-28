@@ -1,0 +1,321 @@
+# The fix task. Starts when a `review` run completes. When the review failed an agent PR
+# (`agent/issue-*`), acts on the review's findings on the PR branch, pushes, and reviews its own
+# push. One fix attempt per PR (`agent-fix-tried`); after that, the PR is the owner's.
+#
+# Four jobs, so the runner that runs Claude never holds the factory's GitHub token:
+#   claim      token, code from master only: the gates and guards, labels, the inputs → artifact
+#   build      no token: Claude acts on the review → its new commits as a git bundle, plus the
+#              PR body addendum, or blocked.md
+#   publish    token, a fresh runner, code from master only: pushes the bundle fast-forward only,
+#              appends the addendum to the PR body, or comments blocked.md
+#   re-review  `review-pr.yml`, on the new head. A failure there adds `ready-for-human`.
+#
+# It starts on `workflow_run`, not a label: the factory's token is the owner's, so a workflow can't
+# tell a run's label change from the owner's, and no run adds a label that starts anything. A
+# `workflow_run` workflow runs from the default branch, so this file always comes from master.
+# The chain stops at the re-review, which runs inside this workflow, not as a `review` run, and
+# `agent-fix-tried` refuses a second attempt even if a `review` run did follow.
+
+name: fix
+
+on:
+  workflow_run:
+    workflows: [review]
+    types: [completed]
+
+permissions:
+  contents: read
+
+env:
+  BRANCH: ${{ github.event.workflow_run.head_branch }}
+  REVIEWED_SHA: ${{ github.event.workflow_run.head_sha }}
+  OWNER: ${{ github.repository_owner }}
+  GH_REPO: ${{ github.repository }}
+  RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+jobs:
+  claim:
+    # The cheap checks, before any download. A review run whose jobs were all skipped (the ones
+    # its own label changes start) concludes `skipped`, so it stops here.
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      startsWith(github.event.workflow_run.head_branch, 'agent/issue-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # One group per PR. Keyed on the branch, which is one PR's for `agent/issue-*`, because the
+    # payload's pull_requests can be empty. On the job, so a skipped run never joins the group.
+    concurrency:
+      group: fix-${{ github.event.workflow_run.head_branch }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      go: ${{ steps.claim.outputs.go }}
+      pr: ${{ steps.gate.outputs.pr }}
+    env:
+      GH_TOKEN: ${{ secrets.FACTORY_GITHUB_TOKEN }}
+      PR_FROM_RUN: ${{ github.event.workflow_run.pull_requests[0].number }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: .github/factory
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: review
+          path: ${{ runner.temp }}/review
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Go on only for a failed review of an open PR
+        id: gate
+        run: |
+          skip() {
+            echo "Not starting: $1"
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          }
+          verdict=$(tr -d '[:space:]' < "$RUNNER_TEMP/review/verdict.txt")
+          [ "$verdict" = fail ] || skip "the review's verdict is '$verdict', not fail."
+          pr=$PR_FROM_RUN
+          [ -n "$pr" ] || pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          [ -n "$pr" ] || skip "no open PR has the head $BRANCH."
+          # Into a variable first, so a failed call fails the step instead of reading as a skip.
+          info=$(gh pr view "$pr" --json state,isCrossRepository,headRefName \
+            --jq '"\(.state) \(.isCrossRepository) \(.headRefName)"')
+          read -r state cross head_ref <<< "$info"
+          [ "$state" = OPEN ] || skip "PR #$pr is $state."
+          [ "$cross" = false ] && [ "$head_ref" = "$BRANCH" ] || skip "PR #$pr isn't this repo's $BRANCH."
+          echo "pr=$pr" >> "$GITHUB_OUTPUT"
+          echo "go=true" >> "$GITHUB_OUTPUT"
+
+      - name: Claim the PR, unless a run has it, it had its fix attempt, or its head moved
+        id: claim
+        if: steps.gate.outputs.go == 'true'
+        env:
+          PR: ${{ steps.gate.outputs.pr }}
+        run: |
+          stop() {
+            gh pr comment "$PR" --body "Not starting a fix run: $1"
+            [ "$2" != hand-back ] || gh pr edit "$PR" --add-label ready-for-human
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          }
+          info=$(gh pr view "$PR" --json labels,headRefOid --jq '[.labels[].name] as $l
+            | "\($l | index("agent-working") != null) \($l | index("agent-fix-tried") != null) \(.headRefOid)"')
+          read -r working tried head <<< "$info"
+          [ "$working" = false ] || stop "a run is already working on this PR."
+          [ "$tried" = false ] || stop "this PR has had its one fix attempt, so it's yours. To allow another, remove \`agent-fix-tried\`, then add \`agent-review\`." hand-back
+          [ "$head" = "$REVIEWED_SHA" ] || stop "the PR's head moved since the review (\`${REVIEWED_SHA:0:7}\` → \`${head:0:7}\`). A review of the new head is your call: add \`agent-review\`." hand-back
+          mkdir -p "$RUNNER_TEMP/fix"
+          for issue in $(gh pr view "$PR" --json closingIssuesReferences --jq '.closingIssuesReferences[].number'); do
+            bash .github/factory/ticket.sh "$issue" >> "$RUNNER_TEMP/fix/tickets.md"
+            printf '\n\n' >> "$RUNNER_TEMP/fix/tickets.md"
+          done
+          [ -s "$RUNNER_TEMP/fix/tickets.md" ] ||
+            echo "This PR closes no ticket, so there is no spec beyond the PR body." > "$RUNNER_TEMP/fix/tickets.md"
+          gh pr view "$PR" --json body --jq .body > "$RUNNER_TEMP/fix/pr-body.md"
+          cp "$RUNNER_TEMP/review/review.md" "$RUNNER_TEMP/fix/review.md"
+          gh pr edit "$PR" --add-label agent-working --add-label agent-fix-tried
+          echo "claimed=true" >> "$GITHUB_OUTPUT"
+          echo "go=true" >> "$GITHUB_OUTPUT"
+
+      - if: steps.claim.outputs.go == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fix-input
+          path: ${{ runner.temp }}/fix
+
+      - name: Hand the PR back after a failure
+        if: failure() && steps.gate.outputs.go == 'true'
+        env:
+          PR: ${{ steps.gate.outputs.pr }}
+          CLAIMED: ${{ steps.claim.outputs.claimed }}
+        run: |
+          gh pr comment "$PR" --body "The fix run failed before it started: $RUN_URL. To retry, remove \`agent-fix-tried\` if the PR has it, then add \`agent-review\`."
+          gh pr edit "$PR" --add-label ready-for-human
+          [ "$CLAIMED" != true ] || gh pr edit "$PR" --remove-label agent-working
+
+  build:
+    needs: claim
+    if: needs.claim.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      PR: ${{ needs.claim.outputs.pr }}
+      OWNER_ID: ${{ github.repository_owner_id }}
+    steps:
+      # The runner context isn't available in job-level env, so the paths are set here.
+      - name: Set the paths
+        run: |
+          echo "OUT_DIR=$RUNNER_TEMP/factory/out" >> "$GITHUB_ENV"
+          echo "TICKET_FILE=$RUNNER_TEMP/factory/tickets.md" >> "$GITHUB_ENV"
+          echo "PR_BODY_FILE=$RUNNER_TEMP/factory/pr-body.md" >> "$GITHUB_ENV"
+          echo "REVIEW_FILE=$RUNNER_TEMP/factory/review.md" >> "$GITHUB_ENV"
+
+      - name: Check out the factory's files from master
+        uses: actions/checkout@v5
+        with:
+          path: factory
+          sparse-checkout: .github
+          persist-credentials: false
+
+      - name: Check out the PR at the reviewed commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          path: pr
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: pr/.nvmrc
+          cache: npm
+          cache-dependency-path: pr/package-lock.json
+
+      - run: npm ci
+        working-directory: pr
+
+      - uses: ./factory/.github/actions/setup-claude
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fix-input
+          path: ${{ runner.temp }}/factory
+
+      # No eval key: a finding that needs a live eval is one for blocked.md.
+      - name: Prepare the branch
+        working-directory: pr
+        run: |
+          git switch --create "$BRANCH"
+          git config user.name "$OWNER (factory)"
+          git config user.email "$OWNER_ID+$OWNER@users.noreply.github.com"
+          mkdir -p "$OUT_DIR"
+
+      - name: Act on the review
+        working-directory: pr
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          prompt=$(envsubst '$PR $BRANCH $TICKET_FILE $PR_BODY_FILE $REVIEW_FILE $OUT_DIR' < ../factory/.github/factory/fix.md)
+          # The implementer's tools, settings and context notice: see implement.yml. The prompt and
+          # settings come from master; the notice's hook runs the PR branch's scripts/check-context.ts,
+          # as it runs $CLAUDE_PROJECT_DIR's. This job holds no GitHub token, so that's safe.
+          claude -p "$prompt" \
+            --model claude-opus-5-5 \
+            --tools "Bash,Read,Edit,Write,Skill,ToolSearch,Monitor,TaskStop,WebSearch,WebFetch" \
+            --permission-mode auto \
+            --settings ../factory/.github/factory/implement-settings.json \
+            --add-dir "$RUNNER_TEMP/factory" \
+            --output-format stream-json --verbose \
+            > "$RUNNER_TEMP/factory/transcript.jsonl"
+          jq -r 'select(.type == "result") | .result' "$RUNNER_TEMP/factory/transcript.jsonl"
+
+      - name: Record the run's peak context
+        run: bash factory/.github/factory/peak-context.sh "$RUNNER_TEMP/factory/transcript.jsonl" "$OUT_DIR/pr-body-addendum.md"
+
+      - name: Bundle the commits
+        working-directory: pr
+        run: bash ../factory/.github/factory/bundle.sh "$OUT_DIR" "$BRANCH" "$REVIEWED_SHA" pr-body-addendum.md
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: outcome
+          path: ${{ runner.temp }}/factory/out
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transcript-fix-pr-${{ needs.claim.outputs.pr }}
+          path: ${{ runner.temp }}/factory/transcript.jsonl
+          if-no-files-found: ignore
+
+  publish:
+    needs: [claim, build]
+    if: always() && needs.claim.result == 'success' && needs.claim.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      pushed: ${{ steps.publish.outputs.pushed }}
+      head-sha: ${{ steps.publish.outputs.head-sha }}
+    env:
+      GH_TOKEN: ${{ secrets.FACTORY_GITHUB_TOKEN }}
+      PR: ${{ needs.claim.outputs.pr }}
+    steps:
+      - name: Set the paths
+        run: echo "OUT=$RUNNER_TEMP/outcome" >> "$GITHUB_ENV"
+
+      - if: needs.build.result == 'success'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - if: needs.build.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: outcome
+          path: ${{ runner.temp }}/outcome
+
+      - name: Push the fix, or hand the PR back
+        id: publish
+        if: needs.build.result == 'success'
+        run: |
+          if [ -f "$OUT/blocked.md" ]; then
+            gh pr comment "$PR" --body-file "$OUT/blocked.md"
+            gh pr edit "$PR" --add-label ready-for-human
+            exit 0
+          fi
+          remote="https://x-access-token:$GH_TOKEN@github.com/$GH_REPO.git"
+          # The bundle's commits sit on the reviewed head, so the fetch needs it.
+          git fetch --quiet "$remote" "$REVIEWED_SHA"
+          git fetch "$OUT/commits.bundle" "refs/heads/$BRANCH:refs/heads/fix"
+          if ! git merge-base --is-ancestor "$REVIEWED_SHA" fix ||
+             [ "$(git rev-list --count "$REVIEWED_SHA..fix")" = 0 ]; then
+            echo "::error::The bundle holds no commits on top of the reviewed head."
+            exit 1
+          fi
+          # No --force: git refuses a push that isn't a fast-forward, so commits the owner pushed
+          # after the review are never overwritten. No npm ci ran here, so no hooks are installed;
+          # hooksPath makes sure none run.
+          if ! git -c core.hooksPath=/dev/null push "$remote" "refs/heads/fix:refs/heads/$BRANCH"; then
+            gh pr comment "$PR" --body "The fix run's push was refused, so nothing was pushed: $RUN_URL. Either the branch moved since the review (\`${REVIEWED_SHA:0:7}\`), or the fix touches \`.github/workflows/\`, which the factory's token can't push."
+            gh pr edit "$PR" --add-label ready-for-human
+            exit 0
+          fi
+          gh pr view "$PR" --json body --jq .body > "$RUNNER_TEMP/pr-body.md"
+          printf '\n\n' >> "$RUNNER_TEMP/pr-body.md"
+          cat "$OUT/pr-body-addendum.md" >> "$RUNNER_TEMP/pr-body.md"
+          gh pr edit "$PR" --body-file "$RUNNER_TEMP/pr-body.md"
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+          echo "head-sha=$(git rev-parse fix)" >> "$GITHUB_OUTPUT"
+
+      - name: Hand the PR back after a failure
+        if: failure() || needs.build.result != 'success'
+        run: |
+          gh pr comment "$PR" --body "The fix run failed: $RUN_URL. Its transcript is attached to the run. To retry, remove \`agent-fix-tried\`, then add \`agent-review\`."
+          gh pr edit "$PR" --add-label ready-for-human
+
+      - name: Release the PR
+        if: always()
+        run: gh pr edit "$PR" --remove-label agent-working
+
+  re-review:
+    needs: [claim, publish]
+    if: needs.publish.outputs.pushed == 'true'
+    uses: ./.github/workflows/review-pr.yml
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    with:
+      pr: ${{ fromJSON(needs.claim.outputs.pr) }}
+      head-sha: ${{ needs.publish.outputs.head-sha }}
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      FACTORY_GITHUB_TOKEN: ${{ secrets.FACTORY_GITHUB_TOKEN }}
