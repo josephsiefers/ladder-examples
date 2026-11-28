@@ -23,7 +23,7 @@
 
 ## Open questions
 
-1. Definition of edit size (word-level edit distance? ratio to the associate's edit?) and what counts as "materially larger".
+1. What counts as "materially larger". UC3 already measures edit size as words changed (word-level diff, insertions + deletions) by the model vs by the gold edit, reported as a median ratio with no pass/fail; see [UC3 Scoring](uc3-nda-review.md#scoring).
 2. Judge rubric, and whether the judge uses Haiku or Sonnet.
 3. Size of the calibration set, how the "bad" edits are constructed, and the agreement threshold for trusting the judge.
 4. Iteration cap and stop condition (judge passes? no improvement?).

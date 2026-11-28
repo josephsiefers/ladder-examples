@@ -70,12 +70,29 @@ The playbook's preferred wording or outcome for a clause type.
 **Fallback position**:
 A less-preferred outcome the playbook still accepts for a clause type.
 
+**Limit**:
+The furthest a clause may depart from the standard position before an associate can no longer accept it alone; anything past it needs the partner.
+
+**Required clause type**:
+A clause type the playbook expects every contract to contain. Its absence is a missing verdict; the absence of an optional clause type is acceptable.
+
+**Clause map**:
+For one contract, the paragraphs whose substance is each clause type. A paragraph may belong to several clause types, or to none.
+_Avoid_: Labels, tags, segmentation
+
 **Verdict**:
-The result of checking one clause type against the playbook: acceptable, acceptable under fallback, deviates, or beyond limit / missing.
+The result of checking one clause type of a contract against the playbook: acceptable, fallback (acceptable under the fallback position), deviates (outside the fallback but within the limit), beyond limit, or missing (no paragraph has that substance).
 
 **Redline**:
-The reviewed contract returned with proposed edits and comments, each edit citing the playbook entry it enforces.
+The reviewed contract returned with its redline entries, each citing the playbook entry it enforces.
 _Avoid_: Markup, diff
+
+**Redline entry**:
+One proposed edit or margin note in a redline, carrying the verdict for its clause type and the associate's decision on it: accept, reject, or escalate.
+_Avoid_: Change, comment, finding
+
+**Escalation**:
+A redline entry the associate passes to the partner because it is beyond limit or missing, or because the associate chooses to.
 
 **Matter record**:
 The firm's record of one client matter, where facts about its contracts are kept.
