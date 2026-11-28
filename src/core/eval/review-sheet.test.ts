@@ -49,6 +49,14 @@ const sourceOf = async (evidence: EvalCase<Input, unknown>["evidence"], caseId =
   return tableRows(sheet.markdown, "Disagreements")[0]?.split(" | ").at(-1);
 };
 
+/** A definition with a document-level label whose every evidence paragraph is `text`. */
+const longDocs = (text: string) => ({
+  async evidenceText() {
+    return text;
+  },
+  documentLabel: () => "label",
+});
+
 describe("buildReviewSheet", () => {
   it("lists disagreements before agreeing rows; one run differing makes a disagreement", async () => {
     const record = runRecord([
@@ -142,6 +150,17 @@ describe("buildReviewSheet", () => {
     );
   });
 
+  it("refuses a record whose missing case would not even appear on the sheet", async () => {
+    const record = runRecord([
+      caseRun("x", 0, { colour: true }),
+      caseRun("z", 0, { colour: true }),
+    ]);
+
+    await expect(buildReviewSheet(definition, record, CASES, { sampleSize: 0 })).rejects.toThrow(
+      "Run record case 'z' is not in the dataset",
+    );
+  });
+
   describe("the random sample of agreeing rows", () => {
     /** 8 cases × 2 fields, all agreeing: 16 rows. */
     const ids = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -173,6 +192,43 @@ describe("buildReviewSheet", () => {
 
       expect(sheet.markdown).toContain("## Agreeing rows: random sample of 10 of 16 (seed 7)");
       expect(sheet.summary).toBe("0 disagreement rows · random sample of 10 of 16 agreeing rows");
+    });
+  });
+
+  describe("with a document-level label", () => {
+    const labelled = {
+      ...definition,
+      documentLabel: (gold: unknown) => `label of ${String(gold)}`,
+    };
+
+    it("has one row per case; a run differing on any field makes it a disagreement", async () => {
+      const record = runRecord([
+        caseRun("x", 0, { colour: true, size: false }),
+        caseRun("y", 0, { colour: true, size: true }),
+      ]);
+      const cases = [evalCase("x"), evalCase("y")].map((each) => ({ ...each, gold: each.id }));
+
+      const sheet = await buildReviewSheet(labelled, record, cases);
+
+      expect(tableRows(sheet.markdown, "Disagreements")).toEqual([
+        "| x | label of x | ✗ gold · something else | (no evidence recorded) |",
+      ]);
+      expect(tableRows(sheet.markdown, "Agreeing rows")).toEqual([
+        "| y | label of y | gold · gold | (no evidence recorded) |",
+      ]);
+    });
+
+    it("cuts each evidence paragraph over 160 characters to an excerpt", async () => {
+      const record = runRecord([caseRun("x", 0, { colour: true })]);
+      const cases = [evalCase("x", { colour: ["1.1"] })];
+      const excerptOf = async (text: string) =>
+        tableRows((await buildReviewSheet(longDocs(text), record, cases)).markdown, "Agreeing")[0]
+          ?.split(" | ")
+          .at(-1);
+      const exact = "a".repeat(160);
+
+      expect(await excerptOf(exact)).toBe(`[1.1] ${exact} |`);
+      expect(await excerptOf(`${"a".repeat(159)} bc`)).toBe(`[1.1] ${"a".repeat(159)}… |`);
     });
   });
 });

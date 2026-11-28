@@ -1,4 +1,5 @@
 {
   "input": { "documentId": "intake-hand-02" },
-  "gold": { "docType": "msa", "ambiguity": "hybrid" }
+  "gold": { "docType": "msa", "ambiguity": "hybrid" },
+  "evidence": { "docType": ["title"] }
 }

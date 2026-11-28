@@ -1,4 +1,5 @@
 {
   "input": { "documentId": "intake-hand-04" },
-  "gold": { "docType": "sow", "ambiguity": "clean" }
+  "gold": { "docType": "sow", "ambiguity": "clean" },
+  "evidence": { "docType": ["title"] }
 }

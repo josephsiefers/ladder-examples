@@ -124,6 +124,8 @@ export function createTriageEval({
       if (paragraphId === TITLE_EVIDENCE) return document.title;
       return document.paragraphs.find((paragraph) => paragraph.id === paragraphId)?.text;
     },
+    documentLabel: ({ docType, ambiguity }) =>
+      ambiguity === undefined ? docType : `${docType} (${ambiguity})`,
     analysis: triageAnalysis,
   };
 }

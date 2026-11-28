@@ -42,6 +42,11 @@ export interface EvalDefinition<Input, Value> {
   target(stats: readonly FieldStats[]): string;
   /** The text of one of a case's evidence paragraphs, for the review sheet; undefined if it has none by that ID. */
   evidenceText(input: Input, paragraphId: string): Promise<string | undefined>;
+  /**
+   * Optional: the gold value as one document-level label, e.g. `msa (hybrid)`. When given, the
+   * review sheet has one row per case, not one per (case, field).
+   */
+  documentLabel?(gold: Value): string;
   /** Optional: an extra report section in Markdown (e.g. a confusion matrix), from the run and its cases. */
   analysis?(record: RunRecord, cases: readonly EvalCase<Input, Value>[]): string;
 }
