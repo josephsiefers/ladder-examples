@@ -60,33 +60,43 @@ describe("npm run generate -- intake", () => {
     expect(await tree(outRoot)).toEqual(first);
   });
 
-  it("prints the coverage table by document type, split and ambiguity, and what it wrote", async () => {
+  it("prints the coverage table by document type and hybrids per split, and what it wrote", async () => {
     await generate();
     const printed = output.join("\n");
-    expect(printed).toContain("| Type · ambiguity | Dev (min 2) | Test (min 1) | |");
-    for (const row of [
-      "nda · clean",
-      "msa · clean",
-      "dpa · clean",
-      "sow · clean",
-      "other · clean",
-    ]) {
+    expect(printed).toContain("| Type, or hybrid | Dev (min 1) | Test (min 1) | |");
+    for (const row of ["nda", "msa", "dpa", "sow", "other", "hybrid"]) {
       expect(printed).toMatch(new RegExp(`\\| ${row} \\| \\d+ \\| \\d+ \\| ok \\|`));
     }
-    expect(output.at(-1)).toMatch(
-      /^\nWrote \d+ intake documents \(\d+ dev, \d+ test\) and their gold cases\.$/,
+    expect(output.at(-1)).toBe(
+      "\nWrote 30 intake documents (18 dev, 12 test) and their gold cases.",
     );
+  });
+
+  it("refuses, writing nothing, a corpus that fails the coverage gate", async () => {
+    const plantsDir = join(outRoot, "plants");
+    await cp(PLANTS, plantsDir, { recursive: true });
+    await writeFile(
+      join(plantsDir, "intake-extra.json"),
+      JSON.stringify({ ...MSA_SPEC, id: "intake-extra" }),
+    );
+
+    expect(await generate({ plantsDir })).toBe(1);
+    expect(output.at(-1)).toBe(
+      "error: the intake corpus has 31 documents (19 dev, 12 test); it needs 30 (18 dev, 12 test). Add, remove or move plant specs.",
+    );
+    expect(Object.keys(await tree(outRoot)).every((path) => path.startsWith("plants/"))).toBe(true);
   });
 
   it("refuses, writing nothing, a plant spec whose type is not its base document's", async () => {
     const plantsDir = join(outRoot, "plants");
     await cp(PLANTS, plantsDir, { recursive: true });
-    const wrong = { ...MSA_SPEC, id: "intake-wrong", docType: "dpa" };
-    await writeFile(join(plantsDir, "intake-wrong.json"), JSON.stringify(wrong));
+    // Replaces a clean dev MSA, so the corpus still passes its coverage gate.
+    const wrong = { ...MSA_SPEC, id: "intake-gen-02", docType: "dpa" };
+    await writeFile(join(plantsDir, "intake-gen-02.json"), JSON.stringify(wrong));
 
     expect(await generate({ plantsDir })).toBe(1);
     expect(output.at(-1)).toBe(
-      "error: intake-wrong: its document type is dpa, but its base document is a msa.",
+      "error: intake-gen-02: its document type is dpa, but its base document is a msa.",
     );
     expect(Object.keys(await tree(outRoot)).every((path) => path.startsWith("plants/"))).toBe(true);
   });

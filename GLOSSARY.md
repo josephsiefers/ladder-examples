@@ -112,6 +112,10 @@ _Avoid_: Pure document, simple document, single-type document
 **Hybrid document**:
 An intake document whose substance spans more than one document type, such as an MSA with built-in confidentiality terms. The counterpart of a clean document.
 
+**Ingredient**:
+A piece of another document type's substance, such as a confidentiality section or a DPA schedule, that the intake generator adds to a base document to make it a hybrid document. The hybrid keeps its base document's type, so at least one of its ingredients is of a different type. A clean document has none.
+_Avoid_: Plant, add-on
+
 **Ambiguity**:
 Whether an intake document is a clean document or a hybrid document. The triage gold labels carry it, and the eval reports accuracy by it. Not how hard a document is to classify.
 _Avoid_: Difficulty, complexity

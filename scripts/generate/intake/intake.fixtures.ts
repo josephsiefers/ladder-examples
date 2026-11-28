@@ -5,7 +5,10 @@ import { createFirmDocuments, type IntakeDocument } from "../../../src/core/docu
 import type { IntakeLibrary } from "./library";
 import type { IntakePlantSpec } from "./spec";
 
-/** A small intake library: one MSA kind whose every variant says which one it is. */
+/**
+ * A small intake library: one MSA kind whose every variant says which one it is, and three
+ * ingredients: a confidentiality section, a data schedule and a placeholder-free section.
+ */
 export const LIBRARY: IntakeLibrary = {
   kinds: {
     msa: {
@@ -21,6 +24,29 @@ export const LIBRARY: IntakeLibrary = {
         { heading: "Fees", variants: [["Fees A."], ["Fees B."]] },
         { heading: "Term", variants: [["Term A."], ["Term B."]] },
       ],
+    },
+  },
+  ingredients: {
+    secrecy: {
+      docType: "nda",
+      heading: "Confidentiality",
+      placement: "section",
+      variants: [
+        ["Secrecy A binds {{firstShort}}.", "Secrecy A, more."],
+        ["Secrecy B binds {{secondShort}}."],
+      ],
+    },
+    "data-schedule": {
+      docType: "dpa",
+      heading: "Schedule: Data Processing",
+      placement: "schedule",
+      variants: [["Schedule A."], ["Schedule B."]],
+    },
+    "no-poaching": {
+      docType: "other",
+      heading: "No Poaching",
+      placement: "section",
+      variants: [["Poaching A."], ["Poaching B."]],
     },
   },
 };

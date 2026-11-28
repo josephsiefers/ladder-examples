@@ -85,8 +85,30 @@ describe("runCorpus", () => {
     expect(await run(toyCorpus(SPECS.slice(0, 2)))).toBe(1);
     expect(stdout).toEqual([expect.stringContaining("| p | 2 | 0 | SHORT |")]);
     expect(stderr).toEqual([
-      "error: coverage minimums not met (2 in dev, 1 in test) for 1 plant(s); add or change plant specs.",
+      "error: coverage minimums not met (2 in dev, 1 in test) for 1 plant(s): p in test; add or change plant specs.",
     ]);
     expect(await readdir(outRoot)).toEqual([]);
+  });
+
+  it("fails with the shortfall and every gate error, writing nothing, when the corpus's gate refuses", async () => {
+    const corpus = {
+      ...toyCorpus(SPECS.slice(0, 2)),
+      gate: (specs: readonly ToySpec[]) => [
+        `error: ${specs.length} toys; add one.`,
+        "error: no red toy; paint one.",
+      ],
+    };
+    expect(await run(corpus)).toBe(1);
+    expect(stderr).toEqual([
+      expect.stringMatching(/^error: coverage minimums not met/),
+      "error: 2 toys; add one.",
+      "error: no red toy; paint one.",
+    ]);
+    expect(await readdir(outRoot)).toEqual([]);
+  });
+
+  it("writes the corpus when its gate finds nothing wrong", async () => {
+    expect(await run({ ...toyCorpus(SPECS), gate: () => [] })).toBe(0);
+    expect(stderr).toEqual([]);
   });
 });

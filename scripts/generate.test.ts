@@ -68,8 +68,8 @@ describe("npm run generate -- ndas", () => {
     await writeFile(join(plantsDir, "nda-worked.json"), JSON.stringify(WORKED_SPEC));
     expect(await generate(["ndas"], { plantsDir })).toBe(1);
     expect(output.join("\n")).toContain("| term until terminated on notice | 0 | 0 | SHORT |");
-    expect(output.at(-1)).toBe(
-      "error: coverage minimums not met (2 in dev, 1 in test) for 13 plant(s); add or change plant specs.",
+    expect(output.at(-1)).toMatch(
+      /^error: coverage minimums not met \(2 in dev, 1 in test\) for 13 plant\(s\): .*term until terminated on notice in dev and test.*; add or change plant specs\.$/,
     );
     expect(Object.keys(await tree(outRoot))).toEqual(["plants/nda-worked.json"]);
   });

@@ -98,8 +98,16 @@
 
 17.2 This Agreement does not oblige either party to enter into any further agreement or transaction.
 
-## 18. Signatures
+## 18. Non-Solicitation of Customers and Non-Competition
 
-18.1 Hartwell Agritech Limited, by its duly authorised representative. Date: ____________.
+18.1 For twelve months after the date of this Agreement, neither party shall, directly or through any other person, solicit or accept business from any person who was a customer of the other party during the six months before that date and with whom it dealt in connection with the Purpose.
 
-18.2 Prairie Rose Seeds Inc., by its duly authorised representative. Date: ____________.
+18.2 For the same period, neither party shall carry on, or be concerned in, any business that competes with the business of the other party in the United Kingdom in the products or services discussed under this Agreement.
+
+18.3 Each party agrees that these restrictions are reasonable and no wider than necessary to protect the other party's goodwill and customer connections. If any of them is found unenforceable, it shall apply with the smallest change needed to make it enforceable.
+
+## 19. Signatures
+
+19.1 Hartwell Agritech Limited, by its duly authorised representative. Date: ____________.
+
+19.2 Prairie Rose Seeds Inc., by its duly authorised representative. Date: ____________.

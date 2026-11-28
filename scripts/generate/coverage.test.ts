@@ -48,9 +48,15 @@ describe("coverage", () => {
     );
   });
 
-  it("explains a shortfall, and finds none when every minimum is met", () => {
+  it("explains a shortfall, naming each short plant and split, and finds none when every minimum is met", () => {
     expect(shortfall(coverage(SPECS, PLAN), PLAN.minimums)).toBe(
-      "error: coverage minimums not met (2 in dev, 1 in test) for 1 plant(s); add or change plant specs.",
+      "error: coverage minimums not met (2 in dev, 1 in test) for 1 plant(s): b in dev; add or change plant specs.",
+    );
+    expect(shortfall(coverage(SPECS.slice(1, 2), PLAN), PLAN.minimums)).toBe(
+      "error: coverage minimums not met (2 in dev, 1 in test) for 2 plant(s): a in dev and test, b in dev and test; add or change plant specs.",
+    );
+    expect(shortfall(coverage(SPECS.slice(0, 2), PLAN), PLAN.minimums)).toBe(
+      "error: coverage minimums not met (2 in dev, 1 in test) for 2 plant(s): a in test, b in dev and test; add or change plant specs.",
     );
     expect(shortfall(coverage(SPECS, PLAN).slice(0, 1), PLAN.minimums)).toBeUndefined();
   });

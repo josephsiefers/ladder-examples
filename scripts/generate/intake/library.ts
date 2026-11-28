@@ -5,7 +5,10 @@ import { z } from "zod";
 import { DOC_TYPES } from "../../../src/core/documents";
 import { readJson } from "../json";
 
-/** The intake library: the short-document kinds intake documents are assembled from. */
+/**
+ * The intake library: the short-document kinds intake documents are assembled from, and the
+ * hybrid ingredients added to them.
+ */
 const LIBRARY_ROOT = fileURLToPath(new URL("../../../data/library/intake/", import.meta.url));
 
 /** Paragraphs with `{{placeholders}}`: `first`, `firstShort`, `second`, `secondShort`. */
@@ -31,19 +34,56 @@ const kindSchema = z.object({
 /** One kind of short document, e.g. an MSA. */
 export type Kind = z.infer<typeof kindSchema>;
 
+const ingredientSchema = z.object({
+  /** The document type whose substance the ingredient is, e.g. `nda` for a confidentiality section. */
+  docType: z.enum(DOC_TYPES),
+  heading: z.string().min(1),
+  /**
+   * Where it goes: a `section` before the base document's closing section (its general terms,
+   * signatures or acceptance), a `schedule` after every section.
+   */
+  placement: z.enum(["section", "schedule"]),
+  variants: variants(template),
+});
+
+/** One hybrid ingredient: a numbered section of another document type's substance. */
+export type Ingredient = z.infer<typeof ingredientSchema>;
+
 export interface IntakeLibrary {
   kinds: Record<string, Kind>;
+  ingredients: Record<string, Ingredient>;
 }
 
-/** Reads the intake library from `root`: one `kinds/<kind>.json` per kind. */
-export async function loadIntakeLibrary(root: string = LIBRARY_ROOT): Promise<IntakeLibrary> {
-  const dir = join(root, "kinds");
-  const files = (await readdir(dir)).filter((file) => file.endsWith(".json")).toSorted();
-  const kinds = await Promise.all(
+/** Every `<name>.json` in `root/<dir>`, by name. */
+async function readEntries<T>(
+  root: string,
+  dir: string,
+  schema: z.ZodType<T>,
+): Promise<Record<string, T>> {
+  const files = (await readdir(join(root, dir)))
+    .filter((file) => file.endsWith(".json"))
+    .toSorted();
+  const entries = await Promise.all(
     files.map(async (file) => {
-      const kind = await readJson(join(dir, file), kindSchema, `intake library file kinds/${file}`);
-      return [file.replace(/\.json$/, ""), kind] as const;
+      const entry = await readJson(
+        join(root, dir, file),
+        schema,
+        `intake library file ${dir}/${file}`,
+      );
+      return [file.replace(/\.json$/, ""), entry] as const;
     }),
   );
-  return { kinds: Object.fromEntries(kinds) };
+  return Object.fromEntries(entries);
+}
+
+/**
+ * Reads the intake library from `root`: one `kinds/<kind>.json` per kind, and one
+ * `ingredients/<ingredient>.json` per ingredient.
+ */
+export async function loadIntakeLibrary(root: string = LIBRARY_ROOT): Promise<IntakeLibrary> {
+  const [kinds, ingredients] = await Promise.all([
+    readEntries(root, "kinds", kindSchema),
+    readEntries(root, "ingredients", ingredientSchema),
+  ]);
+  return { kinds, ingredients };
 }

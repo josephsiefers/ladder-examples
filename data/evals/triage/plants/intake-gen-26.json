@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-26",
+  "split": "test",
+  "seed": 2182,
+  "docType": "msa",
+  "ambiguity": "hybrid",
+  "base": {
+    "source": "library",
+    "kind": "msa",
+    "parties": [
+      {
+        "name": "Saltire Data Services Ltd",
+        "short": "Saltire"
+      },
+      {
+        "name": "Ivybridge Insurance plc",
+        "short": "Ivybridge"
+      }
+    ]
+  },
+  "ingredients": [
+    "dpa-schedule"
+  ]
+}

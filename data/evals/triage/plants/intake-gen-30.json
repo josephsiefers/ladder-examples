@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-30",
+  "split": "test",
+  "seed": 2210,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "lease",
+    "parties": [
+      {
+        "name": "Kingsmere Estates Limited",
+        "short": "Kingsmere"
+      },
+      {
+        "name": "Fallow & Pike LLP",
+        "short": "Fallow & Pike"
+      }
+    ]
+  },
+  "ingredients": []
+}

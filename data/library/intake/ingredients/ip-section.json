@@ -1,0 +1,17 @@
+{
+  "docType": "msa",
+  "heading": "Ownership of Intellectual Property",
+  "placement": "section",
+  "variants": [
+    [
+      "Each party keeps the intellectual property rights it owned before this document took effect, or develops independently of it. Nothing in this document transfers those rights to the other party.",
+      "The intellectual property rights in every deliverable created specifically for the Customer vest in the Customer when it pays for that deliverable in full. The Supplier grants the Customer a perpetual, non-exclusive, royalty-free licence to use any of the Supplier's pre-existing materials that are built into a deliverable, so far as the Customer needs them to use that deliverable.",
+      "The Supplier warrants that the deliverables will not infringe the intellectual property rights of any third party, and shall indemnify the Customer against any claim that they do."
+    ],
+    [
+      "All intellectual property rights in the deliverables, including software configuration, documentation and data mappings written for this project, are assigned to the Customer on payment of the fees for them, and the Supplier shall sign any document needed to perfect that assignment.",
+      "The Supplier keeps ownership of its own tools, know-how and standard software, and licenses the Customer to use them, without further charge and for as long as the Customer uses the deliverables, to the extent that they form part of a deliverable.",
+      "If a third party claims that a deliverable infringes its rights, the Supplier shall defend the claim at its own cost and, at its option, modify the deliverable so that it no longer infringes or obtain the right for the Customer to keep using it."
+    ]
+  ]
+}

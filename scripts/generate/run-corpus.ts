@@ -28,6 +28,11 @@ export interface Corpus<Spec extends { split: Split }> {
   /** What one spec becomes, in the plural, for the summary: e.g. "NDAs". */
   noun: string;
   coverage: CoveragePlan<Spec>;
+  /**
+   * The corpus's own checks beyond its coverage minimums: one error per problem, each saying what
+   * to change. Nothing is written unless it returns none.
+   */
+  gate?(specs: readonly Spec[]): string[];
   /** Reads the corpus's inputs; `plantsDir`, if given, replaces its plant spec directory. */
   load(options: { plantsDir?: string }): Promise<LoadedCorpus<Spec>>;
 }
@@ -41,8 +46,8 @@ export interface RunCorpusOptions {
 }
 
 /**
- * Builds a corpus: prints its coverage table, and unless a plant falls short of its minimums or a
- * spec cannot be built, writes every file under the output root and prints what it wrote. Nothing
+ * Builds a corpus: prints its coverage table, and unless a plant falls short of its minimums, its
+ * gate refuses, or a spec cannot be built, writes every file under the output root and prints what it wrote. Nothing
  * is written unless every spec builds. Returns the exit code.
  */
 export async function runCorpus<Spec extends { split: Split }>(
@@ -52,9 +57,10 @@ export async function runCorpus<Spec extends { split: Split }>(
   const { specs, filesOf } = await corpus.load({ plantsDir });
   const rows = coverage(specs, corpus.coverage);
   stdout(renderCoverageTable(rows, corpus.coverage));
-  const error = shortfall(rows, corpus.coverage.minimums);
-  if (error !== undefined) {
-    stderr(error);
+  const errors = [shortfall(rows, corpus.coverage.minimums), ...(corpus.gate?.(specs) ?? [])];
+  const refused = errors.filter((error) => error !== undefined);
+  if (refused.length > 0) {
+    for (const error of refused) stderr(error);
     return 1;
   }
 

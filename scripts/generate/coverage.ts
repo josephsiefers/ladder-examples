@@ -52,12 +52,19 @@ export function renderCoverageTable(
   ].join("\n");
 }
 
-/** The error to print when some plant is short of its minimums; undefined when none is. */
+/**
+ * The error to print when some plant is short of its minimums, naming each one and the splits it
+ * is short in; undefined when none is.
+ */
 export function shortfall(
   rows: readonly CoverageRow[],
   minimums: CoverageMinimums,
 ): string | undefined {
-  const short = rows.filter(({ met }) => !met).length;
-  if (short === 0) return undefined;
-  return `error: coverage minimums not met (${minimums.dev} in dev, ${minimums.test} in test) for ${short} plant(s); add or change plant specs.`;
+  const short = rows.filter(({ met }) => !met);
+  if (short.length === 0) return undefined;
+  const named = short.map((row) => {
+    const splits = (["dev", "test"] as const).filter((split) => row[split] < minimums[split]);
+    return `${row.plant} in ${splits.join(" and ")}`;
+  });
+  return `error: coverage minimums not met (${minimums.dev} in dev, ${minimums.test} in test) for ${short.length} plant(s): ${named.join(", ")}; add or change plant specs.`;
 }

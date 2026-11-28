@@ -96,8 +96,16 @@
 
 17.2 The Receiving Party may keep copies that it is required to keep by law or regulation, or that are held in automatic electronic back-up systems, provided that they remain subject to this Agreement.
 
-## 18. Signatures
+## 18. Non-Solicitation of Customers and Non-Competition
 
-18.1 Signed for and on behalf of Brannock Freight Inc. by its authorised signatory. Date: ____________.
+18.1 Neither party shall, during the term of this Agreement and for eighteen months after it ends, approach, canvass or deal with any customer or supplier of the other party that it was introduced to, or learnt about, in the course of the discussions under this Agreement, with a view to taking business away from the other party.
 
-18.2 Signed for and on behalf of Elmstead Software LLC by its authorised signatory. Date: ____________.
+18.2 During the same period, neither party shall set up, invest in or work for any business that competes with the other party in the market for the products discussed, except by holding less than three per cent of the shares of a listed company.
+
+18.3 The parties consider each of these restrictions to be separate and reasonable. If a court finds one of them too wide, the others continue to apply.
+
+## 19. Signatures
+
+19.1 Signed for and on behalf of Brannock Freight Inc. by its authorised signatory. Date: ____________.
+
+19.2 Signed for and on behalf of Elmstead Software LLC by its authorised signatory. Date: ____________.

@@ -15,22 +15,44 @@ const PLANTS_DIR = fileURLToPath(new URL("../../../data/evals/triage/plants/", i
 /** UC1's generated contracts, which NDA copies are taken from. */
 const CONTRACTS_DIR = fileURLToPath(new URL("../../../data/firm/contracts/", import.meta.url));
 
-/** What a row of the intake coverage table counts: a document type and an ambiguity. */
-type Answer = Pick<IntakePlantSpec, "docType" | "ambiguity">;
+/** The row that counts hybrid documents, of any type. */
+const HYBRID = "hybrid";
 
-/** One row of the intake coverage table, named for its answer: e.g. "nda · clean". */
-const cell = ({ docType, ambiguity }: Answer) => `${docType} · ${ambiguity}`;
-
-/** The answers the intake corpus must cover, so far: every document type, clean. */
-const COVERED: readonly Answer[] = DOC_TYPES.map((docType) => ({ docType, ambiguity: "clean" }));
-
-/** What the intake corpus must cover in each split: one row per covered type and ambiguity. */
+/**
+ * What the intake corpus must cover in each split: every document type, and hybrid documents.
+ * One row per document type, then a row for hybrids.
+ */
 export const INTAKE_COVERAGE: CoveragePlan<IntakePlantSpec> = {
-  label: "Type · ambiguity",
-  plants: COVERED.map(cell),
-  plantsOf: (spec) => [cell(spec)],
-  minimums: { dev: 2, test: 1 },
+  label: "Type, or hybrid",
+  plants: [...DOC_TYPES, HYBRID],
+  plantsOf: ({ docType, ambiguity }) => (ambiguity === HYBRID ? [docType, HYBRID] : [docType]),
+  minimums: { dev: 1, test: 1 },
 };
+
+/** The size of the intake corpus in each split (the UC2 spec). */
+const SIZE = { dev: 18, test: 12 } as const;
+
+/** The fewest hybrid documents the intake corpus may have (the UC2 spec). */
+const MIN_HYBRIDS = 6;
+
+/** The intake corpus's checks beyond its coverage table: its sizes and its number of hybrids. */
+export function intakeGate(specs: readonly IntakePlantSpec[]): string[] {
+  const errors: string[] = [];
+  const dev = specs.filter(({ split }) => split === "dev").length;
+  const test = specs.length - dev;
+  if (dev !== SIZE.dev || test !== SIZE.test) {
+    errors.push(
+      `error: the intake corpus has ${specs.length} documents (${dev} dev, ${test} test); it needs ${SIZE.dev + SIZE.test} (${SIZE.dev} dev, ${SIZE.test} test). Add, remove or move plant specs.`,
+    );
+  }
+  const hybrids = specs.filter(({ ambiguity }) => ambiguity === HYBRID).length;
+  if (hybrids < MIN_HYBRIDS) {
+    errors.push(
+      `error: the intake corpus has ${hybrids} hybrid documents; it needs at least ${MIN_HYBRIDS}. Add ingredients to a clean plant spec.`,
+    );
+  }
+  return errors;
+}
 
 /** The UC1 contracts the specs copy, by contract ID. A missing one is left out. */
 export async function loadCopiedContracts(
@@ -53,6 +75,7 @@ export async function loadCopiedContracts(
 export const INTAKE_CORPUS: Corpus<IntakePlantSpec> = {
   noun: "intake documents",
   coverage: INTAKE_COVERAGE,
+  gate: intakeGate,
   async load({ plantsDir = PLANTS_DIR }) {
     const specs = await loadSpecs(plantsDir, intakePlantSpecSchema);
     const [library, contracts] = await Promise.all([
