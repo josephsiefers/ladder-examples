@@ -92,7 +92,7 @@ jobs:
           mkdir -p "$OUT_DIR"
           # The body carries the evidence for what the review can't run: demos, live evals.
           gh pr view "$PR" --json body --jq .body > "$PR_BODY_FILE"
-          bash factory/.github/factory/tickets.sh "$PR" > "$TICKET_FILE"
+          bash factory/.github/factory/pr-tickets.sh "$PR" > "$TICKET_FILE"
 
       - name: Review the PR
         working-directory: pr

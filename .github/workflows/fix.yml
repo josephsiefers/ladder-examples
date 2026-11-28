@@ -112,7 +112,7 @@ jobs:
           [ "$tried" = false ] || stop "this PR has had its one fix attempt, so it's yours. To allow another, remove \`agent-fix-tried\`, then add \`agent-review\`." hand-back
           [ "$head" = "$REVIEWED_SHA" ] || stop "the PR's head moved since the review (\`${REVIEWED_SHA:0:7}\` → \`${head:0:7}\`). A review of the new head is your call: add \`agent-review\`." hand-back
           mkdir -p "$RUNNER_TEMP/fix"
-          bash .github/factory/tickets.sh "$PR" > "$RUNNER_TEMP/fix/tickets.md"
+          bash .github/factory/pr-tickets.sh "$PR" > "$RUNNER_TEMP/fix/tickets.md"
           gh pr view "$PR" --json body --jq .body > "$RUNNER_TEMP/fix/pr-body.md"
           cp "$RUNNER_TEMP/review/review.md" "$RUNNER_TEMP/fix/review.md"
           gh pr edit "$PR" --add-label agent-working --add-label agent-fix-tried
@@ -198,7 +198,9 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
           prompt=$(envsubst '$PR $BRANCH $TICKET_FILE $PR_BODY_FILE $REVIEW_FILE $OUT_DIR' < ../factory/.github/factory/fix.md)
-          # The implementer's tools, settings and context notice, all from master: see implement.yml.
+          # The implementer's tools, settings and context notice: see implement.yml. The prompt and
+          # settings come from master; the notice's hook runs the PR branch's scripts/check-context.ts,
+          # as it runs $CLAUDE_PROJECT_DIR's. This job holds no GitHub token, so that's safe.
           claude -p "$prompt" \
             --model claude-opus-5-5 \
             --tools "Bash,Read,Edit,Write,Skill,ToolSearch,Monitor,TaskStop,WebSearch,WebFetch" \

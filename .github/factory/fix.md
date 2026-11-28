@@ -24,7 +24,7 @@ Work test-first with the tdd skill, with these rules for factory runs:
 
 - You are on branch `${BRANCH}`, the PR's branch at the reviewed commit. Commit there, on top of the existing commits. Never rewrite them, never push, and never touch `master`.
 - Commit only through the pre-commit hook, never with `--no-verify`. Stage everything a commit needs, and leave the working tree clean when you finish.
-- Commit messages and the PR body carry no `Co-Authored-By` trailer and no Claude or "Generated with" attribution.
+- Commit messages and `pr-body-addendum.md` carry no `Co-Authored-By` trailer and no Claude or "Generated with" attribution.
 - Re-run the Definition-of-done checks your changes touch: `npm test`, `npm run mutate` scoped to the modules you changed as `AGENTS.md` shows, and the ticket's **Demo** commands, exactly as written.
 - Don't run the eval live, and don't add or change eval cache entries. The run has no API key.
 
