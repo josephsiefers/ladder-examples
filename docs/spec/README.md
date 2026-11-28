@@ -92,7 +92,7 @@ src/core/eval/                  datasets, runner, stats, reports, review sheets
 src/usecases/01-contract-snapshot/
 src/usecases/02-intake-triage/  each: index.ts, schema.ts, prompts.ts, eval.ts
 scripts/                        check-tokens, check-context, generate (assembler)
-data/firm/                      fake firm systems: contracts/, intake/
+data/firm/                      fake firm systems: contracts/, intake/, playbook/
 data/library/                   clause-variant library (generator input)
 data/evals/<eval>/<split>/      gold cases, one JSON per case
 data/evals/<eval>/plants/       plant specs, one JSON per generated case
