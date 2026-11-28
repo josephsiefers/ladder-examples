@@ -44,5 +44,16 @@
 - Overall accuracy, per-type precision and recall, a 5×5 confusion matrix, and accuracy on clean vs hybrid documents reported separately.
 - In the cascade (#13), three strategies side by side: `haiku`, `sonnet`, and `cascade`. Columns: accuracy, hybrid accuracy, escalation rate, cost per 1,000 documents, p50 and p95 latency.
 
+## Results
+
+Dev split, routing by type with Haiku, 18 documents × 3 runs, recorded live on 2026-11-28 ([report](../../evals/triage-dev.md)):
+
+- **Overall accuracy:** 100.0% (mean of runs, stdev 0.0%), pooled over 54 case runs.
+- **Per type:** precision and recall are 100.0% for all five types (support: nda 18, msa 9, dpa 9, sow 9, other 9).
+- **Confusion matrix:** diagonal only. No document was given the wrong type.
+- **Clean vs hybrid:** clean 100.0% (45 case runs), hybrid 100.0% (9 case runs).
+
+**Upgrade trigger: not fired.** Hybrid accuracy is not below clean accuracy. This rests on 3 hybrid documents whose titles fit their type, on the dev split only, and an answer key a human has not yet reviewed. Disguised hybrids (#37) test it harder.
+
 ## Tickets
 #10, #11, #12, #13.

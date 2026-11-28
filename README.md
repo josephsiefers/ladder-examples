@@ -9,7 +9,7 @@ The rungs, from least to most control given up: single call, prompt chaining, ro
 | Use case | Rung | Result |
 |---|---|---|
 | [UC1 Contract snapshot](docs/spec/use-cases/uc1-contract-snapshot.md) | Single call (rung-locked) | Target met on dev ([report](docs/evals/snapshot-dev.md)); answer key not yet reviewed |
-| [UC2 Intake triage](docs/spec/use-cases/uc2-intake-triage.md) | Routing (by type, then easy/hard cascade) | Routing by type built; smoke eval only ([report](docs/evals/triage-smoke.md)) |
+| [UC2 Intake triage](docs/spec/use-cases/uc2-intake-triage.md) | Routing (by type, then easy/hard cascade) | Upgrade trigger not fired on dev: hybrid accuracy equals clean, both 100% ([report](docs/evals/triage-dev.md)) |
 | [UC3 NDA review](docs/spec/use-cases/uc3-nda-review.md) | Prompt chaining + sectioning, then voting | Not built |
 | [UC4 Minimal edit](docs/spec/use-cases/uc4-minimal-edit.md) | Evaluator-optimizer | Not built |
 | [UC5 Diligence question](docs/spec/use-cases/uc5-diligence-question.md) | Orchestrator-workers | Not built |

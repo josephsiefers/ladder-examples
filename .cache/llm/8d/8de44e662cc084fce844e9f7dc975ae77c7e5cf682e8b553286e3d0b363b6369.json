@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-18\">\n# Employment Contract\n\n## 1. Parties and Appointment\n\n[1.1] Norbridge Components Limited (the \"Company\") and Mara Ellison (\"Ms Ellison\" or the \"Employee\") agree the terms of the Employee's employment set out below.\n\n[1.2] The Company appoints the Employee, and the Employee agrees to serve the Company, as Head of Finance Operations from 4 January 2027. The Employee reports to the Chief Financial Officer and shall perform the duties of that role, and any other reasonable duties the Company assigns. This agreement sets out the Employee's terms and conditions of employment and the particulars of employment required by law.\n\n## 2. Place of Work and Hours\n\n[2.1] The Employee's normal place of work is the Company's office in Leeds, but the Employee may work from home for up to two days a week by agreement with the Chief Financial Officer.\n\n[2.2] The Employee's normal working hours are 9.00 am to 5.30 pm, Monday to Friday, with an hour for lunch. The Employee may be required to work additional hours without extra pay where the role reasonably requires.\n\n## 3. Salary and Benefits\n\n[3.1] The Company shall pay the Employee a salary of £78,000 a year, paid monthly in arrears by bank transfer on or before the last working day of each month. The salary will be reviewed each April, without any obligation to increase it.\n\n[3.2] The Employee may join the Company's private medical insurance scheme, subject to its rules.\n\n## 4. Pension\n\n[4.1] The Company shall enrol the Employee in its workplace pension scheme in line with auto-enrolment law. The Company contributes six per cent of the Employee's basic salary, and the Employee contributes four per cent by salary deduction, unless the Employee opts out.\n\n## 5. Holidays and Sickness\n\n[5.1] The Employee is entitled to twenty-five working days' paid holiday in each holiday year, which runs from 1 January, in addition to the usual public holidays in England. Holiday must be agreed in advance with the Chief Financial Officer.\n\n[5.2] If the Employee is absent through sickness, the Employee shall tell the Company by 10.00 am on the first day. The Company pays full salary for up to ten weeks' sickness absence in any twelve months, and statutory sick pay after that.\n\n## 6. Duties and Conduct\n\n[6.1] The Employee shall serve the Company faithfully and diligently, and shall not, without written consent, be engaged in any other business during the employment. The disciplinary and grievance procedures that apply to the Employee are in the staff handbook, which does not form part of this agreement.\n\n## 7. Probation and Notice\n\n[7.1] The first six months of the employment are a probationary period, during which either party may end the employment by giving one week's notice.\n\n[7.2] After probation, either party may end the employment by giving the other three months' written notice. The Company may instead pay the Employee's basic salary in lieu of all or part of the notice period, and may place the Employee on garden leave during notice.\n\n## 8. Termination and Company Property\n\n[8.1] The Company may end the employment at once, without notice or pay in lieu, if the Employee commits gross misconduct or a serious breach of this agreement.\n\n[8.2] When the employment ends, the Employee shall return all Company property, including their laptop, phone and security pass, and the Company may deduct from final pay any sums the Employee owes it.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "docType": "other",
+    "rationale": "The document is an employment contract appointing Mara Ellison as Head of Finance Operations and setting pay, hours, holidays, pension, and notice terms; its primary purpose is an employment relationship, which falls under 'other'."
+  },
+  "usage": {
+    "inputTokens": 2124,
+    "outputTokens": 89
+  },
+  "latencyMs": 1110.5319250000011,
+  "recordedAt": "2026-11-28T01:58:02.100Z"
+}
