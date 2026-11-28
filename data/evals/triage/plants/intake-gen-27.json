@@ -1,0 +1,25 @@
+{
+  "id": "intake-gen-27",
+  "split": "dev",
+  "seed": 2189,
+  "docType": "sow",
+  "ambiguity": "hybrid",
+  "base": {
+    "source": "library",
+    "kind": "sow",
+    "parties": [
+      {
+        "name": "Hollin Systems Limited",
+        "short": "Hollin"
+      },
+      {
+        "name": "Carraway Foods Ltd",
+        "short": "Carraway"
+      }
+    ]
+  },
+  "ingredients": [
+    "confidentiality-section",
+    "ip-section"
+  ]
+}

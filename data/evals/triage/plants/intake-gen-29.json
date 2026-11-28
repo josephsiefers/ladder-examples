@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-29",
+  "split": "dev",
+  "seed": 2203,
+  "docType": "dpa",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "dpa",
+    "parties": [
+      {
+        "name": "Thornbury Health Ltd",
+        "short": "Thornbury"
+      },
+      {
+        "name": "Lyndale Cloud Limited",
+        "short": "Lyndale"
+      }
+    ]
+  },
+  "ingredients": []
+}

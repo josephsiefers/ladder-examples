@@ -4,7 +4,7 @@
   },
   "gold": {
     "docType": "nda",
-    "ambiguity": "clean"
+    "ambiguity": "hybrid"
   },
   "evidence": {
     "docType": [

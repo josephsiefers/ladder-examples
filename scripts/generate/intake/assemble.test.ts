@@ -12,6 +12,13 @@ import type { IntakePlantSpec } from "./spec";
 
 const assemble = (spec: IntakePlantSpec) => assembleIntake(spec, LIBRARY, CONTRACTS);
 
+/** The spec as a hybrid with these ingredients. */
+const hybrid = (spec: IntakePlantSpec, ingredients: string[]): IntakePlantSpec => ({
+  ...spec,
+  ambiguity: "hybrid",
+  ingredients,
+});
+
 describe("assembleIntake from a library kind", () => {
   it("writes a title, the opening as section 1, then every section in library order", async () => {
     const { markdown } = assemble(MSA_SPEC);
@@ -102,15 +109,95 @@ describe("assembleIntake refuses", () => {
       ...section,
       variants: section.variants.map(() => ["Payable by {{payer}}."]),
     }));
-    const library = { kinds: { msa: { ...msa, sections } } };
+    const library = { ...LIBRARY, kinds: { msa: { ...msa, sections } } };
     expect(() => assembleIntake(MSA_SPEC, library, CONTRACTS)).toThrow(
       "Template 'intake/msa': unknown placeholder {{payer}}.",
     );
   });
 
-  it("ingredients, which the intake library has none of yet", () => {
+  it("an ingredient that is not in the intake library", () => {
     expect(() =>
-      assemble({ ...MSA_SPEC, ambiguity: "hybrid", ingredients: ["dpa-schedule"] }),
+      assemble({ ...MSA_SPEC, ambiguity: "hybrid", ingredients: ["secrecy", "dpa-schedule"] }),
     ).toThrow("intake-x1: no ingredient dpa-schedule in the intake library.");
+  });
+
+  it("a hybrid whose every ingredient is of its own document type", () => {
+    const ndaSecrecy = hybrid(NDA_SPEC, ["secrecy"]);
+    expect(() => assemble(ndaSecrecy)).toThrow(
+      "intake-x2: a hybrid needs an ingredient of a type other than nda, but every ingredient is a nda.",
+    );
+  });
+
+  it("an ingredient with a placeholder on a copied NDA, which has no parties to fill it", () => {
+    const spec = hybrid(NDA_SPEC, ["no-poaching", "secrecy"]);
+    expect(() => assemble(spec)).toThrow(
+      /^Template 'intake\/secrecy': unknown placeholder \{\{(first|second)Short\}\}\.$/,
+    );
+  });
+});
+
+describe("assembleIntake with hybrid ingredients", () => {
+  const HYBRID_MSA: IntakePlantSpec = {
+    ...MSA_SPEC,
+    ambiguity: "hybrid",
+    ingredients: ["data-schedule", "secrecy"],
+  };
+
+  it("puts a section before the closing section and a schedule after every section", () => {
+    const headings = [...assemble(HYBRID_MSA).markdown.matchAll(/^## (\d+\. .+)$/gm)].map(
+      (match) => match[1],
+    );
+    expect(headings).toEqual([
+      "1. Parties and Background",
+      "2. Services",
+      "3. Fees",
+      "4. Confidentiality",
+      "5. Term",
+      "6. Schedule: Data Processing",
+    ]);
+  });
+
+  it("fills the ingredient's placeholders with the base document's parties", async () => {
+    const { markdown } = assemble(HYBRID_MSA);
+    const document = await readAsIntake(HYBRID_MSA.id, markdown);
+    expect(document.paragraphs.find(({ id }) => id === "4.1")?.text).toMatch(
+      /^Secrecy [AB] binds (Corvane|Fennick)\.$/,
+    );
+    expect(markdown).not.toMatch(/[{}]/);
+  });
+
+  it("leaves the base document's sections as its clean build has them", () => {
+    const clean = assemble(MSA_SPEC).markdown;
+    const built = assemble(HYBRID_MSA).markdown;
+    expect(built.startsWith(clean.slice(0, clean.indexOf("## 4.")))).toBe(true);
+    expect(built).toContain(clean.slice(clean.indexOf("## 4.")).replaceAll("4.", "5."));
+  });
+
+  it("keeps the gold type and evidence of the base document, marked hybrid", () => {
+    expect(assemble(HYBRID_MSA).goldCase).toEqual({
+      input: { documentId: "intake-x1" },
+      gold: { docType: "msa", ambiguity: "hybrid" },
+      evidence: { docType: ["title", "1.1", "1.2"] },
+    });
+  });
+
+  it("inserts a section into a copied NDA before its last section, renumbering only that", () => {
+    const spec = hybrid(NDA_SPEC, ["no-poaching"]);
+    const { markdown, goldCase } = assemble(spec);
+    const insert = markdown.indexOf("## 3. No Poaching");
+    expect(markdown.slice(0, insert)).toBe(NDA_SOURCE.slice(0, NDA_SOURCE.indexOf("## 3.")));
+    expect(markdown.slice(insert)).toMatch(
+      /^## 3\. No Poaching\n\n3\.1 Poaching [AB]\.\n\n## 4\. Signatures\n\n4\.1 Signed by both parties\.\n$/,
+    );
+    expect(goldCase.gold).toEqual({ docType: "nda", ambiguity: "hybrid" });
+    expect(goldCase.evidence.docType).toEqual(["title", "1.2", "2.1"]);
+  });
+
+  it("appends a schedule to a copied NDA after its last section", () => {
+    const ingredients = ["no-poaching", "data-schedule"];
+    const spec = hybrid(NDA_SPEC, ingredients);
+    expect(assemble(spec).markdown).toMatch(
+      /\n## 4\. Signatures\n\n4\.1 Signed by both parties\.\n\n## 5\. Schedule: Data Processing\n\n5\.1 Schedule [AB]\.\n$/,
+    );
   });
 });

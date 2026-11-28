@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-28",
+  "split": "test",
+  "seed": 2196,
+  "docType": "other",
+  "ambiguity": "hybrid",
+  "base": {
+    "source": "library",
+    "kind": "employment",
+    "parties": [
+      {
+        "name": "Bramcote Analytics Limited",
+        "short": "Bramcote"
+      },
+      {
+        "name": "Daniel Okafor",
+        "short": "Mr Okafor"
+      }
+    ]
+  },
+  "ingredients": [
+    "confidentiality-section"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "docType": "dpa",
+  "heading": "Schedule: Data Processing Terms",
+  "placement": "schedule",
+  "variants": [
+    [
+      "This Schedule applies whenever the Supplier processes personal data on behalf of the Customer in providing the services. The Customer is the controller and the Supplier is the processor of that personal data, which concerns the Customer's employees and customers and consists of names, contact details and account records.",
+      "The Supplier shall process the personal data only on the Customer's documented instructions, ensure that every person authorised to process it is bound by confidentiality, and keep it secure by appropriate technical and organisational measures.",
+      "The Supplier shall not engage a sub-processor without the Customer's prior written authorisation, shall not transfer the personal data outside the United Kingdom without appropriate safeguards, and shall notify the Customer without undue delay, and in any event within forty-eight hours, of any personal data breach.",
+      "When the services end, the Supplier shall, at the Customer's choice, delete or return all the personal data, and shall make available to the Customer all information needed to show compliance with this Schedule, including by allowing audits."
+    ],
+    [
+      "The parties agree that, in performing this agreement, the Supplier acts as processor for the Customer, as controller, of the personal data described in this Schedule: contact and account details of the Customer's staff and end customers, processed for as long as the services are provided.",
+      "The Supplier shall act only on the Customer's written instructions, take appropriate measures to protect the personal data against unauthorised or unlawful processing and accidental loss, and require its staff to keep the personal data confidential.",
+      "The Supplier may use sub-processors only with the Customer's written consent and on terms no less protective than this Schedule. It shall tell the Customer within forty-eight hours of becoming aware of a personal data breach, and shall help the Customer respond to requests from data subjects.",
+      "On termination, the Supplier shall return or securely delete the personal data, unless the law requires it to be kept, and shall allow the Customer or its auditor to inspect its processing on reasonable notice."
+    ]
+  ]
+}

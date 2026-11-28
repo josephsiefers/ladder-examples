@@ -1,0 +1,24 @@
+{
+  "id": "intake-gen-25",
+  "split": "dev",
+  "seed": 2175,
+  "docType": "msa",
+  "ambiguity": "hybrid",
+  "base": {
+    "source": "library",
+    "kind": "msa",
+    "parties": [
+      {
+        "name": "Larchfield Digital Limited",
+        "short": "Larchfield"
+      },
+      {
+        "name": "Penhallow Retail plc",
+        "short": "Penhallow"
+      }
+    ]
+  },
+  "ingredients": [
+    "confidentiality-section"
+  ]
+}

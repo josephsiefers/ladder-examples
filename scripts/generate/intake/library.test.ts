@@ -15,15 +15,44 @@ describe("loadIntakeLibrary", () => {
   beforeEach(async () => {
     root = await mkdtemp(join(tmpdir(), "intake-library-"));
     await mkdir(join(root, "kinds"));
+    await mkdir(join(root, "ingredients"));
   });
   afterEach(async () => {
     await rm(root, { recursive: true, force: true });
   });
 
-  it("reads each kind, named by its file, ignoring other files", async () => {
+  it("reads each kind and ingredient, named by its file, ignoring other files", async () => {
     await writeFile(join(root, "kinds", "msa.json"), JSON.stringify(LIBRARY.kinds.msa));
     await writeFile(join(root, "kinds", "notes.txt"), "not a kind");
+    for (const [name, ingredient] of Object.entries(LIBRARY.ingredients)) {
+      await writeFile(join(root, "ingredients", `${name}.json`), JSON.stringify(ingredient));
+    }
+    await writeFile(join(root, "ingredients", "notes.txt"), "not an ingredient");
     expect(await loadIntakeLibrary(root)).toEqual(LIBRARY);
+  });
+
+  it("names the file and the problem for an ingredient with a single variant", async () => {
+    const ingredient = { ...LIBRARY.ingredients.secrecy, variants: [["Only one."]] };
+    await writeFile(join(root, "ingredients", "secrecy.json"), JSON.stringify(ingredient));
+    await expect(loadIntakeLibrary(root)).rejects.toThrow(
+      "Invalid intake library file ingredients/secrecy.json: variants: Too small: expected array to have >=2 items.",
+    );
+  });
+
+  it("reads the committed ingredients, each with the document type of its substance", async () => {
+    const { ingredients } = await loadIntakeLibrary();
+    const types = Object.fromEntries(
+      Object.entries(ingredients).map(([name, { docType, placement }]) => [
+        name,
+        `${docType} ${placement}`,
+      ]),
+    );
+    expect(types).toEqual({
+      "confidentiality-section": "nda section",
+      "dpa-schedule": "dpa schedule",
+      "ip-section": "msa section",
+      "non-solicitation-section": "other section",
+    });
   });
 
   it("names the file and the problem for a kind with a single variant", async () => {

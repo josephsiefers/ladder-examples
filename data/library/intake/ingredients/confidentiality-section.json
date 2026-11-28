@@ -1,0 +1,17 @@
+{
+  "docType": "nda",
+  "heading": "Confidentiality",
+  "placement": "section",
+  "variants": [
+    [
+      "In this clause, \"Confidential Information\" means all information, in whatever form, that one party discloses to the other in connection with this agreement and that is marked as confidential or that a reasonable person would understand to be confidential.",
+      "The receiving party shall keep the other party's Confidential Information secret, use it only to perform this agreement, and disclose it only to those of its employees and advisers who need to know it and are bound by duties of confidence no less strict than this clause.",
+      "These obligations do not apply to information that is or becomes public other than through a breach of this clause, or that the law or a regulator requires to be disclosed. They continue for five years after this agreement ends."
+    ],
+    [
+      "Each party shall treat as confidential all information it receives from the other about the other's business, customers, finances, staff and technology (\"Confidential Information\"), whether disclosed before or after the date of this agreement.",
+      "Neither party shall use the other's Confidential Information except for the purposes of this agreement, nor disclose it to any person other than its own officers, employees and professional advisers who need to know it for those purposes and who are told of its confidential nature.",
+      "This clause does not cover information already lawfully in the public domain, or a disclosure required by law, and it survives the end of this agreement for three years."
+    ]
+  ]
+}
