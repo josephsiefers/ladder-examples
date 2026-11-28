@@ -112,7 +112,12 @@ jobs:
           [ "$tried" = false ] || stop "this PR has had its one fix attempt, so it's yours. To allow another, remove \`agent-fix-tried\`, then add \`agent-review\`." hand-back
           [ "$head" = "$REVIEWED_SHA" ] || stop "the PR's head moved since the review (\`${REVIEWED_SHA:0:7}\` → \`${head:0:7}\`). A review of the new head is your call: add \`agent-review\`." hand-back
           mkdir -p "$RUNNER_TEMP/fix"
-          bash .github/factory/pr-tickets.sh "$PR" > "$RUNNER_TEMP/fix/tickets.md"
+          for issue in $(gh pr view "$PR" --json closingIssuesReferences --jq '.closingIssuesReferences[].number'); do
+            bash .github/factory/ticket.sh "$issue" >> "$RUNNER_TEMP/fix/tickets.md"
+            printf '\n\n' >> "$RUNNER_TEMP/fix/tickets.md"
+          done
+          [ -s "$RUNNER_TEMP/fix/tickets.md" ] ||
+            echo "This PR closes no ticket, so there is no spec beyond the PR body." > "$RUNNER_TEMP/fix/tickets.md"
           gh pr view "$PR" --json body --jq .body > "$RUNNER_TEMP/fix/pr-body.md"
           cp "$RUNNER_TEMP/review/review.md" "$RUNNER_TEMP/fix/review.md"
           gh pr edit "$PR" --add-label agent-working --add-label agent-fix-tried

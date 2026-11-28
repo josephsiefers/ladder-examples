@@ -87,12 +87,22 @@ jobs:
 
       - uses: ./factory/.github/actions/setup-claude
 
+      # Only files already on master: a `pull_request` run takes this workflow from the PR branch but
+      # the factory's files from master, so a script the PR adds isn't there until it merges.
       - name: Gather the PR body and the tickets the PR closes
         run: |
           mkdir -p "$OUT_DIR"
           # The body carries the evidence for what the review can't run: demos, live evals.
           gh pr view "$PR" --json body --jq .body > "$PR_BODY_FILE"
-          bash factory/.github/factory/pr-tickets.sh "$PR" > "$TICKET_FILE"
+          issues=$(gh pr view "$PR" --json closingIssuesReferences --jq '.closingIssuesReferences[].number')
+          if [ -z "$issues" ]; then
+            echo "This PR closes no ticket, so there is no spec: skip the Spec axis." > "$TICKET_FILE"
+          else
+            for issue in $issues; do
+              bash factory/.github/factory/ticket.sh "$issue" >> "$TICKET_FILE"
+              printf '\n\n' >> "$TICKET_FILE"
+            done
+          fi
 
       - name: Review the PR
         working-directory: pr
