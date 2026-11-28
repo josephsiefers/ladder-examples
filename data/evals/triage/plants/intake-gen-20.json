@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-20",
+  "split": "dev",
+  "seed": 2140,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "engagement-letter",
+    "parties": [
+      {
+        "name": "Whitcombe Lane LLP",
+        "short": "Whitcombe Lane"
+      },
+      {
+        "name": "Fairhaven Foods Limited",
+        "short": "Fairhaven"
+      }
+    ]
+  },
+  "ingredients": []
+}

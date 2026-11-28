@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-24",
+  "split": "dev",
+  "seed": 2168,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "settlement-letter",
+    "parties": [
+      {
+        "name": "Sterling Rack Installations Limited",
+        "short": "Sterling Rack"
+      },
+      {
+        "name": "Greyfold Distribution Limited",
+        "short": "Greyfold"
+      }
+    ]
+  },
+  "ingredients": []
+}

@@ -1,0 +1,99 @@
+{
+  "docType": "other",
+  "titles": [
+    "Settlement Letter",
+    "Letter of Settlement",
+    "Settlement of Dispute: Letter Agreement"
+  ],
+  "openingHeading": "Background",
+  "openings": [
+    [
+      "This letter is written by {{first}} (the \"Supplier\") to {{second}} (the \"Customer\") and, once countersigned by the Customer, records a binding agreement between them.",
+      "The Supplier installed pallet racking at the Customer's warehouse in Northampton in 2026 and invoiced £312,000 for it. The Customer withheld £118,000, alleging that parts of the racking were defective and were installed late, and the Supplier has issued a claim for that sum in the County Court (together, the \"Dispute\"). The parties wish to settle the Dispute in full, without any admission of liability, on the terms of this letter."
+    ],
+    [
+      "{{first}} (\"{{firstShort}}\" or the \"Supplier\") writes to {{second}} (\"{{secondShort}}\" or the \"Customer\") to set out the terms on which the parties have agreed to settle their dispute.",
+      "The dispute concerns the Supplier's invoices for installing pallet racking at the Customer's Northampton warehouse, of which the Customer has refused to pay £118,000 on the grounds of alleged defects and delay, and the Supplier's claim issued in the County Court for that sum (together, the \"Dispute\"). This letter records the full and final settlement of the Dispute, which the parties reach without either admitting liability."
+    ]
+  ],
+  "sections": [
+    {
+      "heading": "Settlement Payment",
+      "variants": [
+        [
+          "The Customer shall pay the Supplier £85,000 (the \"Settlement Sum\") within fourteen days of the date on which it countersigns this letter, by bank transfer to the account the Supplier has notified in writing.",
+          "The Settlement Sum is inclusive of interest and costs. If it is not paid on time, the Supplier may enforce payment of it in full, together with interest from the due date."
+        ],
+        [
+          "In full and final settlement of the Dispute, the Customer shall pay the Supplier the sum of £85,000 (the \"Settlement Sum\"), inclusive of all interest and legal costs, within fourteen days of countersigning this letter. Payment shall be made in cleared funds to the Supplier's usual bank account."
+        ]
+      ]
+    },
+    {
+      "heading": "Remedial Works",
+      "variants": [
+        [
+          "Within thirty days after receiving the Settlement Sum, the Supplier shall replace the twelve damaged upright frames at the warehouse, at its own cost, at times agreed with the Customer's site manager so that the Customer's operations are not disrupted. When the work is done, the Supplier shall give the Customer a load inspection certificate for the racking."
+        ],
+        [
+          "As part of the settlement, the Supplier shall at its own expense inspect the racking and replace any damaged uprights or beams it finds, finishing the work within thirty days of receiving the Settlement Sum and giving the Customer a load inspection certificate when it is done."
+        ]
+      ]
+    },
+    {
+      "heading": "Release of Claims",
+      "variants": [
+        [
+          "On receipt of the Settlement Sum, each party releases the other from all claims, whether known or unknown, that it has or may have arising out of the Dispute or the supply and installation of the racking, except claims to enforce this letter. Each party confirms that it is not aware of any other claim it has against the other."
+        ],
+        [
+          "This settlement is in full and final satisfaction of every claim either party has, or may have, against the other in connection with the Dispute, the racking or its installation. Neither party shall bring any further claim on those matters, save for a claim for breach of the terms in this letter."
+        ]
+      ]
+    },
+    {
+      "heading": "Court Proceedings",
+      "variants": [
+        [
+          "Within seven days of receiving the Settlement Sum, the Supplier shall file with the court a notice of discontinuance of its claim, and each party shall bear its own costs of the proceedings. Neither party shall take any further step in the proceedings, except to enforce this letter."
+        ],
+        [
+          "Within seven days of the Settlement Sum being paid, the parties shall sign and file a consent order staying the Supplier's County Court claim on the terms of this letter, with no order as to costs. Either party may then apply to the court to enforce these terms without starting new proceedings."
+        ]
+      ]
+    },
+    {
+      "heading": "No Admission",
+      "variants": [
+        [
+          "This settlement is a compromise. Neither party admits liability for any part of the Dispute: the Customer's payment of the Settlement Sum is not an admission that the racking was free of defects, nor are the Supplier's remedial works an admission that it was defective."
+        ],
+        [
+          "Nothing in this letter, nor any payment made or work done under it, amounts to an admission of liability by either party. The parties settle only to avoid the cost, delay and uncertainty of continuing the proceedings, and neither may rely on this settlement as evidence in any other dispute."
+        ]
+      ]
+    },
+    {
+      "heading": "General",
+      "variants": [
+        [
+          "This letter contains the whole agreement between the parties about the settlement of the Dispute, and may be varied only in writing signed by both. It is governed by the law of England and Wales, and the courts of England have exclusive jurisdiction over any dispute about it."
+        ],
+        [
+          "The parties confirm that they have each taken legal advice on this letter. It records their entire agreement on the Dispute, it is governed by English law, and it may be signed in counterparts, each of which is an original."
+        ]
+      ]
+    },
+    {
+      "heading": "Acceptance",
+      "variants": [
+        [
+          "If the Customer agrees to these terms, please have an authorised signatory sign and date the enclosed copy of this letter and return it to the Supplier. The agreement becomes binding when the Supplier receives the countersigned copy."
+        ],
+        [
+          "Please confirm the Customer's acceptance of these terms by countersigning this letter where indicated below and returning it to the Supplier by e-mail. Until the Supplier receives the countersigned letter, it is a without prejudice offer which the Supplier may withdraw at any time."
+        ]
+      ]
+    }
+  ]
+}

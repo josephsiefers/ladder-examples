@@ -7,6 +7,10 @@ import { loadIntakeLibrary } from "./library";
 
 let root: string;
 
+/** Words in a variant's paragraphs, as an associate reads them. */
+const words = (paragraphs: readonly string[]) =>
+  paragraphs.flatMap((text) => text.split(/\s+/)).length;
+
 describe("loadIntakeLibrary", () => {
   beforeEach(async () => {
     root = await mkdtemp(join(tmpdir(), "intake-library-"));
@@ -30,10 +34,36 @@ describe("loadIntakeLibrary", () => {
     );
   });
 
-  it("reads the committed library's MSA and SOW kinds", async () => {
+  it("reads the committed library's kinds, each with the document type of its purpose", async () => {
     const { kinds } = await loadIntakeLibrary();
-    expect(kinds.msa?.docType).toBe("msa");
-    expect(kinds.sow?.docType).toBe("sow");
+    const types = Object.fromEntries(
+      Object.entries(kinds).map(([name, { docType }]) => [name, docType]),
+    );
+    expect(types).toEqual({
+      // A confidentiality letter is an NDA in letter form: the form changes, not the purpose.
+      "confidentiality-letter": "nda",
+      dpa: "dpa",
+      employment: "other",
+      "engagement-letter": "other",
+      lease: "other",
+      msa: "msa",
+      "settlement-letter": "other",
+      "software-licence": "other",
+      sow: "sow",
+    });
+  });
+
+  it("keeps every committed kind to 1–2 pages, whichever variants the seed picks", async () => {
+    // The corpus test counts the documents the specs build; this bounds every other seed too.
+    const { kinds } = await loadIntakeLibrary();
+    for (const [name, { openings, sections }] of Object.entries(kinds)) {
+      const choices = [openings, ...sections.map(({ variants }) => variants)].map((options) =>
+        options.map(words),
+      );
+      const fewest = choices.reduce((sum, counts) => sum + Math.min(...counts), 0);
+      const most = choices.reduce((sum, counts) => sum + Math.max(...counts), 0);
+      expect({ name, inRange: fewest >= 400 && most <= 900 }).toEqual({ name, inRange: true });
+    }
   });
 
   it("names, in the committed openings, only titles that every title of the kind shares", async () => {

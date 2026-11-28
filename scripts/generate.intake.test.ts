@@ -64,7 +64,13 @@ describe("npm run generate -- intake", () => {
     await generate();
     const printed = output.join("\n");
     expect(printed).toContain("| Type · ambiguity | Dev (min 2) | Test (min 1) | |");
-    for (const row of ["nda · clean", "msa · clean", "sow · clean"]) {
+    for (const row of [
+      "nda · clean",
+      "msa · clean",
+      "dpa · clean",
+      "sow · clean",
+      "other · clean",
+    ]) {
       expect(printed).toMatch(new RegExp(`\\| ${row} \\| \\d+ \\| \\d+ \\| ok \\|`));
     }
     expect(output.at(-1)).toMatch(

@@ -77,8 +77,11 @@ describe("assembleIntake refuses", () => {
 
   it("a library kind or contract that does not exist", () => {
     expect(() =>
-      assemble({ ...MSA_SPEC, base: { ...MSA_SPEC.base, kind: "lease" } } as IntakePlantSpec),
-    ).toThrow("intake-x1: no kind lease in the intake library.");
+      assemble({
+        ...MSA_SPEC,
+        base: { ...MSA_SPEC.base, kind: "charterparty" },
+      } as IntakePlantSpec),
+    ).toThrow("intake-x1: no kind charterparty in the intake library.");
     expect(() =>
       assemble({ ...NDA_SPEC, base: { source: "nda-copy", contractId: "nda-x" } }),
     ).toThrow("intake-x2: no contract nda-x to copy.");

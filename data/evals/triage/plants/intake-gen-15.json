@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-15",
+  "split": "dev",
+  "seed": 2105,
+  "docType": "dpa",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "dpa",
+    "parties": [
+      {
+        "name": "Halvern Payroll Services Limited",
+        "short": "Halvern"
+      },
+      {
+        "name": "Stoneleigh Retail Group plc",
+        "short": "Stoneleigh"
+      }
+    ]
+  },
+  "ingredients": []
+}

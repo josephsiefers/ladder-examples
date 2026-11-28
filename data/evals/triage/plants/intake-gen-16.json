@@ -1,0 +1,22 @@
+{
+  "id": "intake-gen-16",
+  "split": "test",
+  "seed": 2112,
+  "docType": "other",
+  "ambiguity": "clean",
+  "base": {
+    "source": "library",
+    "kind": "lease",
+    "parties": [
+      {
+        "name": "Marlow Quay Estates Limited",
+        "short": "Marlow Quay"
+      },
+      {
+        "name": "Petrel Analytics Limited",
+        "short": "Petrel"
+      }
+    ]
+  },
+  "ingredients": []
+}
