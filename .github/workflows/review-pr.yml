@@ -1,0 +1,185 @@
+# The automated review of one PR head, called by `review.yml` (a PR opens, or the owner adds
+# `agent-review`) and by `fix.yml` (the re-review after a fix run pushes). Reads the diff cold with
+# the code-review skill, posts one comment-only review, and labels the PR `review-passed` or
+# `review-failed`. A pass also marks a draft PR ready for human review. A failure on a PR that has
+# had its fix attempt (`agent-fix-tried`) also adds `ready-for-human`.
+#
+# Two jobs, so code from the PR never runs where the factory's GitHub token is:
+#   review  read-only GITHUB_TOKEN: the factory's files come from master, the PR is checked out
+#           into pr/ and only read; Claude writes the review and its verdict → the `review` artifact,
+#           which `fix.yml` reads
+#   post    token, a fresh runner, no checkout: posts the review text and sets the labels
+
+name: review-pr
+
+on:
+  workflow_call:
+    inputs:
+      pr:
+        description: The PR to review
+        type: number
+        required: true
+      head-sha:
+        description: The PR head to review
+        type: string
+        required: true
+      take-review-label:
+        description: Remove `agent-review`, which the owner added to ask for this review
+        type: boolean
+        default: false
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN:
+        required: true
+      FACTORY_GITHUB_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  PR: ${{ inputs.pr }}
+  OWNER: ${{ github.repository_owner }}
+  GH_REPO: ${{ github.repository }}
+  RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # On the job, not in the callers: adding `review-passed` or `review-failed` starts a `review.yml`
+    # run whose calling job is skipped, so this workflow never starts and never joins the group.
+    concurrency:
+      group: review-${{ inputs.pr }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      # The runner context isn't available in job-level env, so the paths are set here.
+      - name: Set the paths
+        run: |
+          echo "OUT_DIR=$RUNNER_TEMP/factory/out" >> "$GITHUB_ENV"
+          echo "TICKET_FILE=$RUNNER_TEMP/factory/tickets.md" >> "$GITHUB_ENV"
+          echo "PR_BODY_FILE=$RUNNER_TEMP/factory/pr-body.md" >> "$GITHUB_ENV"
+
+      - name: Check out the factory's files from master
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: factory
+          sparse-checkout: .github
+          persist-credentials: false
+
+      - name: Check out the PR
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.head-sha }}
+          path: pr
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: pr/.nvmrc
+
+      - uses: ./factory/.github/actions/setup-claude
+
+      - name: Gather the PR body and the tickets the PR closes
+        run: |
+          mkdir -p "$OUT_DIR"
+          # The body carries the evidence for what the review can't run: demos, live evals.
+          gh pr view "$PR" --json body --jq .body > "$PR_BODY_FILE"
+          bash factory/.github/factory/tickets.sh "$PR" > "$TICKET_FILE"
+
+      - name: Review the PR
+        working-directory: pr
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          prompt=$(envsubst '$PR $TICKET_FILE $PR_BODY_FILE $OUT_DIR' < ../factory/.github/factory/review.md)
+          # --setting-sources user: ignore any .claude/settings.json the PR brings. The plugin
+          # install lives in user settings, so the skills still load.
+          # --tools: only the tools a review uses, to keep the starting context small. Agent is
+          # for the code-review skill's parallel sub-agents. No web tools: this job holds a secret
+          # and reads untrusted PR text, and a fetch could send the secret out.
+          # --permission-mode dontAsk: a call off the allow list is refused, not judged by auto
+          # mode's classifier. The allow list is what keeps the review from running the PR's code
+          # (bash -c, sh, env npm, yarn, python...), which a deny list can't cover.
+          # --allowedTools: Write only into the out dir, so the review can't change the PR checkout.
+          # Path rules for Write are spelled Edit(...); the leading / makes "//abs/path", an
+          # absolute path. The settings' bare "Edit" deny matches only the Edit tool, not this.
+          claude -p "$prompt" \
+            --model claude-opus-5-5 \
+            --tools "Bash,Read,Write,Skill,Agent" \
+            --permission-mode dontAsk \
+            --allowedTools "Edit(/${OUT_DIR}/**)" \
+            --setting-sources user \
+            --settings ../factory/.github/factory/review-settings.json \
+            --add-dir "$RUNNER_TEMP/factory" \
+            --output-format stream-json --verbose \
+            > "$RUNNER_TEMP/factory/transcript.jsonl"
+          jq -r 'select(.type == "result") | .result' "$RUNNER_TEMP/factory/transcript.jsonl"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: review
+          path: ${{ runner.temp }}/factory/out
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transcript-pr-${{ inputs.pr }}
+          path: ${{ runner.temp }}/factory/transcript.jsonl
+          if-no-files-found: ignore
+
+  post:
+    needs: review
+    # Not after a cancel: that means a newer review of the same PR is running.
+    if: always() && (needs.review.result == 'success' || needs.review.result == 'failure')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.FACTORY_GITHUB_TOKEN }}
+    steps:
+      - name: Set the paths
+        run: echo "OUT=$RUNNER_TEMP/review" >> "$GITHUB_ENV"
+
+      - name: Take the review label
+        if: inputs.take-review-label
+        run: gh pr edit "$PR" --remove-label agent-review
+
+      - if: needs.review.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: review
+          path: ${{ runner.temp }}/review
+
+      - name: Post the review and its verdict
+        if: needs.review.result == 'success'
+        run: |
+          verdict=$(tr -d '[:space:]' < "$OUT/verdict.txt")
+          if [ "$verdict" != pass ] && [ "$verdict" != fail ]; then
+            echo "::error::verdict.txt says '$verdict', not pass or fail."
+            exit 1
+          fi
+          gh pr review "$PR" --comment --body-file "$OUT/review.md"
+          gh pr edit "$PR" --remove-label review-passed --remove-label review-failed
+          if [ "$verdict" = pass ]; then
+            gh pr edit "$PR" --add-label review-passed
+            if [ "$(gh pr view "$PR" --json isDraft --jq .isDraft)" = true ]; then
+              gh pr ready "$PR"
+            fi
+          else
+            gh pr edit "$PR" --add-label review-failed
+            # The PR has had its one fix run, so no fix run follows this failure: it's the owner's.
+            tried=$(gh pr view "$PR" --json labels --jq '[.labels[].name] | index("agent-fix-tried") // empty')
+            [ -z "$tried" ] || gh pr edit "$PR" --add-label ready-for-human
+          fi
+
+      - name: Report a failed review run
+        if: failure() || needs.review.result != 'success'
+        run: |
+          gh pr comment "$PR" --body "The automated review run failed: $RUN_URL. Add \`agent-review\` again to retry."

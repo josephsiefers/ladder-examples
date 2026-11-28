@@ -242,7 +242,9 @@ pause
 # ── 3 ─────────────────────────────────────────────────────────────────────
 stage "Create the factory's labels"
 gh label create agent-working --repo "$REPO" --force --color FBCA04 \
-  --description "An implementer run is working on this ticket"
+  --description "A factory run is working on this ticket or PR"
+gh label create agent-fix-tried --repo "$REPO" --force --color C5DEF5 \
+  --description "This PR had its fix run; remove to allow another"
 gh label create agent-review --repo "$REPO" --force --color 1D76DB \
   --description "Owner only: start an automated review of this PR"
 gh label create review-passed --repo "$REPO" --force --color 0E8A16 \
