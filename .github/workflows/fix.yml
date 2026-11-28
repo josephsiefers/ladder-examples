@@ -208,7 +208,7 @@ jobs:
           # as it runs $CLAUDE_PROJECT_DIR's. This job holds no GitHub token, so that's safe.
           claude -p "$prompt" \
             --model claude-opus-5-5 \
-            --tools "Bash,Read,Edit,Write,Skill,ToolSearch,Monitor,TaskStop,WebSearch,WebFetch" \
+            --tools "Bash,Read,Edit,Write,Skill,Agent,ToolSearch,Monitor,TaskStop,WebSearch,WebFetch" \
             --permission-mode auto \
             --settings ../factory/.github/factory/implement-settings.json \
             --add-dir "$RUNNER_TEMP/factory" \

@@ -133,12 +133,15 @@ jobs:
           # --tools: only the tools a build uses, to keep the starting context small. Monitor and
           # TaskStop (for the background mutation run) stay deferred behind ToolSearch. WebSearch
           # and WebFetch are for current docs. They are in --tools but not on the allow list in
-          # implement-settings.json, so auto mode's classifier judges each call.
+          # implement-settings.json, so auto mode's classifier judges each call. Agent lets Claude
+          # hand work such as searches to subagents, whose context doesn't count toward the session
+          # budget; the prompt leaves it to Claude when to use one. It is on the allow list, so the
+          # classifier doesn't judge it.
           # --permission-mode auto: a classifier judges each call the settings' allow and deny rules
           # don't decide, instead of refusing it. The deny rules still hold.
           claude -p "$prompt" \
             --model claude-opus-5-5 \
-            --tools "Bash,Read,Edit,Write,Skill,ToolSearch,Monitor,TaskStop,WebSearch,WebFetch" \
+            --tools "Bash,Read,Edit,Write,Skill,Agent,ToolSearch,Monitor,TaskStop,WebSearch,WebFetch" \
             --permission-mode auto \
             --settings .github/factory/implement-settings.json \
             --add-dir "$RUNNER_TEMP/factory" \
