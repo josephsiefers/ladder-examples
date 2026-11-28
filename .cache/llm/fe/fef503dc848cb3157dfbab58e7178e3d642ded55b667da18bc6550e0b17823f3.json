@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-15\">\n# Data Processing Agreement\n\n## 1. Parties and Purpose\n\n[1.1] This agreement is made between Stoneleigh Retail Group plc (the \"Controller\") and Halvern Payroll Services Limited (the \"Processor\").\n\n[1.2] The Processor provides hosted payroll services to the Controller under a separate services agreement, and in doing so processes the personal data of the Controller's employees on the Controller's behalf. This agreement sets out the terms on which the Processor processes that personal data, as Article 28 of the UK GDPR requires, and it applies for as long as the Processor holds any of it.\n\n## 2. Details of the Processing\n\n[2.1] The Processor processes personal data only to provide the payroll services: calculating pay, deductions and pension contributions, producing payslips and making returns to HM Revenue & Customs. The data subjects are the Controller's current and former employees. The personal data comprises names, contact details, National Insurance numbers, bank details, salary and tax information, and records of absence.\n\n## 3. Processor's Obligations\n\n[3.1] The Processor shall act only on the written instructions of the Controller when processing the personal data, and shall not process it for its own purposes or for anyone else. If the law requires processing the Controller has not instructed, the Processor shall notify the Controller first, where the law permits.\n\n[3.2] The Processor's staff with access to the personal data shall be trained in data protection and bound by obligations of confidentiality.\n\n## 4. Security\n\n[4.1] Taking into account the nature of the processing and the risks to employees, the Processor shall keep the personal data secure. It shall encrypt the data, restrict access to staff who need it for the payroll services, keep logs of that access, and maintain a certified information security management system for the whole of the processing.\n\n## 5. Sub-processors\n\n[5.1] The Controller gives the Processor general authorisation to use sub-processors, provided the Processor keeps an up-to-date list of them, tells the Controller of any intended addition or replacement at least thirty days in advance, and binds each one by written contract to the same data protection obligations as this agreement. The Processor is liable for the acts of every sub-processor it uses.\n\n## 6. International Transfers\n\n[6.1] The Processor shall not transfer the personal data outside the United Kingdom, or allow a sub-processor to do so, without the Controller's prior written consent. Any transfer the Controller consents to shall be made under the international data transfer agreement issued by the Information Commissioner, or another safeguard that data protection law recognises.\n\n## 7. Personal Data Breaches\n\n[7.1] If the Processor becomes aware of any breach of security leading to the loss of, or unauthorised access to, the personal data, it shall tell the Controller within twenty-four hours, give it all the information it reasonably needs to report the breach to the Information Commissioner within the statutory deadline, and take reasonable steps to contain the breach and limit its effects.\n\n## 8. Assistance and Audit\n\n[8.1] The Processor shall pass to the Controller, within five working days, any request it receives from an employee to access, correct or erase their personal data, and shall not answer it except on the Controller's instructions. Once a year, or after a personal data breach, the Controller may audit the Processor's compliance with this agreement on fourteen days' notice.\n\n## 9. Return and Deletion\n\n[9.1] On termination or expiry of the services agreement, the Processor shall stop processing the personal data, return it to the Controller in the format the Controller reasonably asks for, and then securely delete all copies, certifying in writing that it has done so. The Processor may keep only what the law requires it to keep, and shall keep that confidential.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 1
+  },
+  "value": {
+    "docType": "dpa",
+    "rationale": "The document's primary purpose is to govern how the Processor handles the Controller's employees' personal data on the Controller's behalf, as Article 28 UK GDPR requires, covering processing details, security, sub-processors, transfers, breach notification, data subject requests and deletion."
+  },
+  "usage": {
+    "inputTokens": 2202,
+    "outputTokens": 106
+  },
+  "latencyMs": 1032.407487999999,
+  "recordedAt": "2026-11-28T01:58:01.137Z"
+}

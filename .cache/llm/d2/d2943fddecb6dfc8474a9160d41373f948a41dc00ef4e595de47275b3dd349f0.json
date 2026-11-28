@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-12\">\n# Statement of Work\n\n## 1. Background\n\n[1.1] Ashby Cold Chain Ltd (the \"Customer\") engages Quarrelle Systems Limited (the \"Supplier\") to carry out the project described below, on the terms of the master services agreement already in force between them.\n\n[1.2] This document is a statement of work under that agreement. It orders the implementation of the Supplier's warehouse management system at the Customer's distribution centre, and records the work, deliverables, milestones and fees for that project.\n\n## 2. Scope of Work\n\n[2.1] The Supplier shall configure its warehouse management system for the Customer's distribution centre, build an interface between it and the Customer's order management system, migrate the Customer's current stock records into it, and train the Customer's staff to use it.\n\n[2.2] Hardware, network changes at the distribution centre, and changes to the Customer's order management system are outside the scope of this Statement of Work.\n\n## 3. Deliverables\n\n[3.1] The Supplier shall deliver: a design specification describing the configuration and the interface; the configured system, tested and ready for go-live; and a training and handover pack, with two days of on-site training for up to twelve of the Customer's staff.\n\n## 4. Timetable and Milestones\n\n[4.1] Work starts on the first working day after this Statement of Work is signed. The Supplier shall deliver the design specification by the end of week four (Milestone 1), the configured system for testing by the end of week twelve (Milestone 2), and go-live with the training and handover pack by the end of week sixteen (Milestone 3).\n\n## 5. Acceptance\n\n[5.1] The Customer shall review each deliverable within ten working days of receiving it, and either accept it in writing or list the ways in which it fails to meet this Statement of Work. The Supplier shall correct any listed failure and resubmit the deliverable for review. A milestone is accepted when the Customer accepts every deliverable due at it.\n\n## 6. Fees and Payment\n\n[6.1] The fixed price for this project is £186,000, excluding VAT, paid in three instalments: £37,200 on acceptance of Milestone 1, £93,000 on acceptance of Milestone 2, and the final instalment of £55,800 on acceptance of Milestone 3.\n\n[6.2] The Supplier shall invoice each instalment when its milestone is accepted, and the Customer shall pay each invoice within thirty days of receipt.\n\n## 7. Customer Responsibilities\n\n[7.1] The Customer shall take any decision the Supplier needs within five working days of being asked, provide an extract of its current stock records in a format the Supplier specifies by the end of week six, and install at the distribution centre the scanners, label printers and other hardware the system needs before testing starts.\n\n## 8. Project Governance\n\n[8.1] Each party shall name a project manager. The Supplier's project manager shall send the Customer's project manager a progress report every two weeks, covering work done, the status of each milestone and open risks. Either side may call a meeting on two days' notice to deal with a problem.\n\n## 9. Changes and Term\n\n[9.1] Either party may propose a change to this project in writing; the Supplier shall state its effect on the timetable and fees, and no change applies until both parties sign it. This Statement of Work expires on completion of the project, and its terms otherwise follow the master services agreement.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "docType": "sow",
+    "rationale": "The document is titled and written as a statement of work under an existing master services agreement; its primary purpose is to order one specific warehouse system implementation project, setting its scope, deliverables, milestones, acceptance and fixed-price fees."
+  },
+  "usage": {
+    "inputTokens": 2096,
+    "outputTokens": 90
+  },
+  "latencyMs": 1519.282819,
+  "recordedAt": "2026-11-28T01:57:54.531Z"
+}

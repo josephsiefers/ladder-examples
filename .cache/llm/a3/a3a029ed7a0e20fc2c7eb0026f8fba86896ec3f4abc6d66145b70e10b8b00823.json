@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-20\">\n# Engagement Letter\n\n## 1. Introduction\n\n[1.1] This letter is sent by Whitcombe Lane LLP (\"we\" or \"us\") to the board of directors of Fairhaven Foods Limited (the \"Company\").\n\n[1.2] Thank you for appointing us as auditors of the Company. This letter confirms the terms of our engagement to audit the Company's financial statements for the year ending 31 March 2027, explains the responsibilities that the directors and we each have, and sets out our fees. It applies to each later year's audit until it is replaced.\n\n## 2. Scope of the Audit\n\n[2.1] Our work will consist of an examination, on a test basis, of evidence for the amounts and disclosures in the financial statements, sufficient for us to form an opinion on whether they are free from material misstatement. We will report that opinion to the members as the Companies Act 2006 requires.\n\n## 3. Responsibilities of the Directors\n\n[3.1] Preparing the financial statements is the responsibility of the directors, not us. The directors must also safeguard the Company's assets, keep proper accounting records, and give us unrestricted access to the records, staff and information we ask for. Before we sign our report, the directors will be asked to confirm in writing the representations made to us during the audit.\n\n## 4. Our Responsibilities\n\n[4.1] We will plan and perform the audit to obtain reasonable assurance that the financial statements are free from material misstatement, whether caused by fraud or error. We will report to the directors any significant weaknesses in internal control that come to our attention.\n\n## 5. Timetable and Staffing\n\n[5.1] The audit partner will be Helen Marsh, who is responsible for the conduct of the audit and for signing our report. Fieldwork will take place in June 2027, and we expect to issue our report by the end of July 2027, so long as the Company provides its draft financial statements by the end of May.\n\n## 6. Fees\n\n[6.1] Our fee for the audit for the year ending 31 March 2027 is £42,500, excluding VAT and expenses, based on the time we expect to spend. If the Company's records are not ready on time, or the audit takes longer for reasons outside our control, we will discuss an additional fee with the directors before incurring it.\n\n[6.2] We will invoice half the fee at the start of fieldwork and the balance when we sign our report, each invoice payable within thirty days.\n\n## 7. Liability and Complaints\n\n[7.1] Subject to approval by the Company's members, our liability for any loss caused by our negligence in the audit is limited to £1,000,000 in total. Nothing in this letter limits our liability for fraud or dishonesty.\n\n[7.2] If the directors wish to complain about our service, they should write to our managing partner, who will investigate and reply within twenty-eight days.\n\n## 8. Agreement of Terms\n\n[8.1] This letter, together with our standard terms of business enclosed with it, forms the contract between the Company and us, and is governed by the law of England and Wales. Please confirm the Company's agreement by having a director sign and return the enclosed copy of this letter.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 0
+  },
+  "value": {
+    "docType": "other",
+    "rationale": "This is an audit engagement letter whose primary purpose is to confirm the terms of Whitcombe Lane LLP's engagement to audit Fairhaven Foods' financial statements, covering scope, responsibilities, fees and liability. It is not a confidentiality, framework services, data processing, or project-order document, so it falls under other."
+  },
+  "usage": {
+    "inputTokens": 2007,
+    "outputTokens": 193
+  },
+  "latencyMs": 1527.570108,
+  "recordedAt": "2026-11-28T01:57:56.278Z"
+}

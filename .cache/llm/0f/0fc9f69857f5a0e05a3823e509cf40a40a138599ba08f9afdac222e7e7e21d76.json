@@ -1,0 +1,43 @@
+{
+  "key": {
+    "model": "claude-haiku-5-5",
+    "system": "You are the intake clerk at a law firm. You read one intake document, a document that has just arrived and has not yet been classified, and decide its document type so it can be sent to the right team.\n\nThe document may come with a cover note or email from the client. Classify the document itself, not the note; use the note only as context.\n\nDecide the document type by the document's PRIMARY PURPOSE: what the document as a whole is mainly for. Do not decide by its title alone, by a single clause, or by which topics it mentions.\n\nDocument types:\n\nnda\n  A non-disclosure or confidentiality agreement: its main purpose is to protect confidential information that one or both parties disclose, usually so they can evaluate or discuss a possible deal. Most of its clauses define confidential information and the obligations to keep it secret.\n\nmsa\n  A master services agreement: the framework terms under which one party provides services to another over time (services standard, fees and payment, intellectual property, liability, term and termination), usually with specific work ordered later under statements of work.\n\ndpa\n  A data processing agreement: its main purpose is to govern how one party processes personal data on behalf of another (instructions, security, sub-processors, breach notification, data subject rights, international transfers), as data protection law requires.\n\nsow\n  A statement of work: it orders one specific project or engagement under an existing master agreement, setting out its scope, deliverables, milestones, acceptance and fees for that project.\n\nother\n  Anything whose primary purpose is none of the above: for example a letter of intent, term sheet, lease, employment contract, settlement, or general correspondence.\n\nA hybrid document still has exactly one document type. Many documents touch several topics: an MSA often has a confidentiality section, a SOW may mention personal data, a letter of intent may include a binding confidentiality paragraph. Those sections do not change the type. Ask what the document is mainly for, and choose that one type.\n\nWorked example: a master services agreement setting the terms on which a supplier provides software services, which also contains a confidentiality section, has primary purpose \"framework for services\". Its document type is \"msa\", not \"nda\".\n\nGive a short rationale (one or two sentences) naming the primary purpose that decided the type.",
+    "prompt": "Classify the document type of this intake document.\n\n<intake-document id=\"intake-gen-27\">\n# Statement of Work: Warehouse System Implementation\n\n## 1. Background\n\n[1.1] Carraway Foods Ltd (the \"Customer\") engages Hollin Systems Limited (the \"Supplier\") to carry out the project described below, on the terms of the master services agreement already in force between them.\n\n[1.2] This document is a statement of work under that agreement. It orders the implementation of the Supplier's warehouse management system at the Customer's distribution centre, and records the work, deliverables, milestones and fees for that project.\n\n## 2. Scope of Work\n\n[2.1] The project covers the design, configuration, testing and go-live of the warehouse management system for the distribution centre, including an interface to the Customer's order management system and the transfer of existing stock records.\n\n[2.2] The Supplier is not responsible for buying or installing scanners, printers or other hardware, which the Customer shall provide.\n\n## 3. Deliverables\n\n[3.1] The Supplier shall deliver: a design specification describing the configuration and the interface; the configured system, tested and ready for go-live; and a training and handover pack, with two days of on-site training for up to twelve of the Customer's staff.\n\n## 4. Timetable and Milestones\n\n[4.1] Work starts on the first working day after this Statement of Work is signed. The Supplier shall deliver the design specification by the end of week four (Milestone 1), the configured system for testing by the end of week twelve (Milestone 2), and go-live with the training and handover pack by the end of week sixteen (Milestone 3).\n\n## 5. Acceptance\n\n[5.1] Each deliverable is accepted when the Customer signs an acceptance certificate for it, or ten working days after delivery if the Customer has not by then notified any material defect. The Supplier shall fix any notified defect promptly, and the same acceptance process then applies again. A milestone is accepted when every deliverable due at it is accepted.\n\n## 6. Fees and Payment\n\n[6.1] The fixed price for this project is £186,000, excluding VAT, paid in three instalments: £37,200 on acceptance of Milestone 1, £93,000 on acceptance of Milestone 2, and the final instalment of £55,800 on acceptance of Milestone 3.\n\n[6.2] The Supplier shall invoice each instalment when its milestone is accepted, and the Customer shall pay each invoice within thirty days of receipt.\n\n## 7. Customer Responsibilities\n\n[7.1] The Customer shall take any decision the Supplier needs within five working days of being asked, provide an extract of its current stock records in a format the Supplier specifies by the end of week six, and install at the distribution centre the scanners, label printers and other hardware the system needs before testing starts.\n\n## 8. Project Governance\n\n[8.1] Each party shall appoint a project manager. The project managers shall meet weekly to review progress against the milestones, record risks and agree actions, and the Supplier shall circulate a short written report after each meeting.\n\n## 9. Confidentiality\n\n[9.1] Each party shall treat as confidential all information it receives from the other about the other's business, customers, finances, staff and technology (\"Confidential Information\"), whether disclosed before or after the date of this agreement.\n\n[9.2] Neither party shall use the other's Confidential Information except for the purposes of this agreement, nor disclose it to any person other than its own officers, employees and professional advisers who need to know it for those purposes and who are told of its confidential nature.\n\n[9.3] This clause does not cover information already lawfully in the public domain, or a disclosure required by law, and it survives the end of this agreement for three years.\n\n## 10. Ownership of Intellectual Property\n\n[10.1] All intellectual property rights in the deliverables, including software configuration, documentation and data mappings written for this project, are assigned to the Customer on payment of the fees for them, and the Supplier shall sign any document needed to perfect that assignment.\n\n[10.2] The Supplier keeps ownership of its own tools, know-how and standard software, and licenses the Customer to use them, without further charge and for as long as the Customer uses the deliverables, to the extent that they form part of a deliverable.\n\n[10.3] If a third party claims that a deliverable infringes its rights, the Supplier shall defend the claim at its own cost and, at its option, modify the deliverable so that it no longer infringes or obtain the right for the Customer to keep using it.\n\n## 11. Changes and Term\n\n[11.1] Either party may propose a change to this project in writing; the Supplier shall state its effect on the timetable and fees, and no change applies until both parties sign it. This Statement of Work expires on completion of the project, and its terms otherwise follow the master services agreement.\n</intake-document>",
+    "schemaName": "intake-classification",
+    "jsonSchema": {
+      "type": "object",
+      "properties": {
+        "docType": {
+          "enum": [
+            "nda",
+            "msa",
+            "dpa",
+            "sow",
+            "other"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "description": "{minLength: 1}"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "docType",
+        "rationale"
+      ]
+    },
+    "maxTokens": 4096,
+    "sampleIndex": 2
+  },
+  "value": {
+    "docType": "sow",
+    "rationale": "The document expressly orders one specific warehouse system implementation project under an existing master services agreement, setting out its scope, deliverables, milestones, acceptance and fixed-price fees; the confidentiality and IP clauses are secondary to that primary project-ordering purpose."
+  },
+  "usage": {
+    "inputTokens": 2537,
+    "outputTokens": 104
+  },
+  "latencyMs": 1578.232559,
+  "recordedAt": "2026-11-28T01:58:09.719Z"
+}
